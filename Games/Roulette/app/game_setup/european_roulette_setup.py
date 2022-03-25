@@ -1,11 +1,11 @@
-from roulette_base_classes import RouletteWheel
-from roulette_base_classes import RouletteWager
-from data.wheel_definitions import euro_wheel_defn
+from Games.Roulette.app.roulette_base_classes import RouletteWager
+from Games.Roulette.app.roulette_base_classes import RouletteWheel
+from Games.Roulette.constants.wheel_defns import euro_wheel_defn
 
-eu_wheel = RouletteWheel(euro_wheel_defn)
+euro_wheel = RouletteWheel(euro_wheel_defn)
 
 
-class EuRouletteWheelWager(RouletteWager):
+class EuWheelWager(RouletteWager):
     def __init__(self, stake: float):
         super().__init__(stake)
 
@@ -17,7 +17,7 @@ class EuRouletteWheelWager(RouletteWager):
         """
         Allows users to bet on specific colours
         """
-        spin = eu_wheel.spin()
+        spin = euro_wheel.spin()
         if spin['colour_return'] == colour:
             if spin['colour_return'] == 1:  # TODO need to specify
                 return self.stake + self.stake * 1
