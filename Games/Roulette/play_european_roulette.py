@@ -1,4 +1,4 @@
-from european_roulette_setup import eu_roulette_wheel
+from game_setup.european_roulette_setup import eu_roulette_wheel
 import sys
 
 
