@@ -2,7 +2,7 @@ from Games.Roulette.app.roulette_base_classes import RouletteWager
 from Games.Roulette.app.roulette_base_classes import RouletteWheel
 from Games.Roulette.constants.wheel_defns import euro_wheel_defn
 
-euro_wheel = RouletteWheel(euro_wheel_defn)
+euro_wheel = RouletteWheel(euro_wheel_defn) # this could instead be defined within the EU wager once some bets moved
 
 
 class EuWheelWager(RouletteWager):
