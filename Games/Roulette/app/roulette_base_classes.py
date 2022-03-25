@@ -29,5 +29,3 @@ class RouletteWager:
     "Base class for different wagers on the roulette wheel"
     def __init__(self, stake: float):
         self.stake = stake
-
-

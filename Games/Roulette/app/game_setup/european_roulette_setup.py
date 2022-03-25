@@ -13,7 +13,7 @@ class EuWheelWager(RouletteWager):
     Outside bets
     """
 
-    def colours_bet(self, colour: str) -> float:
+    def colours_bet(self, colour: str) -> float: #TODO move the generic bet types to main class, and take wheel as a parameter!!!
         """
         Allows users to bet on specific colours
         """
