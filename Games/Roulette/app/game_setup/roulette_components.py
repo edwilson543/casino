@@ -3,3 +3,5 @@ from Games.Roulette.constants.wheel_defns import euro_wheel_defn, euro_wheel_pay
 
 euro_wheel = RouletteWheelWagers(slots=euro_wheel_defn, payout_scaler= euro_wheel_payout_scaler)
 
+wheel_dict = {'E' : euro_wheel}
+

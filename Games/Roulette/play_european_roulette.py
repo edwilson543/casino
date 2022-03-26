@@ -1,4 +1,5 @@
 from Games.Roulette.app.game_setup.roulette_components import euro_wheel
+from Games.Roulette.app.game_setup.roulette_mechanics import RouletteInitiator
 import sys
 
 active_wheel = None
@@ -6,40 +7,15 @@ user_pot = 0
 active_bet_type = None
 active_bet_mapping = {'C': 'colours', 'S': 'straight_up', 'O': 'other'}  # update to be imported from somewhere
 
-"""
-To become the game initiation base class: game_initiation, wheel_selection and deposit
-"""
-
-for attempt in range(10):  # initiate game
-    user_ready = input("Type 'go' when ready to play \n--->")
-    if user_ready == "go":
-        break
-else:
-    sys.exit("Too many invalid attempts - game over")
-
-for attempt in range(10):  # set deposit amount
-    deposit_amount = input("How much would you like to deposit to play with (£)?"
-                           "\nDeposits are allowed as real numbers \n--->") # should probably only allow >0
-    try:
-        user_pot = int(deposit_amount)
-        break
-    except ValueError:
-        print('Invalid deposit amount - please try again')
-else:
-    sys.exit("Too many invalid attempts - game over")
-
-for attempt in range(10):  # select wheel
-    wheel_choice = input("What wheel would you like to play on? \n[E]uropean, [O]ther\n--->") # add options
-    if wheel_choice == 'E':
-        active_wheel = euro_wheel
-        break
-    else:
-        print("Invalid wheel choice, please try again")
-else:
-    sys.exit("Too many invalid attempts - game over")
+play_setup = RouletteInitiator()
+play_setup.game_initiator()
+user_pot = play_setup.deposit_amount()
+print(user_pot) # just to check its working
+active_wheel = play_setup.wheel_choice()
+print(active_wheel) # just to check its working
 
 """
-To become the game play class: loop over bet type and stake
+To become the bet selector and bet place class: loop over bet type and stake
 """
 
 for attempt in range(10):  # choose bet type
@@ -74,3 +50,7 @@ else:
     sys.exit("Too many invalid attempts - game over")
 
 print(active_bet_type)
+
+# active bet needs to be expanded down to
+
+# TODO finish script - while deposit>0 just loop over the bet script, once it has feature to change pot
