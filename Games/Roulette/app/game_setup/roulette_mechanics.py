@@ -1,0 +1,1 @@
+#TODO make the game structure into a class
