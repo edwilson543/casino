@@ -1,0 +1,1 @@
+active_bet_mapping = {'C': 'colours', 'S': 'straight_up', 'O': 'other'}
