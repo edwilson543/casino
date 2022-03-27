@@ -1,8 +1,7 @@
 # TODO make the game structure into a class - transfer bulk of play into here
-import sys
-from Games.Roulette.constants.bet_type_mapping import active_bet_mapping
-
-attempts = 25  # default acceptance of keyboard spam before sys exit
+from Games.Roulette.constants.wheel_defns import wheel_options, wheel_options_text
+from Games.Roulette.constants.bet_type_defns import bet_cats_and_types, bet_type_options_text, bet_cat_options_text
+from Games.Roulette.app.roulette_base_classes import RouletteWheel
 
 
 class RouletteInitiator:
@@ -12,34 +11,45 @@ class RouletteInitiator:
         pass
 
     def game_initiator(self):
-        for attempt in range(attempts):  # initiate game
+        """Method to initiate the game by getting the user to type 'go'"""
+        while True:  # initiate game
             user_ready = input("Type 'go' when ready to play \n--->")
             if user_ready == "go":
                 break
-        else:
-            sys.exit("Too many invalid attempts - game over")
 
-    def deposit_amount(self):
-        for attempt in range(attempts):  # set deposit amount
-            deposit_amount = input("How much would you like to deposit to play with (£)?"
-                                   "\nDeposits are allowed as real numbers \n--->")  # should probably only allow >0
+    def deposit_amount(self, min_deposit: int, deposit_multiples: int):
+        """
+        Method to get the user to specify how much they want to deposit.
+        Parameters need to be defined such that min_deposit % deposit_multiples should be 0
+        """
+        while True:
+            deposit_amount = input("How much would you like to deposit to play with?\n"
+                                   f"Deposits are allowed as multiples of £{deposit_multiples},"
+                                   f"the minimum deposit is £{min_deposit}. \n--->")
             try:
-                user_pot = int(deposit_amount)
-                return user_pot
+                user_pot = int(deposit_amount.replace("£", ""))  # incase some types in e.g. £100 rather than 150
+                if user_pot >= min_deposit and user_pot % deposit_multiples == 0:
+                    confirmation = input(f"Are you sure you would like to deposit £{user_pot} to play with?\n"
+                                         "[Y]es, [N]o \n--->")
+                    if confirmation == 'N':
+                        continue
+                    print(f"You have deposited £{user_pot} to play with")
+                    return user_pot
+                else:
+                    print('Invalid deposit amount - please try again and refer to deposit criteria.')
             except ValueError:
-                print('Invalid deposit amount - please try again')
-        else:
-            sys.exit("Too many invalid attempts - game over")
+                print('Invalid deposit amount - please try again and refer to deposit criteria.')
 
     def wheel_choice(self):
-        for attempt in range(attempts):  # select wheel
-            wheel_choice = input("What wheel would you like to play on? \n[E]uropean, [O]ther\n--->")  # add options
-            if wheel_choice == 'E':
-                return wheel_choice
+        """Method to allow the user to input what wheel they would like to play on"""
+        while True:
+            wheel_choice = input("What wheel would you like to play on?\n"
+                                 f"{wheel_options_text}\n--->").upper() # upper to allow for lower case
+            if wheel_choice in list(wheel_options.keys()):
+                return RouletteWheel(slots=wheel_options[wheel_choice][0],
+                                     payout_scaler=wheel_options[wheel_choice][1])
             else:
                 print("Invalid wheel choice, please try again")
-        else:
-            sys.exit("Too many invalid attempts - game over")
 
 
 class BetSelector:
@@ -49,36 +59,23 @@ class BetSelector:
     def __init__(self):
         pass
 
-    def choose_bet_type(self):
-        # TODO split this into bet category then bet type"""
-        for attempt in range(attempts):  # choose bet category
+    def choose_bet_category(self):
+        while True:
             bet_cat = input("What category of bet would you like to place?"
-                            "\n[I]nside or [O]utside \n--->")
-            if bet_cat in ['I', 'O']:
-                if bet_cat == 'I':
-                    for attempt_ind in range(attempts):  # choose specific bet type
-                        bet_type = input("What type of bet would you like to place?"
-                                         "\n[C]olour or [O]ther \n--->")  # update options
-                        if bet_type in ['C', 'O']:
-                            active_bet_type = active_bet_mapping[f"{bet_type}"]
-                            return active_bet_type
-                        else:
-                            print("Not a valid bet type, try again")
-                    else:
-                        sys.exit("Too many invalid attempts - game over")
-                elif bet_cat == 'O':
-                    for attempt_ind in range(attempts):  # choose specific bet type
-                        bet_type = input("What type of bet would you like to place?"
-                                         "\n[S]traight_up or [O]ther \n--->")  # update options
-                        if bet_type in ['S', 'O']:
-                            active_bet_type = active_bet_mapping[f"{bet_type}"]
-                            return active_bet_type
-                        else:
-                            print("Not a valid bet type, try again")
+                            f"\n{bet_cat_options_text}\n--->").upper()
+            if bet_cat in list(bet_cats_and_types.keys()):
+                return bet_cat
             else:
                 print("Not a valid bet category, try again")
-        else:
-            sys.exit("Too many invalid attempts - game over")
+
+    def choose_bet_type(self, bet_cat):
+        while True:
+            bet_type = input("What category of bet would you like to place?"
+                             f"\n{bet_type_options_text[bet_cat]}\n--->").upper()
+            if bet_type in bet_cats_and_types[bet_cat]:
+                return bet_type
+            else:
+                print("Not a valid bet type, try again")
 
 
 class BetPlace:
@@ -86,5 +83,6 @@ class BetPlace:
     # Should output the bet in the same format as the spin output
     # can then test if spin in BetPlace.outcome()
 
+
 class BetOutcome:
-    pass # to move in the roulette wheel subclass and make this a class
+    pass  # to move in the roulette wheel subclass and make this a class
