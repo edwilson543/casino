@@ -35,26 +35,39 @@ class RouletteWheel:
         return sum(map(colour.__eq__, self.slots.values()))
 
     def user_colour_list(self):
-        pass
+        """
+        Returns: text string the user can use to identify the colour options for betting
+        Example output form: '[R]ed, [B]lack, [G]reen'
+        """
+        colours = list(set(self.slots.values()))
+        options = list(map(lambda col: "[" + col[0].upper() + "]" + col[1:], colours))
+        display_str_no_comma = " ".join(options).strip()
+        return display_str_no_comma.replace(" ", ", ")
 
-    def user_number_list(self):
-        pass
+
+    def user_number_list(self): # to write
+        """
+        Returns: text string describing the numbers of the roulette wheel
+        Example output form: '[0, 36] (inclusive)'
+        Note this would need to change if defining a roulette wheel which skips numbers
+        """
+        min_number = min(list(set(self.slots.keys())))
+        max_number = max(list(set(self.slots.keys())))
+        return f"[{min_number}, {max_number}] (inclusive)"
 
 
-class RouletteWheelWagers(RouletteWheel):
+class RouletteWheelWagers():
     """
     Base class for defining the different wagers on the roulette wheel.
-    Not actually sure if it counts as a base class given its a subclass.
+    Not used in itself, but acts as a template for defining each individual bet.
     """
 
-    def __init__(self,
-                 slots: dict,
-                 payout_scaler: float,
-                 min_bet: int,
-                 max_bet: float):
-        super().__init__(slots, payout_scaler)
+    def __init__(self, bet_id: str, min_bet: int, max_bet: float):
+        self.bet_id = 'GENERIC'
+        self.min_bet = 5
+        self.max_bet = 50
 
-    def set_stake(self):
+    def set_stake(self): # unsure if there is any value if defining these here as a template
         pass
 
     def place_bet(self):
