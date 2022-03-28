@@ -62,10 +62,10 @@ class RouletteWheelWagers():
     Not used in itself, but acts as a template for defining each individual bet.
     """
 
-    def __init__(self, bet_id: str, min_bet: int, max_bet: float):
-        self.bet_id = 'GENERIC'
-        self.min_bet = 5
-        self.max_bet = 50
+    def __init__(self, bet_id: str, min_bet = 5, max_bet = 50):
+        self.bet_id = bet_id
+        self.min_bet = min_bet
+        self.max_bet = max_bet
 
     def set_stake(self): # unsure if there is any value if defining these here as a template
         pass
