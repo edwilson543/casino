@@ -34,39 +34,55 @@ class RouletteWheel:
         """Returns: the number of slots on the wheel of the specified colour"""
         return sum(map(colour.__eq__, self.slots.values()))
 
+    def user_colour_list(self):
+        pass
+
+    def user_number_list(self):
+        pass
+
 
 class RouletteWheelWagers(RouletteWheel):
     """
     Base class for defining the different wagers on the roulette wheel.
     Not actually sure if it counts as a base class given its a subclass.
-    Also all this could just be defined on the parent class but this seemed a bit neater. Easy to change otherwise
     """
 
     def __init__(self,
                  slots: dict,
-                 payout_scaler: float):
+                 payout_scaler: float,
+                 min_bet: int,
+                 max_bet: float):
         super().__init__(slots, payout_scaler)
 
-    """Outside bets - to be expanded"""
-    def colours_bet(self, stake: float, colour: str) -> float:
-        spin = self.spin()
-        if spin['colour_return'] == colour:
-            print(f"Spin outcome: colour: {spin['colour_return']}, number: {spin['number_return']}")
-            print('you win!')
-            return stake * self.payout_scaler / (self.colour_counts(colour) / self.wheel_size())
-        else:
-            print(f"Spin outcome: colour: {spin['colour_return']}, number: {spin['number_return']}")
-            print('you lose!')
-            return 0
+    def set_stake(self):
+        pass
 
-    """Inside bets - to be expanded"""
-    def straight_up(self, stake: float, number: str) -> float:
-        spin = self.spin()
-        if spin['number_return'] == number:
-            print(f"Spin outcome: colour: {spin['colour_return']}, number: {spin['number_return']}")
-            print('you win!')
-            return stake * self.payout_scaler * self.wheel_size()
-        else:
-            print(f"Spin outcome: colour: {spin['colour_return']}, number: {spin['number_return']}")
-            print('you lose!')
-            return 0
+    def place_bet(self):
+        pass
+
+    def winning_set(self):
+        pass
+
+    # """Outside bets - to be expanded"""
+    # def colours_bet(self, stake: float, colour: str) -> float:
+    #     spin = self.spin()
+    #     if spin['colour_return'] == colour:
+    #         print(f"Spin outcome: colour: {spin['colour_return']}, number: {spin['number_return']}")
+    #         print('you win!')
+    #         return stake * self.payout_scaler / (self.colour_counts(colour) / self.wheel_size())
+    #     else:
+    #         print(f"Spin outcome: colour: {spin['colour_return']}, number: {spin['number_return']}")
+    #         print('you lose!')
+    #         return 0
+    #
+    # """Inside bets - to be expanded"""
+    # def straight_up(self, stake: float, number: str) -> float:
+    #     spin = self.spin()
+    #     if spin['number_return'] == number:
+    #         print(f"Spin outcome: colour: {spin['colour_return']}, number: {spin['number_return']}")
+    #         print('you win!')
+    #         return stake * self.payout_scaler * self.wheel_size()
+    #     else:
+    #         print(f"Spin outcome: colour: {spin['colour_return']}, number: {spin['number_return']}")
+    #         print('you lose!')
+    #         return 0

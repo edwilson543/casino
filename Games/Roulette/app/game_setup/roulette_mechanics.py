@@ -1,6 +1,6 @@
 # TODO make the game structure into a class - transfer bulk of play into here
-from Games.Roulette.constants.wheel_defns import wheel_options, wheel_options_text
-from Games.Roulette.constants.bet_type_defns import bet_cats_and_types, bet_type_options_text, bet_cat_options_text
+from Games.Roulette.definitions.wheel_defns import wheel_options, wheel_options_text
+from Games.Roulette.definitions.bet_type_defns import bet_cats_and_types, bet_type_options_text, bet_cat_options_text
 from Games.Roulette.app.roulette_base_classes import RouletteWheel
 
 
@@ -44,10 +44,9 @@ class RouletteInitiator:
         """Method to allow the user to input what wheel they would like to play on"""
         while True:
             wheel_choice = input("What wheel would you like to play on?\n"
-                                 f"{wheel_options_text}\n--->").upper() # upper to allow for lower case
+                                 f"{wheel_options_text}\n--->").upper()  # upper to allow for lower case
             if wheel_choice in list(wheel_options.keys()):
-                return RouletteWheel(slots=wheel_options[wheel_choice][0],
-                                     payout_scaler=wheel_options[wheel_choice][1])
+                return wheel_options[wheel_choice]
             else:
                 print("Invalid wheel choice, please try again")
 
@@ -78,10 +77,18 @@ class BetSelector:
                 print("Not a valid bet type, try again")
 
 
-class BetPlace:
-    pass  # class that given the type of bet will define what the bet actually is
-    # Should output the bet in the same format as the spin output
-    # can then test if spin in BetPlace.outcome()
+class BetPlacer:
+    """Class that given the type of bet will define what the bet actually is, including stake"""
+    def __init__(self, bet_type: str):
+        self.bet_type = bet_type
+
+    def stake_amount(self):
+        """
+        Method to get the user to specify how much they want to bet.
+        Parameters need to be defined such that min_deposit % deposit_multiples should be 0
+        """
+        pass
+
 
 
 class BetOutcome:

@@ -8,9 +8,13 @@ If necessary define a new category by adding a key to the dictionary.
 Note the bet cat/type distinction is essentially trivial, but it gives the option of not displaying
 100 different bet choices in one go...
 """
-bet_cats_and_types = {'I': ['C'], 'O': ['S']}
+from Games.Roulette.app.roulette_base_classes import RouletteWheelWagers # so we can define each bet
 
+"""Steps 1-3 parameters"""
+bet_cats_and_types = {'O': ['C'], 'I': ['S']}
 bet_cat_options_text = "[I]nside, [O]utside"
-bet_type_options_text = {'I': "[C]olours", 'O': "[S]traight_up"}
+bet_type_options_text = {'O': "[C]olours", 'I': "[S]traight_up"}
 
-# then will need a mapping of C, S to different bet method calls
+"""class definitions for each bet. Seems unideal but they all need different methods"""
+
+# then will need a mapping of C, S to different bet classses
