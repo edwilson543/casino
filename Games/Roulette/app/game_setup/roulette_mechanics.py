@@ -1,6 +1,6 @@
-# TODO make the game structure into a class - transfer bulk of play into here
 from Games.Roulette.definitions.wheel_defns import wheel_options, wheel_options_text
 from Games.Roulette.definitions.bet_type_defns import bet_cats_and_types, bet_type_options_text, bet_cat_options_text
+from Games.Roulette.definitions.bet_type_defns import bet_type_min_max_bet
 from Games.Roulette.app.roulette_base_classes import RouletteWheel
 
 
@@ -76,20 +76,56 @@ class BetSelector:
             else:
                 print("Not a valid bet type, try again")
 
+    def choose_stake_amount(self, bet_type, user_funds):
+        min_stake = bet_type_min_max_bet[bet_type]['min']
+        max_stake = bet_type_min_max_bet[bet_type]['max']
+        while True:
+            stake = input("How much would you like to stake?\n"
+                          f"Minimum stake: £{min_stake}, Maximum stake: £{max_stake}, integer stakes only\n--->")
+            try:
+                stake = int(stake.replace("£", ""))  # get rid of the £ sign if the user types one
+                if stake > user_funds:
+                    print(f"A £{stake} stake exceeds your current funds")
+                    continue  # TODO Add some feature here to allow user to do a top up
+                elif min_stake <= stake <= max_stake:
+                    confirmation = input(f"Confirm your stake of £{stake}?\n"
+                                         "[Y]es, [N]o \n--->")
+                    if confirmation == 'N':
+                        continue
+                    print(f"£{stake} stake placed, time to choose your bet!")
+                    return stake
+                else:
+                    print('Invalid stake - please try again and refer to bet criteria.')
+            except ValueError:
+                print('Invalid stake - please try again and refer to bet criteria.')
 
-class BetPlacer:
-    """Class that given the type of bet will define what the bet actually is, including stake"""
-    def __init__(self, bet_type: str):
-        self.bet_type = bet_type
 
-    def stake_amount(self):
-        """
-        Method to get the user to specify how much they want to bet.
-        Parameters need to be defined such that min_deposit % deposit_multiples should be 0
-        """
+class RouletteWheelWagers:
+    """
+    Class for defining the different wagers on the roulette wheel.
+    Should this be a subclass of the roulette wheel class/ should it be defined in base classes?
+    """
+
+    def __init__(self):
+        self.place_bet_mapping = {'C': self.place_colours_bet(), 'S': self.place_straight_up_bet()}
+        self.get_winning_set_mapping = {'C': self.get_winning_set_colours(), 'S': self.get_winning_set_straight_up()}
+
+    def place_bet(self, wheel: RouletteWheel):
+        """Function to take the place_bet_mapping and apply the relevant method"""
         pass
 
+    def get_winning_set(self, wheel: RouletteWheel):
+        """Function to take the get_winning_set_mapping and apply the relevant method"""
+        pass
 
+    def place_colours_bet(self, wheel: RouletteWheel):
+        pass
 
-class BetOutcome:
-    pass  # to move in the roulette wheel subclass and make this a class
+    def get_winning_set_colours(self: RouletteWheel):
+        pass
+
+    def place_straight_up_bet(self: RouletteWheel):
+        pass
+
+    def get_winning_set_straight_up(self):
+        pass

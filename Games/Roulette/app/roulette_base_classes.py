@@ -38,14 +38,19 @@ class RouletteWheel:
         """
         Returns: text string the user can use to identify the colour options for betting
         Example output form: '[R]ed, [B]lack, [G]reen'
+
+        Spotted an issue - can't have e.g. black and blue on same wheel.
+        Could be fixed by changing the method to a while loop that keeps going until all IDs are unique,
+        but not sure if that's a bit overkill given all roulette wheels use the same colours...
         """
-        colours = list(set(self.slots.values()))
-        options = list(map(lambda col: "[" + col[0].upper() + "]" + col[1:], colours))
-        display_str_no_comma = " ".join(options).strip()
+        def col_str_rep(colour):
+            return "[" + colour[0].upper() + "]" + colour[1:]
+        colours = sorted(list(set(self.slots.values())))  # get the unique colours of the wheel in an alphabetical list
+        str_rep_list = [col_str_rep(colour) for colour in colours]
+        display_str_no_comma = " ".join(str_rep_list).strip()
         return display_str_no_comma.replace(" ", ", ")
 
-
-    def user_number_list(self): # to write
+    def user_number_list(self):  # to write
         """
         Returns: text string describing the numbers of the roulette wheel
         Example output form: '[0, 36] (inclusive)'
@@ -54,48 +59,3 @@ class RouletteWheel:
         min_number = min(list(set(self.slots.keys())))
         max_number = max(list(set(self.slots.keys())))
         return f"[{min_number}, {max_number}] (inclusive)"
-
-
-class RouletteWheelWagers():
-    """
-    Base class for defining the different wagers on the roulette wheel.
-    Not used in itself, but acts as a template for defining each individual bet.
-    """
-
-    def __init__(self, bet_id: str, min_bet = 5, max_bet = 50):
-        self.bet_id = bet_id
-        self.min_bet = min_bet
-        self.max_bet = max_bet
-
-    def set_stake(self): # unsure if there is any value if defining these here as a template
-        pass
-
-    def place_bet(self):
-        pass
-
-    def winning_set(self):
-        pass
-
-    # """Outside bets - to be expanded"""
-    # def colours_bet(self, stake: float, colour: str) -> float:
-    #     spin = self.spin()
-    #     if spin['colour_return'] == colour:
-    #         print(f"Spin outcome: colour: {spin['colour_return']}, number: {spin['number_return']}")
-    #         print('you win!')
-    #         return stake * self.payout_scaler / (self.colour_counts(colour) / self.wheel_size())
-    #     else:
-    #         print(f"Spin outcome: colour: {spin['colour_return']}, number: {spin['number_return']}")
-    #         print('you lose!')
-    #         return 0
-    #
-    # """Inside bets - to be expanded"""
-    # def straight_up(self, stake: float, number: str) -> float:
-    #     spin = self.spin()
-    #     if spin['number_return'] == number:
-    #         print(f"Spin outcome: colour: {spin['colour_return']}, number: {spin['number_return']}")
-    #         print('you win!')
-    #         return stake * self.payout_scaler * self.wheel_size()
-    #     else:
-    #         print(f"Spin outcome: colour: {spin['colour_return']}, number: {spin['number_return']}")
-    #         print('you lose!')
-    #         return 0
