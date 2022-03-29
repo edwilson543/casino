@@ -19,10 +19,11 @@ active_bet_cat = bet_selection.choose_bet_category()
 active_bet_type_id = bet_selection.choose_bet_type(bet_cat=active_bet_cat)
 # Stake quantification
 active_stake = bet_selection.choose_stake_amount(bet_type=active_bet_type_id)
+user_pot -= active_stake
 
 # Bet placing and evaluation
 bet_place_evaluate = RouletteWheelWagers(stake=active_stake, bet_type_id=active_bet_type_id, wheel_id=active_wheel_id)
-active_bet_choice = bet_place_evaluate.place_bet()
+active_bet_choice, active_potential_winnings = bet_place_evaluate.place_bet()
 
 sys.exit('Game over i.e. not coded any further yet')
 

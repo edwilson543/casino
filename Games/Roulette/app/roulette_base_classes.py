@@ -36,7 +36,6 @@ class RouletteWheel:
         return sum(map(colour.__eq__, self.slots.values()))
 
     def generate_colour_ids(self):
-
         """
         Method to identify user colour selection based on their input.
         Returns: a dictionary in the form {'R': 'red', 'B': 'black', 'G': green}
@@ -71,12 +70,18 @@ class RouletteWheel:
             display_str_no_comma = " ".join(str_rep_list).strip()
             return display_str_no_comma.replace(" ", ", ")
 
-    def user_number_list(self):  # to write
+    def user_number_options_text(self):
         """
         Returns: text string describing the numbers of the roulette wheel
-        Example output form: '[0, 36] (inclusive)'
+        Example output form: '0 to 36 (inclusive)'
         Note this would need to change if defining a roulette wheel which skips numbers
         """
         min_number = min(list(set(self.slots.keys())))
         max_number = max(list(set(self.slots.keys())))
-        return f"[{min_number}, {max_number}] (inclusive)"
+        return f"{min_number} to {max_number} (inclusive)"
+
+    def user_number_options_range(self):
+        """Returns a range which specifies the valid number choices"""
+        min_number = min(list(set(self.slots.keys())))
+        max_number = max(list(set(self.slots.keys())))
+        return range(min_number, max_number + 1)
