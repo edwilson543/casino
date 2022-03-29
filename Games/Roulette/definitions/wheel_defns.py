@@ -2,8 +2,8 @@ from Games.Roulette.app.roulette_base_classes import RouletteWheel
 
 """
 To define a new wheel complete the following steps:
-1) create wheel_defn as a mapping of the numbers on the wheel to the colours
-2) define a payout scaler. payout := stake * payout_scaler / P(bet winning)
+1) create wheel_defn as a mapping of the numbers on the wheel to the colours, colours all in lower case
+2) define a payout scaler. payout := floor(stake * payout_scaler / P(bet winning))
 3) Instantiate the relevant wheel using the definitions
 3) Add the wheel to the wheel_options dict below, using an identification key
 4) Add the wheel option to the wheel_options_text so that it can be chosen in the game, with the same key

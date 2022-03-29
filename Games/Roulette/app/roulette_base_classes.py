@@ -14,7 +14,8 @@ class RouletteWheel:
         __________
         slots: slot of the roulette wheel -
         should be passed as a dictionary, with the numbers as keys and the colours as the values
-        payout_scaler: payout := stake * payout_scaler / P(bet winning). So it's a number <1 assuming house always wins
+        payout_scaler: payout := floor(stake * payout_scaler / P(bet winning)).
+        So it's a number <1 assuming house always wins
         """
         self.slots = slots
         self.payout_scaler = payout_scaler
@@ -34,21 +35,41 @@ class RouletteWheel:
         """Returns: the number of slots on the wheel of the specified colour"""
         return sum(map(colour.__eq__, self.slots.values()))
 
-    def user_colour_list(self):
+    def generate_colour_ids(self):
+
+        """
+        Method to identify user colour selection based on their input.
+        Returns: a dictionary in the form {'R': 'red', 'B': 'black', 'G': green}
+        The for loop will normally end after the 1st iteration. It is there to catch the instance where 2 colours start
+        with the same letters. The loop keeps going until we have unique IDs.
+        Note that there shouldn't be an error of indexing out of range when slicing.
+        """
+        for i in range(0, 25): #25 assuming no colours have more than 20 letters
+            def col_id(colour):
+                return colour[i].upper()
+            colours = sorted(list(set(self.slots.values())))  # get the unique wheel colours in an alphabetical list
+            col_id_list = [col_id(colour) for colour in colours]
+            if len(col_id_list) != len(list(set(col_id_list))):
+                continue
+                # e.g. if [B] is used to identify 2 different colours, try again using [BL]
+            return dict(zip(col_id_list, colours))
+
+    def user_colour_options(self):
         """
         Returns: text string the user can use to identify the colour options for betting
         Example output form: '[R]ed, [B]lack, [G]reen'
-
-        Spotted an issue - can't have e.g. black and blue on same wheel.
-        Could be fixed by changing the method to a while loop that keeps going until all IDs are unique,
-        but not sure if that's a bit overkill given all roulette wheels use the same colours...
+        Analogous to generate_colour_ids - written separately though - maybe should combine??
         """
-        def col_str_rep(colour):
-            return "[" + colour[0].upper() + "]" + colour[1:]
-        colours = sorted(list(set(self.slots.values())))  # get the unique colours of the wheel in an alphabetical list
-        str_rep_list = [col_str_rep(colour) for colour in colours]
-        display_str_no_comma = " ".join(str_rep_list).strip()
-        return display_str_no_comma.replace(" ", ", ")
+        for i in range(0, 25): #25 assuming no colours have more than 20 letters
+            def col_str_rep(colour):
+                return "[" + colour[i].upper() + "]" + colour[i+1:]
+            colours = sorted(list(set(self.slots.values())))  # get the unique wheel colours in an alphabetical list
+            str_rep_list = [col_str_rep(colour) for colour in colours]
+            if len(str_rep_list) != len(list(set(str_rep_list))):
+                continue
+                # e.g. if [B] is used to identify 2 different colours, try again using [BL]
+            display_str_no_comma = " ".join(str_rep_list).strip()
+            return display_str_no_comma.replace(" ", ", ")
 
     def user_number_list(self):  # to write
         """
