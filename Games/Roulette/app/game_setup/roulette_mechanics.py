@@ -112,9 +112,9 @@ class RouletteWheelWagers:
         self.bet_type_id = bet_type_id
         self.wheel_id = wheel_id
         self.place_bet_mapping = {'E': {'C': self.place_colours_bet, 'S': self.place_straight_up_bet},
-                                  'D': {'C': self.place_colours_bet, 'S': self.place_straight_up_bet}}
+                                  'A': {'C': self.place_colours_bet, 'S': self.place_straight_up_bet}}
         self.get_winning_set_mapping = {'E': {'C': self.get_winning_set_colours, 'S': self.get_winning_set_straight_up},
-                                        'D': {'C': self.get_winning_set_colours, 'S': self.get_winning_set_straight_up}}
+                                        'A': {'C': self.get_winning_set_colours, 'S': self.get_winning_set_straight_up}}
 
     def place_bet(self):  # TODO do not include wheel as parameter
         """Method to take the place_bet_mapping and apply the relevant method"""

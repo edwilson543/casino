@@ -19,12 +19,12 @@ If the bet is not wheel specific, we still need to map each wheel x bet pair ont
 """
 
 # Step 1 as above
-bet_cat_options_text = {'E': "[I]nside, [O]utside", 'D': "[I]nside, [O]utside"}
+bet_cat_options_text = {'E': "[I]nside, [O]utside", 'A': "[I]nside, [O]utside"}
 # Step 2 as above
-bet_cats_and_types = {'E': {'O': ['C'], 'I': ['S']}, 'D': {'O': ['C'], 'I': ['S']}}
+bet_cats_and_types = {'E': {'O': ['C'], 'I': ['S']}, 'A': {'O': ['C'], 'I': ['S']}}
 
 # Bet type options to be displayed once the category has been selected:
-bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight_up"}, 'D': {'O': "[C]olours", 'I': "[S]traight_up"}}
+bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight_up"}, 'A': {'O': "[C]olours", 'I': "[S]traight_up"}}
 # Min and max bet for each bet type:
 bet_type_min_max_bet = {'E': {'C': {'min': 5, 'max': 50}, 'S': {'min': 5, 'max': 20}},
-                        'D': {'C': {'min': 5, 'max': 50}, 'S': {'min': 5, 'max': 20}}}
+                        'A': {'C': {'min': 5, 'max': 50}, 'S': {'min': 5, 'max': 20}}}
