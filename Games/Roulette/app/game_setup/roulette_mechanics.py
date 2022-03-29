@@ -2,6 +2,7 @@ from Games.Roulette.definitions.wheel_defns import wheel_options, wheel_options_
 from Games.Roulette.definitions.bet_type_defns import bet_cats_and_types, bet_type_options_text, bet_cat_options_text
 from Games.Roulette.definitions.bet_type_defns import bet_type_min_max_bet
 from Games.Roulette.app.roulette_base_classes import RouletteWheel
+import math  # seems unideal to import whole module but just importing floor from math gave an error when called
 
 
 class RouletteInitiator:
@@ -46,7 +47,7 @@ class RouletteInitiator:
             wheel_choice = input("What wheel would you like to play on?\n"
                                  f"{wheel_options_text}\n--->").upper()  # upper to allow for lower case
             if wheel_choice in list(wheel_options.keys()):
-                return wheel_options[wheel_choice]
+                return wheel_choice, wheel_options[wheel_choice]
             else:
                 print("Invalid wheel choice, please try again")
 
@@ -58,27 +59,27 @@ class BetSelector:
     def __init__(self):
         pass
 
-    def choose_bet_category(self):
+    def choose_bet_category(self, wheel_id: str):
         while True:
             bet_cat = input("What category of bet would you like to place?"
-                            f"\n{bet_cat_options_text}\n--->").upper()
-            if bet_cat in list(bet_cats_and_types.keys()):
+                            f"\n{bet_cat_options_text[wheel_id]}\n--->").upper()
+            if bet_cat in list(bet_cats_and_types[wheel_id].keys()):
                 return bet_cat
             else:
                 print("Not a valid bet category, try again")
 
-    def choose_bet_type(self, bet_cat):
+    def choose_bet_type(self, bet_cat, wheel_id: str):
         while True:
             bet_type = input("What category of bet would you like to place?"
-                             f"\n{bet_type_options_text[bet_cat]}\n--->").upper()
-            if bet_type in bet_cats_and_types[bet_cat]:
+                             f"\n{bet_type_options_text[wheel_id][bet_cat]}\n--->").upper()
+            if bet_type in bet_cats_and_types[wheel_id][bet_cat]:
                 return bet_type
             else:
                 print("Not a valid bet type, try again")
 
-    def choose_stake_amount(self, bet_type, user_funds):
-        min_stake = bet_type_min_max_bet[bet_type]['min']
-        max_stake = bet_type_min_max_bet[bet_type]['max']
+    def choose_stake_amount(self, bet_type, user_funds, wheel_id: str):
+        min_stake = bet_type_min_max_bet[wheel_id][bet_type]['min']
+        max_stake = bet_type_min_max_bet[wheel_id][bet_type]['max']
         while True:
             stake = input("How much would you like to stake?\n"
                           f"Minimum stake: £{min_stake}, Maximum stake: £{max_stake}, integer stakes only\n--->")
@@ -86,7 +87,7 @@ class BetSelector:
                 stake = int(stake.replace("£", ""))  # get rid of the £ sign if the user types one
                 if stake > user_funds:
                     print(f"A £{stake} stake exceeds your current funds")
-                    continue  # TODO Add some feature here to allow user to do a top up
+                    continue  # TODO Add some feature here to allow user to do a top up or go all in
                 elif min_stake <= stake <= max_stake:
                     confirmation = input(f"Confirm your stake of £{stake}?\n"
                                          "[Y]es, [N]o \n--->")
@@ -103,28 +104,51 @@ class BetSelector:
 class RouletteWheelWagers:
     """
     Class for defining the different wagers on the roulette wheel.
-    Should this be a subclass of the roulette wheel class/ should it be defined in base classes?
+    Each different bet is defined as its own method #TODO write explanation here
     """
 
-    def __init__(self):
-        self.place_bet_mapping = {'C': self.place_colours_bet(), 'S': self.place_straight_up_bet()}
-        self.get_winning_set_mapping = {'C': self.get_winning_set_colours(), 'S': self.get_winning_set_straight_up()}
+    def __init__(self, bet_type_id: str, wheel_id: str, stake: int):  # Note mappings not initialised
+        self.stake = stake
+        self.bet_type_id = bet_type_id
+        self.wheel_id = wheel_id
+        self.place_bet_mapping = {'E': {'C': self.place_colours_bet, 'S': self.place_straight_up_bet},
+                                  'D': {'C': self.place_colours_bet, 'S': self.place_straight_up_bet}}
+        self.get_winning_set_mapping = {'E': {'C': self.get_winning_set_colours, 'S': self.get_winning_set_straight_up},
+                                        'D': {'C': self.get_winning_set_colours, 'S': self.get_winning_set_straight_up}}
 
-    def place_bet(self, wheel: RouletteWheel):
-        """Function to take the place_bet_mapping and apply the relevant method"""
-        pass
+    def place_bet(self):  # TODO do not include wheel as parameter
+        """Method to take the place_bet_mapping and apply the relevant method"""
+        return self.place_bet_mapping[self.wheel_id][self.bet_type_id]()
 
     def get_winning_set(self, wheel: RouletteWheel):
-        """Function to take the get_winning_set_mapping and apply the relevant method"""
+        """Method to take the get_winning_set_mapping and apply the relevant method"""
         pass
 
-    def place_colours_bet(self, wheel: RouletteWheel):
+    # Lower level methods for each specific bet
+
+    def place_colours_bet(self):
+        wheel = wheel_options[self.wheel_id]
+        colour_options = wheel.user_colour_options()
+        colour_dict = wheel.generate_colour_ids()
+        while True:
+            bet_choice = input(f"What colour would you like to bet on?\n {colour_options}\n--->").upper()
+            if bet_choice in colour_dict.keys():
+                confirmation = input(f"Confirm £{self.stake} stake on {colour_dict[bet_choice]}?\n"
+                                     f"Winning this bet will return: £"
+                                     f"{math.floor(self.stake / (wheel.colour_counts(colour_dict[bet_choice]) / wheel.wheel_size()))}"
+                                     f"\n[Y]es, [N]o\n--->").upper()
+                if confirmation == 'N':
+                    continue
+                print(f"£{self.stake} stake placed on {colour_dict[bet_choice]}!")
+                return bet_choice
+            else:
+                print("Invalid colour choice, please try again")
+
+    def get_winning_set_colours(self):
+        print('winning_set')
         pass
 
-    def get_winning_set_colours(self: RouletteWheel):
-        pass
-
-    def place_straight_up_bet(self: RouletteWheel):
+    def place_straight_up_bet(self):
         pass
 
     def get_winning_set_straight_up(self):
