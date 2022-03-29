@@ -12,10 +12,8 @@ Note that the bet cat/type distinction is essentially trivial, but it gives the 
 4) In the class RouletteWheelWagers in roulette base classes,define the class methods:
 place_bet_new_bet_type() and get_winning_set_new_bet_type() for the new bet.
 If the bet type is wheel specific, add a suffix for the wheel name, otherwise no need.
-5) Add the methods to the dictionary which is within the RouletteWheelWagers class definitions, with key 'WB', where
-'W' is the wheel that the bet corresponds to and 'B' the bet type.
-If the bet is not wheel specific, we still need to map each wheel x bet pair onto the bet method, so include as many
-'WB's as there are methods
+5) Add the methods to the dictionary which is within the RouletteWheelWagers class definitions, with the first key
+corresponding to the wheel, and the second key corresponding to the bet type.
 """
 
 # Step 1 as above
