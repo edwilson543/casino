@@ -16,6 +16,10 @@ euro_wheel_defn = {0: 'green', 1: 'red', 2: 'black', 3: 'red', 4: 'black', 5: 'r
                    32: 'red', 33: 'black', 34: 'red', 35: 'black', 36: 'red'}
 euro_wheel_payout_scaler = 0.95
 
+american_wheel_defn = {00: 'green', 0: 'green', 1: 'red', 2: 'black', 3: 'red',4: 'black', 5: 'red', 6: 'black',
+                       7: 'red', 8: 'black',9: 'red',10: 'black',11: 'black',12: 'red', 13: 'black', 14: 'red',
+                       15: 'black'}
+
 dummy_second_wheel_defn = {0: 'black', 1: 'white'}
 dummy_second_wheel_scaler = 0.95
 
