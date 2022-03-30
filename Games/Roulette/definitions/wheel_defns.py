@@ -15,6 +15,7 @@ black feature on the same wheel
 9) Map relevant bet type methods for the wheel in roulette_bas_classes RouletteWheel class, defining any new methods
 if necessary.
 """
+#TODO add dictionaries for the boards to the definitions, maybe with supporting string rep of form "|1|2|\n-----\n|3|4|"
 ###############################
 # Wheel definitions and payouts
 ###############################
