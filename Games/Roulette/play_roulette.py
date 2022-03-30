@@ -12,7 +12,7 @@ permitted_depo_multiples = 10
 play_setup = RouletteInitiator(min_deposit=min_depo, deposit_multiples=permitted_depo_multiples)
 play_setup.game_initiator()
 user_pot = play_setup.deposit_amount()
-active_wheel_id, active_wheel = play_setup.wheel_choice()
+active_wheel_id = play_setup.wheel_choice()
 
 # Bet selection
 bet_selection = BetSelector(wheel_id=active_wheel_id, player_funds=user_pot)
@@ -22,7 +22,7 @@ active_bet_type_id = bet_selection.choose_bet_type(bet_cat=active_bet_cat)
 active_stake = bet_selection.choose_stake_amount(bet_type=active_bet_type_id)
 user_pot -= active_stake
 
-# Bet placing up to immediately before evaluation
+# Bet placing up to immediately before outcome evaluation
 bet_placer = RouletteWheelWagers(stake=active_stake, bet_type_id=active_bet_type_id, wheel_id=active_wheel_id)
 active_bet_choice, active_potential_winnings = bet_placer.place_bet()
 active_winning_slots = bet_placer.get_winning_slots(player_bet=active_bet_choice)

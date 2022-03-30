@@ -51,7 +51,7 @@ class RouletteInitiator:
             wheel_choice = input("What wheel would you like to play on?\n"
                                  f"{wheel_options_text}\n--->").upper()  # upper to allow for lower case
             if wheel_choice in list(wheel_options.keys()):
-                return wheel_choice, wheel_options[wheel_choice]
+                return wheel_choice
             else:
                 print("Invalid wheel choice, please try again")
 
