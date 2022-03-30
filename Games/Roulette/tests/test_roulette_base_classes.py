@@ -13,11 +13,5 @@ class TestRouletteWheel:
     def test_wheel_colour_counts_red(self):
         assert euro_wheel.colour_counts(colour='red') == 18
 
-    def test_user_colour_options(self):
-        assert euro_wheel.user_colour_options() == "[B]lack, [G]reen, [R]ed"
-
-    def test_generate_colour_ids(self):
-        assert euro_wheel.generate_colour_ids() == {'B': 'black', 'G': 'green', 'R': 'red'}
-
-    def test_user_number_list(self):
-        assert euro_wheel.user_number_list() == "[0, 36] (inclusive)"
+    def test_user_number_options_range(self):
+        assert euro_wheel.user_number_options_range() == range(0, 37)

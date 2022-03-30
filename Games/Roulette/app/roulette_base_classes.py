@@ -2,9 +2,7 @@ import numpy as np
 
 
 class RouletteWheel:
-    """
-    Base class for the roulette wheel - from which we can define different wheel configurations
-    """
+    """Base class for the roulette wheel - from which we can define different wheel configurations"""
 
     def __init__(self,
                  slots: dict,
