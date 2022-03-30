@@ -25,9 +25,7 @@ user_pot -= active_stake
 # Bet placing up to immediately before evaluation
 bet_placer = RouletteWheelWagers(stake=active_stake, bet_type_id=active_bet_type_id, wheel_id=active_wheel_id)
 active_bet_choice, active_potential_winnings = bet_placer.place_bet()
-print(active_bet_choice) # to delete
 active_winning_slots = bet_placer.get_winning_slots(player_bet=active_bet_choice)
-print(active_winning_slots) # to delete
 
 # Bet evaluation
 bet_evaluater = BetEvaluation(potential_winnings=active_potential_winnings,
