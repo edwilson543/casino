@@ -10,7 +10,7 @@ under the relevant bet category keys (second keys) defining a new one for the ca
 Note that the bet cat/type distinction is essentially trivial, but it gives the option of not displaying
 100 different bet choices in one go...
 4) In the class RouletteWheelWagers in roulette base classes,define the class methods:
-place_bet_new_bet_type() and get_winning_set_new_bet_type() for the new bet.
+place_bet_new_bet_type() and get_winning_slots_new_bet_type() for the new bet.
 If the bet type is wheel specific, add a suffix for the wheel name, otherwise no need.
 5) Add the methods to the dictionary which is within the RouletteWheelWagers class definitions, with the first key
 corresponding to the wheel, and the second key corresponding to the bet type.
