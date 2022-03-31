@@ -27,8 +27,10 @@ class BetEvaluation:
                 if spin_outcome_num in self.winning_slots:
                     print(f"Congratulations! You have won £{self.potential_winnings}\n"
                           f"Your pot has increased to £{self.user_pot + self.potential_winnings}")
+                    sleep(pause_durations['medium'])
                     return self.potential_winnings
                 else:
                     print("Better luck next time, your bet did not win.\n"
                           f"Your pot has decreased to £{self.user_pot}")
+                    sleep(pause_durations['medium'])
                     return 0

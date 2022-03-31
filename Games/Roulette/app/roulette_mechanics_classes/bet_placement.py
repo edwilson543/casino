@@ -2,8 +2,6 @@ from Games.Roulette.definitions.wheel_defns import wheel_options
 from math import floor
 
 
-# Not sure if it would be better if the below composite classes were instead subclasses of the RouletteWheel class
-
 class RouletteWheelWagers:
     """
     Class for defining the different wagers on the roulette wheel.
@@ -70,7 +68,7 @@ class RouletteWheelWagers:
         """
         colour = self.wheel.colour_ids[player_bet[0]]
         # from the place_colours_bet method we know player_bet contains just one element
-        return [slot_num for slot_num in self.wheel.slots.keys() if self.wheel.slots[slot_num] == colour]
+        return [slot_num for slot_num in self.wheel.slots if self.wheel.slots[slot_num] == colour]
 
     def place_straight_up_bet(self):
         number_options_text = self.wheel.user_number_options_text()

@@ -1,8 +1,9 @@
 from Games.Roulette.definitions.game_parameters import threshold_for_top_up_prompt
+import sys
 
 
-#TODO write this class so that it does the leg work for looping the game, navigating user to relevant stage
-#ideally all in one method?
+# TODO clean up these class methods
+# ideally all in one method?
 class RouletteContinuation:
     """
     Class to keep the game going until the user runs out of money or quits.
@@ -15,11 +16,24 @@ class RouletteContinuation:
         self.top_up_multiples = top_up_multiples
         self.user_pot = user_pot
 
-    def keep_playing(self):
-        """input = Y/N keep play"""
-        pass
+    def game_continuation_steps(self):
+        self.keep_playing()
+        if self.check_top_up_prompt_worthwhile() == True:
+            pass
+        else:
+            pass
 
-    def choose_next_steps(self):
+    def keep_playing(self):
+        while True:
+            proceed = input("Would you like to continue playing, [Y]es or [N]o\n--->").upper()
+            if proceed == "N":
+                sys.exit(f"Your final pot is £{self.user_pot}")  # could give class initial_pot attribute to give P/L
+            elif proceed == 'Y':
+                break
+            else:
+                print(f"{proceed} not a valid command, pleas try again")
+
+    def choose_navigation(self):
         while True:
             next_step = input("")
         pass
@@ -46,9 +60,9 @@ class RouletteContinuation:
 
     def check_top_up_prompt_worthwhile(self):
         if self.user_pot > threshold_for_top_up_prompt:
-            return False
+            return 0
         else:
-            return True
+            return self.top_up_prompt()
 
     def top_up_prompt(self):
         """Method to get the user to specify how much they want to top up"""

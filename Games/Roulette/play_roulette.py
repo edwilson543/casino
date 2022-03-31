@@ -4,14 +4,13 @@ from Games.Roulette.app.roulette_mechanics_classes.bet_selection import BetSelec
 from Games.Roulette.app.roulette_mechanics_classes.bet_placement import RouletteWheelWagers
 from Games.Roulette.app.roulette_mechanics_classes.bet_evaluation import BetEvaluation
 from Games.Roulette.app.roulette_mechanics_classes.roulette_continuation import RouletteContinuation
-import sys
 
 # Game initialisation
 play_setup = RouletteInitiator(min_deposit=deposit_parameters['min_deposit'],
                                deposit_multiples=deposit_parameters['deposit_multiples'])
 play_setup.game_initiator()
 initial_user_pot = play_setup.deposit_amount()
-active_user_pot = initial_user_pot # to print total win / loss at end of game or commentary on up/down
+active_user_pot = initial_user_pot  # to print total win / loss at end of game or commentary on up/down
 
 while True:
     active_wheel_id = play_setup.wheel_choice()
@@ -40,13 +39,9 @@ while True:
     # establish game continuation criteria
     continuation = RouletteContinuation(user_pot=active_user_pot, min_top_up=top_up_parameters['min_top_up'],
                                         top_up_multiples=top_up_parameters['top_up_multiples'])
-    active_top_up_prompt_status = continuation.check_top_up_prompt_worthwhile()
-    if active_top_up_prompt_status is True:
-        active_user_pot += continuation.top_up_prompt()
-    else:
-        continue
-
-sys.exit('Game over i.e. not coded any further yet')
+    continuation.keep_playing()
+    top_up = continuation.check_top_up_prompt_worthwhile()
+    active_user_pot += top_up
 
 # TODO finish script - while deposit>0 loop over the bet script, once it has feature to change pot
 # TODO make an overall class that is this script
