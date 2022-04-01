@@ -4,6 +4,7 @@ from Games.Roulette.app.roulette_mechanics_classes.bet_selection import BetSelec
 from Games.Roulette.app.roulette_mechanics_classes.bet_placement import RouletteWheelWagers
 from Games.Roulette.app.roulette_mechanics_classes.bet_evaluation import BetEvaluation
 from Games.Roulette.app.roulette_mechanics_classes.roulette_continuation import RouletteContinuation
+from Games.Roulette.definitions.navigation_defns import navigation_dict
 
 
 class RouletteGame:
@@ -49,31 +50,26 @@ class RouletteGame:
         self.active_winnings = active_winnings
         self.navigation_id = navigation_id
 
-    def play_setup(self):
+    def roulette_setup(self):
         play_setup = RouletteInitiator(min_deposit=self.min_deposit, deposit_multiples=self.deposit_multiples)
         play_setup.game_initiator()
         initial_deposit = play_setup.deposit_amount()
         self.initial_user_pot = initial_deposit
         self.active_user_pot = initial_deposit
 
-    def game_loop(self):
+    def roulette_loop(self):
         """Method to loop over all game components, based on the navigation_id re-determined at end"""
-        # TODO make a dictionary/list of the navigation_ids and what they do, so don't reference directly to strings
-        # This could introduce quite  pointless step e.g. 'W' -> 'choose wheel' -> 'W'
-        # And also a list of the text command options
-        # Perhaps each of the classes that are instantiated within the if loops should first also be done here, or
-        # alternatively could become class attributes so they can be called directly
 
         while True:
             # wheel selection
-            if self.navigation_id == 'W':
+            if self.navigation_id in navigation_dict['from_wheel_selection']:
                 """i.e. if user chose to change wheel after their bet, or this is the first loop."""
                 # Could maybe take the wheel choice method out of game initiation as not really relevant to min/max depo
                 play_setup = RouletteInitiator(min_deposit=self.min_deposit, deposit_multiples=self.deposit_multiples)
                 self.active_wheel_id = play_setup.wheel_choice()
 
             # bet selection
-            if self.navigation_id == 'W' or 'BT':
+            if self.navigation_id in navigation_dict['from_bet_selection']:
                 """i.e. if user chose to change wheel or change bet category, or this is the first loop.
                 or used because if they changed the wheel then also need to change bet category"""
                 bet_selection = BetSelector(wheel_id=self.active_wheel_id, player_funds=self.active_user_pot)
@@ -81,14 +77,14 @@ class RouletteGame:
                 self.active_bet_type_id = bet_selection.choose_bet_type(bet_cat=self.active_bet_cat)
 
             # stake quantification - use of bet_selection from previous if maybe a bit unideal
-            if self.navigation_id == 'W' or 'BT' or 'S':
+            if self.navigation_id in navigation_dict['from_stake_quantification']:
                 """i.e. if user chose to change wheel or bet type or stake amount."""
                 bet_selection = BetSelector(wheel_id=self.active_wheel_id, player_funds=self.active_user_pot)
                 self.active_stake = bet_selection.choose_stake_amount(bet_type=self.active_bet_type_id)
                 self.active_user_pot -= self.active_stake
 
             # Bet placing up to immediately before outcome evaluation
-            if self.navigation_id == 'W' or 'BT' or 'S' or 'BC':
+            if self.navigation_id in navigation_dict['from_bet_choice']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice."""
                 bet_placer = RouletteWheelWagers(stake=self.active_stake, bet_type_id=self.active_bet_type_id,
                                                  wheel_id=self.active_wheel_id)
@@ -96,21 +92,19 @@ class RouletteGame:
                 self.active_winning_slots = bet_placer.get_winning_slots(player_bet=self.active_bet_choice)
 
             # Bet evaluation
-            if self.navigation_id == 'W' or 'BT' or 'S' or 'BC' or 'R':
+            if self.navigation_id in navigation_dict['from_bet_evaluation']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
-            bet_evaluater = BetEvaluation(potential_winnings=self.active_potential_winnings,
-                                          winning_slots=self.active_winning_slots,
-                                          user_pot=self.active_user_pot,
-                                          wheel_id=self.active_wheel_id)
-            self.active_winnings = bet_evaluater.evaluate_bet()
-            self.active_user_pot += self.active_winnings
+                bet_evaluater = BetEvaluation(potential_winnings=self.active_potential_winnings,
+                                              winning_slots=self.active_winning_slots,
+                                              user_pot=self.active_user_pot,
+                                              wheel_id=self.active_wheel_id)
+                self.active_winnings = bet_evaluater.evaluate_bet()
+                self.active_user_pot += self.active_winnings
 
-            # establish game continuation criteria
-            """Code here that goes through some continuation steps and sends loop back to relevant place.
-            Need to develop, and within roulette continuation"""
-            continuation = RouletteContinuation(user_pot=self.active_user_pot,
+            # Establish game continuation criteria
+            continuation = RouletteContinuation(initial_user_pot=self.initial_user_pot,
+                                                user_pot=self.active_user_pot,
                                                 min_top_up=self.min_top_up,
                                                 top_up_multiples=self.top_up_multiples)
-            continuation.keep_playing()
-            self.active_top_up = continuation.check_top_up_prompt_worthwhile()
+            self.active_top_up, self.navigation_id = continuation.game_continuation_steps()
             self.active_user_pot += self.active_top_up

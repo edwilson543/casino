@@ -1,6 +1,5 @@
 from Games.Roulette.app.roulette_base_classes import RouletteWheel
 
-# TODO define relational dictionaries for the roulette boards, and add to the class attributes
 """
 To define a new wheel complete the following steps:
 1) Create wheel_defn as a mapping of the numbers on the wheel to the colours
@@ -15,7 +14,7 @@ black feature on the same wheel
 9) Map relevant bet type methods for the wheel in roulette_bas_classes RouletteWheel class, defining any new methods
 if necessary.
 """
-#TODO add dictionaries for the boards to the definitions, maybe with supporting string rep of form "|1|2|\n-----\n|3|4|"
+# TODO add dictionaries for the boards to the definitions, maybe with supporting string rep of form "|1|2|\n-----\n|3|4|"
 ###############################
 # Wheel definitions and payouts
 ###############################
