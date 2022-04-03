@@ -1,5 +1,6 @@
 from Games.Roulette.definitions.bet_type_defns import bet_cats_and_types, bet_cat_options_text
 from Games.Roulette.definitions.bet_type_defns import bet_type_options_text, bet_type_min_max_bet
+import sys
 
 
 class BetSelector:
@@ -29,25 +30,65 @@ class BetSelector:
                 print("Not a valid bet type, try again")
 
     def choose_stake_amount(self, bet_type):
+        """
+        Returns:
+        Stake amount, all_in_status
+        """
         min_stake = bet_type_min_max_bet[self.wheel_id][bet_type]['min']
         max_stake = bet_type_min_max_bet[self.wheel_id][bet_type]['max']
+        all_in_status = False
         while True:
-            stake = input("How much would you like to stake?\n"
-                          f"Minimum stake: £{min_stake}, Maximum stake: £{max_stake}, integer stakes only.\n"
-                          f"You have £{self.player_funds} left to play with.\n--->")
-            try:
-                stake = int(stake.replace("£", ""))  # get rid of the £ sign if the user types one
-                if stake > self.player_funds:
-                    print(f"A £{stake} stake exceeds your current funds")
-                    continue  # TODO Add some feature here to allow user to do a top up or go all in
-                elif min_stake <= stake <= max_stake:
-                    confirmation = input(f"Confirm your stake of £{stake}?\n"
-                                         "[Y]es, [N]o \n--->").upper()
-                    if confirmation != 'Y':
+            if self.player_funds < min_stake:
+                all_in_stake, all_in_status = self.all_in()
+                return all_in_stake, all_in_status
+                # TODO Add some feature here to allow user to do a top up instead
+            else:
+                stake = input("How much would you like to stake?\n"
+                              f"Minimum stake: £{min_stake}, Maximum stake: £{max_stake}, integer stakes only.\n"
+                              f"You have £{self.player_funds} left to play with.\n--->")
+                try:
+                    stake = int(stake.replace("£", ""))  # get rid of the £ sign if the user types one
+                    if stake > self.player_funds:
+                        print(f"A £{stake} stake exceeds your current funds ({self.player_funds}).")
                         continue
-                    print(f"£{stake} stake placed, time to choose your bet!")
-                    return stake
-                else:
+                    elif min_stake <= stake <= max_stake:
+                        confirmation = input(f"Confirm your stake of £{stake}?\n"
+                                             "[Y]es, [N]o \n--->").upper()
+                        if confirmation != 'Y':
+                            print(f"£{stake} stake placed, time to choose your bet!")
+                        return stake, all_in_status
+                    else:
+                        print('Invalid stake - please try again and refer to bet criteria.')
+                except ValueError:
                     print('Invalid stake - please try again and refer to bet criteria.')
-            except ValueError:
-                print('Invalid stake - please try again and refer to bet criteria.')
+
+    def all_in(self):
+        all_in = input(f"Would you like to go all in, [Y]es or [N]o?").upper()
+        while True:
+            if all_in == 'Y':
+                all_in_status = True
+                return self.player_funds, all_in_status
+            elif all_in == 'N':
+                sys.exit(f"Game over, your final pot is {self.player_funds}")
+            else:
+                print("Invalid options, please try again.")
+
+    # def top_up(self):
+    #     """Method to get the user to specify how much they want to top up"""
+    #     while True:
+    #         deposit_amount = input("How much would you like to top up?\n"
+    #                                f"Top ups are allowed as multiples of £{self.top_up_multiples},"
+    #                                f"the minimum top up is £{self.min_top_up}. \n--->")
+    #         try:
+    #             top_up = int(deposit_amount.replace("£", ""))  # in case someone types in e.g. £100 rather than 150
+    #             if top_up >= self.min_top_up and top_up % self.top_up_multiples == 0:
+    #                 confirmation = input(f"Are you sure you would like to top up by £{top_up}?\n"
+    #                                      "[Y]es, [N]o \n--->").upper()
+    #                 if confirmation != 'Y':
+    #                     continue
+    #                 print(f"You have deposited £{top_up}.\nYour pot now contains £{self.user_pot + top_up}")
+    #                 return top_up
+    #             else:
+    #                 print('Invalid top up amount - please try again and refer to criteria.')
+    #         except ValueError:
+    #             print('Invalid top up amount - please try again and refer to criteria.')

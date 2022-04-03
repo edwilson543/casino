@@ -5,6 +5,7 @@ from Games.Roulette.app.roulette_mechanics_classes.bet_placement import Roulette
 from Games.Roulette.app.roulette_mechanics_classes.bet_evaluation import BetEvaluation
 from Games.Roulette.app.roulette_mechanics_classes.roulette_continuation import RouletteContinuation
 from Games.Roulette.definitions.navigation_defns import navigation_dict
+import sys
 
 
 class RouletteGame:
@@ -30,8 +31,9 @@ class RouletteGame:
                  active_stake: int = 20,
                  active_bet_choice: str = 'G',
                  active_winning_slots: list = [],  # resolution needed?
-                 active_potential_winnings=50,
-                 active_winnings=0,
+                 active_potential_winnings: int = 50,
+                 active_winnings: int = 0,
+                 all_in_status: bool = False,
                  navigation_id: str = 'W'):
         self.min_deposit = min_deposit
         self.deposit_multiples = deposit_multiples
@@ -48,6 +50,7 @@ class RouletteGame:
         self.active_winning_slots = active_winning_slots
         self.active_potential_winnings = active_potential_winnings
         self.active_winnings = active_winnings
+        self.all_in_status = all_in_status
         self.navigation_id = navigation_id
 
     def roulette_setup(self):
@@ -80,7 +83,8 @@ class RouletteGame:
             if self.navigation_id in navigation_dict['from_stake_quantification']:
                 """i.e. if user chose to change wheel or bet type or stake amount."""
                 bet_selection = BetSelector(wheel_id=self.active_wheel_id, player_funds=self.active_user_pot)
-                self.active_stake = bet_selection.choose_stake_amount(bet_type=self.active_bet_type_id)
+                self.active_stake, self.all_in_status = bet_selection.choose_stake_amount(
+                    bet_type=self.active_bet_type_id)
 
             # Bet placing up to immediately before outcome evaluation
             if self.navigation_id in navigation_dict['from_bet_choice']:
@@ -93,7 +97,7 @@ class RouletteGame:
             # Bet evaluation
             if self.navigation_id in navigation_dict['from_bet_evaluation']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
-                self.active_user_pot -= self.active_stake # included here if user does a repeat bet
+                self.active_user_pot -= self.active_stake  # included here if user does a repeat bet
                 bet_evaluater = BetEvaluation(potential_winnings=self.active_potential_winnings,
                                               winning_slots=self.active_winning_slots,
                                               user_pot=self.active_user_pot,
@@ -102,6 +106,8 @@ class RouletteGame:
                 self.active_user_pot += self.active_winnings
 
             # Establish game continuation criteria
+            if self.all_in == True:
+                sys.exit(f"Game over. Your final pot is {self.active_user_pot}")
             continuation = RouletteContinuation(initial_user_pot=self.initial_user_pot,
                                                 user_pot=self.active_user_pot,
                                                 min_top_up=self.min_top_up,

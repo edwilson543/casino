@@ -8,8 +8,10 @@ which must also be taken
 3) Add a relevant if statement in roulette_mechanics
 4) Initialise a parameter for the new navigation in the RouletteGame class
 """
-# Maybe we need an option to top up, regardless of top up prompt
 
+#########
+# Navigation options in the for loop in the roulette_mechanics module
+#########
 navigation_text = "[R]epeat bet; change bet: [C]hoice, [S]take, [T]ype, [W]heel"
 navigation_dict = {'from_wheel_selection': ['W'],
                    'from_bet_selection': ['T', 'W'],
@@ -17,3 +19,4 @@ navigation_dict = {'from_wheel_selection': ['W'],
                    'from_bet_choice': ['C', 'S', 'T', 'W'],
                    'from_bet_evaluation': ['R', 'C', 'S', 'T', 'W']}
 navigation_options = ['R', 'C', 'S', 'T', 'W']
+
