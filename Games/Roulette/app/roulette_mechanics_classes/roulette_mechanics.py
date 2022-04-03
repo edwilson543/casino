@@ -10,7 +10,7 @@ import sys
 
 class RouletteGame:
     """
-    Class to pull together all components of the roulette game, so they can be loooped over
+    Class to pull together all components of the roulette game, so they can be looped over
     Maybe there is a better way to do this than initialise dummy parameters, which never actually get used - looked at
     using None but apparently that is not ideal.
     The parameters are all those necessary to instantiate the classes in the other roulette_mechanics_classes.
@@ -106,11 +106,12 @@ class RouletteGame:
                 self.active_user_pot += self.active_winnings
 
             # Establish game continuation criteria
-            if self.all_in == True:
-                sys.exit(f"Game over. Your final pot is {self.active_user_pot}")
+            if self.all_in_status:
+                sys.exit(f"Game over. Your final pot is £{self.active_user_pot}")
             continuation = RouletteContinuation(initial_user_pot=self.initial_user_pot,
                                                 user_pot=self.active_user_pot,
                                                 min_top_up=self.min_top_up,
-                                                top_up_multiples=self.top_up_multiples)
+                                                top_up_multiples=self.top_up_multiples,
+                                                stake=self.active_stake)
             self.active_top_up, self.navigation_id = continuation.game_continuation_steps()
             self.active_user_pot += self.active_top_up

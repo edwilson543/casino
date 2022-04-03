@@ -1,5 +1,6 @@
 from Games.Roulette.definitions.game_parameters import threshold_for_top_up_prompt
 from Games.Roulette.definitions.navigation_defns import navigation_text, navigation_options
+from Games.Roulette.definitions.navigation_defns import navigation_text_low_funds, navigation_options_low_funds
 import sys
 
 
@@ -10,17 +11,20 @@ class RouletteContinuation:
     The purpose will be to map users to where they need to be within the existing mechanics.
     """
 
-    def __init__(self, initial_user_pot: int, user_pot: int, min_top_up: int, top_up_multiples: int):
+    def __init__(self, initial_user_pot: int, user_pot: int, min_top_up: int, top_up_multiples: int, stake: int):
         self.initial_user_pot = initial_user_pot
         self.user_pot = user_pot
         self.min_top_up = min_top_up
         self.top_up_multiples = top_up_multiples
+        self.stake = stake
 
     def game_continuation_steps(self):
         self.keep_playing()
         top_up = self.check_top_up_prompt_worthwhile()
         next_step = self.choose_navigation()
         return top_up, next_step
+
+    # lower level methods
 
     def keep_playing(self):
         while True:
@@ -40,12 +44,20 @@ class RouletteContinuation:
             return self.top_up_prompt()
 
     def choose_navigation(self):
+        if self.stake <= self.user_pot:
+            nav_text = navigation_text
+            nav_options = navigation_options
+        else:
+            nav_text = navigation_text_low_funds
+            nav_options = navigation_options_low_funds
         while True:
-            next_step = input(f"What would you like to do?\n{navigation_text}\n--->").upper()
-            if next_step in navigation_options:
+            next_step = input(f"What would you like to do?\n{nav_text}\n--->").upper()
+            if next_step in nav_options:
                 return next_step
             else:
                 print(f"{next_step} not a valid command, please try again")
+
+    # lowest level methods
 
     def top_up_prompt(self):
         """Method to get the user to specify how much they want to top up"""
@@ -69,7 +81,7 @@ class RouletteContinuation:
                                          "[Y]es, [N]o \n--->").upper()
                     if confirmation != 'Y':
                         continue
-                    print(f"You have deposited £{top_up}.")
+                    print(f"You have deposited £{top_up}.\n Your new pot is £{top_up + self.user_pot}")
                     return top_up
                 else:
                     print('Invalid top up amount - please try again and refer to criteria.')
@@ -77,6 +89,7 @@ class RouletteContinuation:
                 print('Invalid top up amount - please try again and refer to criteria.')
 
     def up_or_down(self):
+        """Method to specify whether the player is winning or losing in the text prompts"""
         if self.user_pot >= self.initial_user_pot:
             return "up"
         elif self.user_pot < self.initial_user_pot:

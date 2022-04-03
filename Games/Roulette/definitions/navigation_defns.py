@@ -1,16 +1,13 @@
 """
 ID codes to allow the user to loop the game to the relevant point after bet evaluation
-To add a new navigation (obviously first need a new step/aspect of the game):
-1) Add the relevant text below - note the text is ended as the order of likeliness of that user will select it
-2) Add a label for where in the for loop the navigation is, with a corresponding list for all the subsequent steps
-which must also be taken
-3) Add it to the list of navigation_options
-3) Add a relevant if statement in roulette_mechanics
-4) Initialise a parameter for the new navigation in the RouletteGame class
+The first set of options corresponds to the case where the user has sufficient funds to continue using the same stake
+amount.
+The second set of 'low_funds' options restricts the navigation options so that the user will have to
+change their stake amount, which is required in the case that insufficient funds remain to repeat the bet.
 """
 
 #########
-# Navigation options in the for loop in the roulette_mechanics module
+# Navigation options in the for loop in the roulette_mechanics module, if active stake does not exceed min bet
 #########
 navigation_text = "[R]epeat bet; change bet: [C]hoice, [S]take, [T]ype, [W]heel"
 navigation_dict = {'from_wheel_selection': ['W'],
@@ -19,4 +16,10 @@ navigation_dict = {'from_wheel_selection': ['W'],
                    'from_bet_choice': ['C', 'S', 'T', 'W'],
                    'from_bet_evaluation': ['R', 'C', 'S', 'T', 'W']}
 navigation_options = ['R', 'C', 'S', 'T', 'W']
+
+#########
+# Navigation options in the for loop in the roulette_mechanics module, if active stake does exceed min bet
+#########
+navigation_text_low_funds = "Change bet: [S]take, [T]ype, [W]heel"
+navigation_options_low_funds = ['S', 'T', 'W']
 
