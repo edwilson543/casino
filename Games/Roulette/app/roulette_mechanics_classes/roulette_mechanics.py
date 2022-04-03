@@ -81,7 +81,6 @@ class RouletteGame:
                 """i.e. if user chose to change wheel or bet type or stake amount."""
                 bet_selection = BetSelector(wheel_id=self.active_wheel_id, player_funds=self.active_user_pot)
                 self.active_stake = bet_selection.choose_stake_amount(bet_type=self.active_bet_type_id)
-                self.active_user_pot -= self.active_stake
 
             # Bet placing up to immediately before outcome evaluation
             if self.navigation_id in navigation_dict['from_bet_choice']:
@@ -94,6 +93,7 @@ class RouletteGame:
             # Bet evaluation
             if self.navigation_id in navigation_dict['from_bet_evaluation']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
+                self.active_user_pot -= self.active_stake # included here if user does a repeat bet
                 bet_evaluater = BetEvaluation(potential_winnings=self.active_potential_winnings,
                                               winning_slots=self.active_winning_slots,
                                               user_pot=self.active_user_pot,
