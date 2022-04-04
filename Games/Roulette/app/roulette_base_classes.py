@@ -1,6 +1,8 @@
 import numpy as np
 
 
+# TODO get rid of the payout scaler and change so that return is 1/fake probability , where fake probability
+# is win slots / (number of slots - green slots). Make sure to define the colour used to bias the wheel
 class RouletteWheel:
     """Base class for the roulette wheel - from which we can define different wheel configurations"""
 
@@ -8,7 +10,8 @@ class RouletteWheel:
                  slots: dict,
                  payout_scaler: float,
                  colour_ids: dict,
-                 colour_options: str):
+                 colour_options: str,
+                 colour_bias: str):
         """
         Parameters
         __________
@@ -21,6 +24,7 @@ class RouletteWheel:
         self.payout_scaler = payout_scaler
         self.colour_ids = colour_ids
         self.colour_options = colour_options
+        self.colour_bias = colour_bias
 
     def spin(self):
         """Returns: One random spin of the wheel as a dictionary, with number and colour as the key/value pairs"""
