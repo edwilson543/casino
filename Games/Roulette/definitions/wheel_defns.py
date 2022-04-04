@@ -7,14 +7,14 @@ To define a new wheel complete the following steps:
 3) Add some colour ids - these should be unique, using as many characters as necessary e.g. BLU and BLA if blue and
 black feature on the same wheel
 4) Define a colour_options_text for that wheel, which should correspond to the colour ids 
-5) Instantiate the relevant wheel using the definitions
+5) Create a subclass of the RouletteWheel base class for each wheel, using the defined parameters
 6) Add the wheel to the wheel_options dict below, using an identification key
 7) Add the wheel option to the wheel_options_text so that it can be chosen in the game, with the same key
 8) Add relevant bet type options to the wheel in bet_type_defns, using the wheel id key from wheel_options
 9) Map relevant bet type methods for the wheel in roulette_bas_classes RouletteWheel class, defining any new methods
 if necessary.
 """
-# TODO add dictionaries for the boards to the definitions, maybe with supporting string rep of form "|1|2|\n-----\n|3|4|"
+# TODO add dictionaries for the boards to the definitions, maybe with a string rep of form "|1|2|\n-----\n|3|4|"
 ###############################
 # Wheel definitions and payouts
 ###############################
@@ -63,6 +63,7 @@ class AmericanWheel(RouletteWheel):
         colour_options = american_wheel_colour_options_text
         super().__init__(slots, payout_scaler, colour_ids, colour_options)
 
+
 class TemplateWheel(RouletteWheel):
     def __init__(self):
         slots = template_wheel_defn
@@ -70,6 +71,7 @@ class TemplateWheel(RouletteWheel):
         colour_ids = template_wheel_colour_ids
         colour_options = template_wheel_colour_options_text
         super().__init__(slots, payout_scaler, colour_ids, colour_options)
+
 
 ##############################
 # Dictionary and associated text for the different wheel options
