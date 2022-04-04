@@ -113,5 +113,6 @@ class RouletteGame:
                                                 min_top_up=self.min_top_up,
                                                 top_up_multiples=self.top_up_multiples,
                                                 stake=self.active_stake)
+            self.active_top_up = 0 # otherwise user gets auto top up if previously have topped up
             self.active_top_up, self.navigation_id = continuation.game_continuation_steps()
             self.active_user_pot += self.active_top_up
