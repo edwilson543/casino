@@ -38,23 +38,41 @@ american_wheel_colour_ids = {'G': 'green', 'R': 'red', 'B': 'black'}
 american_wheel_colour_options_text = "[G]reen, [R]ed, [B]lack"
 
 template_wheel_defn = {0: 'black', 1: 'white'}
-template_wheel_scaler = 0.95
+template_wheel_payout_scaler = 0.95
 template_wheel_colour_ids = {'B': 'black', 'W': 'white'}
 template_wheel_colour_options_text = "[B]lack, [W]hite"
 
-###############################
-# Instantiate the wheel objects
-###############################
-euro_wheel = RouletteWheel(slots=euro_wheel_defn, payout_scaler=euro_wheel_payout_scaler,
-                           colour_ids=euro_wheel_colour_ids, colour_options=euro_wheel_colour_options_text)
 
-american_wheel = RouletteWheel(slots=american_wheel_defn, payout_scaler=american_wheel_payout_scaler,
-                               colour_ids=american_wheel_colour_ids, colour_options=american_wheel_colour_options_text)
-template_wheel = RouletteWheel(slots=template_wheel_defn, payout_scaler=template_wheel_scaler,
-                               colour_ids=template_wheel_colour_ids, colour_options=template_wheel_colour_options_text)
+###############################
+# Create subclass of the RouletteWheel base class for each defined wheel
+###############################
+class EuroWheel(RouletteWheel):
+    def __init__(self):
+        slots = euro_wheel_defn
+        payout_scaler = euro_wheel_payout_scaler
+        colour_ids = euro_wheel_colour_ids
+        colour_options = euro_wheel_colour_options_text
+        super().__init__(slots, payout_scaler, colour_ids, colour_options)
+
+
+class AmericanWheel(RouletteWheel):
+    def __init__(self):
+        slots = american_wheel_defn
+        payout_scaler = american_wheel_payout_scaler
+        colour_ids = american_wheel_colour_ids
+        colour_options = american_wheel_colour_options_text
+        super().__init__(slots, payout_scaler, colour_ids, colour_options)
+
+class TemplateWheel(RouletteWheel):
+    def __init__(self):
+        slots = template_wheel_defn
+        payout_scaler = template_wheel_payout_scaler
+        colour_ids = template_wheel_colour_ids
+        colour_options = template_wheel_colour_options_text
+        super().__init__(slots, payout_scaler, colour_ids, colour_options)
 
 ##############################
 # Dictionary and associated text for the different wheel options
 ##############################
-wheel_options = {'E': euro_wheel, 'A': american_wheel}
+wheel_options = {'E': EuroWheel(), 'A': AmericanWheel()}
 wheel_options_text = "[E]uropean, [A]merican"
