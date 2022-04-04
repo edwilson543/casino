@@ -1,4 +1,4 @@
-from Games.Roulette.app.roulette_mechanics_classes.bet_placement import RouletteWheelWagers
+from Games.Roulette.app.roulette_mechanics_action_classes.bet_placement import RouletteWheelWagers
 
 test_bet_placer_colours = RouletteWheelWagers(bet_type_id='C', wheel_id='E', stake=10)
 

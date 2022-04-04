@@ -1,9 +1,9 @@
 from Games.Roulette.definitions.game_parameters import deposit_parameters, top_up_parameters
-from Games.Roulette.app.roulette_mechanics_classes.roulette_initiation import RouletteInitiator
-from Games.Roulette.app.roulette_mechanics_classes.bet_selection import BetSelector
-from Games.Roulette.app.roulette_mechanics_classes.bet_placement import RouletteWheelWagers
-from Games.Roulette.app.roulette_mechanics_classes.bet_evaluation import BetEvaluation
-from Games.Roulette.app.roulette_mechanics_classes.roulette_continuation import RouletteContinuation
+from Games.Roulette.app.roulette_mechanics_action_classes.roulette_initiation import RouletteInitiator
+from Games.Roulette.app.roulette_mechanics_action_classes.bet_selection import BetSelector
+from Games.Roulette.app.roulette_mechanics_action_classes.bet_placement import RouletteWheelWagers
+from Games.Roulette.app.roulette_mechanics_action_classes.bet_evaluation import BetEvaluation
+from Games.Roulette.app.roulette_mechanics_action_classes.roulette_continuation import RouletteContinuation
 from Games.Roulette.definitions.navigation_defns import navigation_dict
 import sys
 
@@ -13,7 +13,7 @@ class RouletteGame:
     Class to pull together all components of the roulette game, so they can be looped over
     Maybe there is a better way to do this than initialise dummy parameters, which never actually get used - looked at
     using None but apparently that is not ideal.
-    The parameters are all those necessary to instantiate the classes in the other roulette_mechanics_classes.
+    The parameters are all those necessary to instantiate the classes in the other roulette_mechanics_action_classes.
     The game loops until the user runs out of money or
     """
 
