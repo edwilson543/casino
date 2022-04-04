@@ -4,6 +4,11 @@ test_bet_placer_colours = RouletteWheelWagers(bet_type_id='C', wheel_id='E', sta
 
 
 class TestRouletteWheelWagers:
+    def test_get_winning_slots(self):
+        """Test to see if the mapping of bet_type_id -> bet method is working correctly"""
+        winning_set = test_bet_placer_colours.get_winning_slots_colours(player_bet=['R'])  # test for colour red
+        assert winning_set == [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+
     def test_get_winning_slots_colours(self):
         winning_set = test_bet_placer_colours.get_winning_slots_colours(player_bet=['R'])  # test for colour red
         assert winning_set == [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
