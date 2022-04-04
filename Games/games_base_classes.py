@@ -2,6 +2,8 @@ from datetime import datetime
 
 
 class Player:
+    """Class to hold the pot and define interactions with the pot.
+    Player has money taken from the pot, and added to the pot"""
     def __init__(self,
                  name: str,
                  password: str,
