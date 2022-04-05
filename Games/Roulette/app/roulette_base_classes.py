@@ -1,8 +1,8 @@
+from Games.games_base_classes import Bet
+from math import floor
 import numpy as np
 
 
-# TODO get rid of the payout scaler and change so that return is 1/fake probability , where fake probability
-# is win slots / (number of slots - green slots). Make sure to define the colour used to bias the wheel
 class RouletteWheel:
     """Base class for the roulette wheel - from which we can define different wheel configurations"""
 
@@ -67,3 +67,34 @@ class RouletteWheel:
         min_number = min(list(set(self.slots.keys())))
         max_number = max(list(set(self.slots.keys())))
         return range(min_number, max_number + 1)
+
+
+# TODO Not sure if this counts as a base class, or if it should instead go in the bet_type_defns
+# TODO find a better way of including the playing wheel defn
+# By calculating the payout before defining the wheel we have problems
+class RouletteBet(Bet):
+    """Each bet on the Roulette wheel will be defined as a subclass of this class."""
+
+    def __init__(self, payout: int,
+                 win_criteria: list,
+                 min_bet: int,
+                 max_bet: int,
+                 bet_type_id: str,
+                 playing_wheel_id: str):
+        super().__init__(payout, win_criteria, min_bet, max_bet)
+        self.bet_type_id = bet_type_id
+        self.playing_wheel_id = playing_wheel_id
+        self.playing_wheel = RouletteWheel  # Maybe there's a better way of including the wheel here
+
+    def calculate_payout(self):
+        """Calculates the payout of a £1 roulette bet, determined by using the bias_wheel_size (which ignores the
+        'bias_colour') when calculating the probability of winning, so that the return always reflects a degree of
+        'the house always wins."""
+        win_probability_over_estimate = len(self.win_criteria) / self.playing_wheel.bias_wheel_size()
+        self.payout = floor(1 / win_probability_over_estimate)
+
+    def determine_win_criteria(self, *args):
+        """Abstract method for calculating the win crtieria of a given bet - will be bet specific.
+        The determine_win_criteria method will be used to take an input and generate a list of winning slot for a
+        given bet"""
+        pass
