@@ -41,13 +41,14 @@ class RouletteWheelWagers:
         """
         Returns:
         User bet_choice -  as a list for compatibly with other bet methods.
-        potential_winnings of the bet - bet outcome is not determined, only what a bet win would return
+        potential_winnings of the bet - bet outcome is not determined, only what a bet win would return. This is
+        calculated based on the 'fake' probability of winning, i.e. ignoring the bias_colour.
         """
         while True:
             bet_choice = input(f"What colour would you like to bet on?\n{self.wheel.colour_options}\n--->").upper()
             if bet_choice in self.wheel.colour_ids.keys():
-                potential_winnings = floor(self.stake * self.wheel.payout_scaler / (
-                        self.wheel.colour_counts(self.wheel.colour_ids[bet_choice]) / self.wheel.wheel_size()))
+                potential_winnings = self.stake * floor(
+                    1 / (self.wheel.colour_counts(self.wheel.colour_ids[bet_choice]) / self.wheel.bias_wheel_size()))
                 confirmation = input(f"Confirm £{self.stake} stake on {self.wheel.colour_ids[bet_choice]}?\n"
                                      f"Winning this bet will return: £{potential_winnings}"
                                      f"\n[Y]es, [N]o\n--->").upper()
@@ -78,7 +79,7 @@ class RouletteWheelWagers:
             try:
                 bet_choice = int(bet_choice)
                 if bet_choice in number_options_range:
-                    potential_winnings = floor(self.stake * self.wheel.payout_scaler * self.wheel.wheel_size())
+                    potential_winnings = self.stake * floor(self.wheel.bias_wheel_size())
                     confirmation = input(f"Confirm £{self.stake} stake on {bet_choice}?\n"
                                          f"Winning this bet will return: £{potential_winnings}"
                                          f"\n[Y]es, [N]o\n--->").upper()

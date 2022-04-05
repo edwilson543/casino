@@ -8,23 +8,23 @@ class RouletteWheel:
 
     def __init__(self,
                  slots: dict,
-                 payout_scaler: float,
                  colour_ids: dict,
                  colour_options: str,
-                 colour_bias: str):
+                 bias_colour: str):
         """
         Parameters
         __________
         slots: slot of the roulette wheel -
         should be passed as a dictionary, with the numbers as keys and the colours as the values
-        payout_scaler: payout := floor(stake * payout_scaler / P(bet winning)).
-        So it's a number <1 assuming house always wins
+        colour_ids: a mapping of colour id (e.g. 'R') to each colour (e.g. 'red')
+        colour_options: a string used to get user input on what colour they'd like to bet on
+        bias_colour: the colour whose counts are ignored when calculating stake returns. e.g. if you have a 37 slot
+        wheel and one slot is green, then stakes are calculated from probabilities as 1/(x/36).
         """
         self.slots = slots
-        self.payout_scaler = payout_scaler
         self.colour_ids = colour_ids
         self.colour_options = colour_options
-        self.colour_bias = colour_bias
+        self.bias_colour = bias_colour
 
     def spin(self):
         """Returns: One random spin of the wheel as a dictionary, with number and colour as the key/value pairs"""
@@ -35,13 +35,22 @@ class RouletteWheel:
         colour_return = self.slots[number_return]
         return number_return, colour_return
 
-    def wheel_size(self) -> int:
-        """Returns: The number of slots on the wheel as a float, for calculating probabilities within wager defns"""
-        return len(self.slots)
+    def bias_wheel_size(self) -> int:
+        """
+        Returns: The number of slots on the wheel, minus a count of the number of slots of biased colours.
+        The purpose is so that when calculating the return for a bet, the bias wheel size is used to calculate the
+        probability of winning so that the house always wins."""
+        return self.wheel_size() - self.colour_counts(colour=self.bias_colour)
 
     def colour_counts(self, colour: str) -> int:
         """Returns: the number of slots on the wheel of the specified colour"""
         return sum(map(colour.__eq__, self.slots.values()))
+
+    def wheel_size(self) -> int:
+        """Returns: The number of slots on the wheel as an int, for calculating probabilities within wager defns"""
+        return len(self.slots)
+
+    # UI methods - will need to be moved elsewhere
 
     def user_number_options_text(self):
         """
