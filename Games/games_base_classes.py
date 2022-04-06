@@ -43,14 +43,17 @@ class Player:
 
 # TODO maybe we do / don't want payout and win criteria (and stake) as attributes here
 class Bet:
-    def __init__(self, payout: int,
-                 win_criteria: list,
+    def __init__(self,
                  min_bet: int,
-                 max_bet: int):
-        self.payout = payout
-        self.win_criteria = win_criteria
+                 max_bet: int,
+                 bet_type_id: str,
+                 win_criteria: list,
+                 payout: int):
         self.min_bet = min_bet
         self.max_bet = max_bet
+        self.bet_type_id = bet_type_id
+        self.win_criteria = win_criteria
+        self.payout = payout
 
     def calculate_payout(self):
         """Abstract method for calculating the payout for a £1 bet - will be game specific"""

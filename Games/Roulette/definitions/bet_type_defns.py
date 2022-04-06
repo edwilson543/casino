@@ -1,5 +1,6 @@
 from Games.Roulette.app.roulette_base_classes import RouletteBet
 from Games.Roulette.definitions.wheel_defns import wheel_options
+from math import floor
 
 # general q - should we have the _text strings in the UI folder - seems like it could get a bit messy if separated?
 
@@ -32,37 +33,69 @@ bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight_up"}, 'A': {'O
 bet_type_min_max_bet = {'E': {'C': {'min': 5, 'max': 50}, 'S': {'min': 5, 'max': 20}},
                         'A': {'C': {'min': 5, 'max': 50}, 'S': {'min': 5, 'max': 20}}}
 
-
 ###############################
 # Create subclass of the RouletteBet base class for each defined bet
 ###############################
-# TODO may want to link the default parameters to some central dictionary
-# TODO should we restate the payout method here?
-# TODO should we have none as the default
-# TODO should we be including the wheel within the attributes
+"""
+In the game flow, we'll instantiate a bet, based on the active_wheel_id and active_bet_type_id.
+Then will use user input to determine the win_criteria (which is consistently defined as a list of slot numbers),
+and this will be used to automatically calculate the payout, as the bias_wheel_size divided by the length of the
+win_criteria list
+"""
+
+
+# TODO may want to link the default parameters to some central dictionary/enum?
+# TODO should we have none as the default playing wheel id?
+# TODO should we be including the wheel/bias_wheel_size within the attributes - maybe covered in data storage approach?
+# I guess ideally we wouldn't have to restate the payout method for every subclass
 class ColoursBet(RouletteBet):
-    """In the game flow, we'll instantiate a bet, and then the user inputs will be used to define:
-    first, the playing wheel_id
-    second, the colour
-    third (and automatically, the win_criteria and payout)"""
+    """Class for defining win criteria and payout of a colours bet"""
+
     def __init__(self,
-                 payout: int = None,
-                 win_criteria: list = None,  # resolution?
                  min_bet: int = 5,
                  max_bet: int = 50,
                  bet_type_id: str = 'C',
-                 playing_wheel_id: str = None,
-                 colour: str = None):
-        super().__init__(payout, win_criteria, min_bet, max_bet, bet_type_id, playing_wheel_id)
-        self.bet_type_id = bet_type_id
-        self.playing_wheel_id = playing_wheel_id
+                 win_criteria: list = None,
+                 payout: int = None,
+                 playing_wheel_id: str = None):
+        super().__init__(min_bet, max_bet, bet_type_id, win_criteria, payout, playing_wheel_id)
         self.playing_wheel = wheel_options[playing_wheel_id]
-        self.colour = colour
 
-    def determine_win_criteria(self):
-        """Abstract method for calculating the win crtieria of a given bet - will be bet specific"""
+    @property
+    def win_criteria(self):
+        return self.win_criteria
+
+    @win_criteria.setter
+    def win_criteria(self, colour: str):
         self.win_criteria = [slot_num for slot_num in self.playing_wheel.slots if
-                             self.playing_wheel.slots[slot_num] == self.colour]
+                             self.playing_wheel.slots[slot_num] == colour]
 
-    def determine_colour(self, colour: str):
-        self.colour = colour
+    def calculate_payout(self):
+        win_probability_over_estimate = len(self.win_criteria) / self.playing_wheel.bias_wheel_size()
+        self.payout = floor(1 / win_probability_over_estimate)
+
+
+class StraightUpBet(RouletteBet):
+    """Class for defining win criteria and payout for a straight up bet"""
+
+    def __init__(self,
+                 min_bet: int = 10,
+                 max_bet: int = 20,
+                 bet_type_id: str = 'S',
+                 win_criteria: list = None,
+                 payout: int = None,
+                 playing_wheel_id: str = None):
+        super().__init__(min_bet, max_bet, bet_type_id, win_criteria, payout, playing_wheel_id)
+        self.playing_wheel = wheel_options[playing_wheel_id]
+
+    @property
+    def win_criteria(self):
+        return self.win_criteria
+
+    @win_criteria.setter
+    def win_criteria(self, number: int):
+        self.win_criteria = [number]
+
+    def calculate_payout(self):
+        win_probability_over_estimate = len(self.win_criteria) / self.playing_wheel.bias_wheel_size()
+        self.payout = floor(1 / win_probability_over_estimate)
