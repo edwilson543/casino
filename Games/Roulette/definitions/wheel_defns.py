@@ -1,4 +1,4 @@
-from Games.Roulette.app.roulette_base_classes import RouletteWheel
+from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
 
 """
 To define a new wheel complete the following steps:

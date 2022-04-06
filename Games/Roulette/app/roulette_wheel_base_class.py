@@ -1,4 +1,3 @@
-from Games.games_base_classes import Bet
 import numpy as np
 
 
@@ -66,32 +65,3 @@ class RouletteWheel:
         min_number = min(list(set(self.slots.keys())))
         max_number = max(list(set(self.slots.keys())))
         return range(min_number, max_number + 1)
-
-
-# TODO Not sure if this counts as a base class, or if it should instead go in the bet_type_defns
-# TODO To calculate the payout we need to be able to access the wheel methods - not sure if we want a wheel
-# in the class definitions/ how to access 'wheel size' without instantiating a wheel
-# We could add the bias_wheel_size as a class attribute..
-class RouletteBet(Bet):
-    """Each bet on the Roulette wheel will be defined as a subclass of this class."""
-    def __init__(self,
-                 min_bet: int,
-                 max_bet: int,
-                 bet_type_id: str,
-                 win_criteria: list,
-                 payout: int,
-                 playing_wheel_id: str):
-        super().__init__(min_bet, max_bet, bet_type_id, win_criteria, payout)
-        self.playing_wheel_id = playing_wheel_id
-
-    def calculate_payout(self):
-        """Will calculate the payout of a £1 roulette bet, determined by using the bias_wheel_size (which ignores the
-        'bias_colour') when calculating the probability of winning, so that the return always reflects a degree of
-        'the house always wins."""
-        pass
-
-    def determine_win_criteria(self, *args):
-        """Abstract method for calculating the win crtieria of a given bet - will be bet specific.
-        The determine_win_criteria method will be used to take an input and generate a list of winning slot for a
-        given bet"""
-        pass
