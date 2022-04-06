@@ -1,6 +1,6 @@
-from Games.Roulette.app.roulette_bet_base_class import RouletteWheel
+from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
 from Games.Roulette.app.roulette_bet_base_class import RouletteBet
-
+from Games.Roulette.definitions.wheel_defns import EuroWheel
 
 # TODO update this description
 """
@@ -50,14 +50,14 @@ class ColoursBet(RouletteBet):
     """Class for defining win criteria and payout of a colours bet"""
 
     def __init__(self,
+                 playing_wheel: RouletteWheel = EuroWheel,  # just as a default, will get updated
+                 playing_wheel_id: str = None,
                  min_bet: int = 5,
                  max_bet: int = 50,
                  bet_type_id: str = 'C',
                  win_criteria: list = None,
-                 payout: int = None,
-                 playing_wheel_id: str = None,
-                 playing_wheel: RouletteWheel = None):
-        super().__init__(min_bet, max_bet, bet_type_id, win_criteria, payout, playing_wheel_id, playing_wheel)
+                 payout: int = None):
+        super().__init__(playing_wheel, playing_wheel_id, min_bet, max_bet, bet_type_id, win_criteria, payout)
 
     @property
     def win_criteria(self):
@@ -73,14 +73,14 @@ class StraightUpBet(RouletteBet):
     """Class for defining win criteria and payout for a straight up bet"""
 
     def __init__(self,
+                 playing_wheel: RouletteWheel = EuroWheel,  # just as a default, will get updated
+                 playing_wheel_id: str = None,
                  min_bet: int = 10,
                  max_bet: int = 20,
                  bet_type_id: str = 'S',
                  win_criteria: list = None,
-                 payout: int = None,
-                 playing_wheel_id: str = None,
-                 playing_wheel: RouletteWheel = None):
-        super().__init__(min_bet, max_bet, bet_type_id, win_criteria, payout, playing_wheel_id, playing_wheel)
+                 payout: int = None):
+        super().__init__(playing_wheel, playing_wheel_id, min_bet, max_bet, bet_type_id, win_criteria, payout)
 
     @property
     def win_criteria(self):

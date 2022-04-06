@@ -60,5 +60,5 @@ class Bet:
         pass
 
     def determine_win_criteria(self):
-        """Abstract method for calculating the win crtieria of a given bet - will be game and bet specific"""
+        """Abstract method for calculating the win criteria of a given bet - will be game and bet specific"""
         pass

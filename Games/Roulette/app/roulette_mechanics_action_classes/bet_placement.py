@@ -7,7 +7,7 @@ class BetPlacement:
     Class to generate the winning criteria and potential payout of a given bet
     """
 
-    def __init__(self, bet_type_id: str, wheel_id: str, stake: int):  # Note mappings not initialised
+    def __init__(self, bet_type_id: str, wheel_id: str, stake: int):
         self.bet_type_id = bet_type_id
         self.wheel_id = wheel_id
         self.stake = stake

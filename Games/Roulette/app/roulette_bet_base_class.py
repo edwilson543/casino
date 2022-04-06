@@ -1,5 +1,5 @@
 from Games.games_base_classes import Bet
-from roulette_wheel_base_class import RouletteWheel
+from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
 from Games.Roulette.definitions.wheel_defns import wheel_options
 from math import floor
 
@@ -16,13 +16,13 @@ class RouletteBet(Bet):
     """Each bet on the Roulette wheel will be defined as a subclass of this class."""
 
     def __init__(self,
+                 playing_wheel: RouletteWheel,
+                 playing_wheel_id: str,
                  min_bet: int,
                  max_bet: int,
                  bet_type_id: str,
                  win_criteria: list,
-                 payout: int,
-                 playing_wheel_id: str,
-                 playing_wheel: RouletteWheel):
+                 payout: int):
         super().__init__(min_bet, max_bet, bet_type_id, win_criteria, payout)
         self.playing_wheel_id = playing_wheel_id
         self.playing_wheel = playing_wheel
