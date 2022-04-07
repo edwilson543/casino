@@ -46,19 +46,16 @@ class Bet:
     def __init__(self,
                  min_bet: int,
                  max_bet: int,
-                 bet_type_id: str,
-                 win_criteria: list,
-                 payout: int):
+                 bet_type_id: str):
         self.min_bet = min_bet
         self.max_bet = max_bet
         self.bet_type_id = bet_type_id
-        self.win_criteria = win_criteria
-        self.payout = payout
 
-    def calculate_payout(self):
-        """Abstract method for calculating the payout for a £1 bet - will be game specific"""
+    def determine_win_criteria(self, *args):
+        """Abstract method for calculating the win criteria of a given bet - will be game and bet specific"""
         pass
 
-    def determine_win_criteria(self):
-        """Abstract method for calculating the win criteria of a given bet - will be game and bet specific"""
+    def calculate_payout(self, *args):
+        """Abstract method for calculating the payout for a £1 bet - will be game and bet specific,
+        in particular we will need"""
         pass

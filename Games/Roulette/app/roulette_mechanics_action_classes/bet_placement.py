@@ -30,4 +30,4 @@ class BetPlacement:
 
     def get_potential_winnings(self):
         """Calculates the potential winnings of the user defined bet"""
-        return self.stake * self.bet_type.calculate_payout()
+        return self.stake * self.bet_type.calculate_payout(,
