@@ -1,12 +1,16 @@
 from Games.Roulette.definitions.game_parameters import deposit_parameters, top_up_parameters
-from Games.Roulette.app.roulette_mechanics_action_classes.roulette_initiation import RouletteInitiator
+from Games.games_base_classes import Player
+from user_interface.command_line.Roulette.definitions.navigation_defns_user import navigation_dict
+from user_interface.command_line.all_games.player_interactions_user import PlayerUserInteractions
+
+from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.roulette_initiation_user import \
+    RouletteInitiatorUser
 from Games.Roulette.app.roulette_mechanics_action_classes.bet_selection import BetSelector
 
 from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_placement_user import BetPlacementUser
 
 from Games.Roulette.app.roulette_mechanics_action_classes.bet_evaluation import BetEvaluation
 from Games.Roulette.app.roulette_mechanics_action_classes.roulette_continuation import RouletteContinuation
-from Games.Roulette.definitions.navigation_defns import navigation_dict
 import sys
 # added whilst updating
 from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
@@ -23,6 +27,7 @@ class RouletteGameUser:
     """
 
     def __init__(self,
+                 active_player: Player = None,
                  min_deposit: int = deposit_parameters['min_deposit'],
                  deposit_multiples: int = deposit_parameters['deposit_multiples'],
                  initial_user_pot: int = 0,
@@ -41,6 +46,7 @@ class RouletteGameUser:
                  all_in_status: bool = False,
                  navigation_id: str = 'W',
                  active_wheel: RouletteWheel = None):
+        self.active_player = active_player
         self.min_deposit = min_deposit
         self.deposit_multiples = deposit_multiples
         self.initial_user_pot = initial_user_pot
@@ -61,12 +67,13 @@ class RouletteGameUser:
         self.active_wheel = active_wheel  # TODO link up elsewhere
 
     ################
-    # NOT UPDATED
+    # UPDATED
     ################
     def roulette_setup(self):
-        play_setup = RouletteInitiator(min_deposit=self.min_deposit, deposit_multiples=self.deposit_multiples)
-        play_setup.game_initiator()
-        initial_deposit = play_setup.deposit_amount()
+        play_setup = PlayerUserInteractions(min_deposit=self.min_deposit, deposit_multiples=self.deposit_multiples)
+        self.active_player = play_setup.existing_or_new_player()
+        initial_deposit = play_setup.get_user_deposit_amount
+        # next two lines should be replaced with the players pot - and remove pot attributes of the loop
         self.initial_user_pot = initial_deposit
         self.active_user_pot = initial_deposit
 
@@ -74,14 +81,15 @@ class RouletteGameUser:
         """Method to loop over all game components, based on the navigation_id re-determined at end"""
 
         while True:
-            # wheel selection
             ##################
             # NOT UPDATED
             ##################
             if self.navigation_id in navigation_dict['from_wheel_selection']:
                 """i.e. if user chose to change wheel after their bet, or this is the first loop."""
                 # Could maybe take the wheel choice method out of game initiation as not really relevant to min/max depo
-                play_setup = RouletteInitiator(min_deposit=self.min_deposit, deposit_multiples=self.deposit_multiples)
+                # wheel selection
+                play_setup = RouletteInitiatorUser(min_deposit=self.min_deposit,
+                                                   deposit_multiples=self.deposit_multiples)
                 self.active_wheel_id = play_setup.wheel_choice()
                 self.active_wheel = wheel_options[self.active_wheel_id]  # TODO integrate into wheel selection,
                 # and probably just get rid of the whole wheel_id thing
@@ -119,7 +127,6 @@ class RouletteGameUser:
                 self.active_bet_choice = bet_placer.get_user_bet_choice()
                 self.active_winning_slots = bet_placer.get_winning_slots(self.active_bet_choice)
                 self.active_potential_winnings = bet_placer.get_potential_winnings(self.active_winning_slots)
-
 
             # Bet evaluation
             ###############

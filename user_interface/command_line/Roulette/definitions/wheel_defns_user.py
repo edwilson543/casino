@@ -2,7 +2,7 @@ from Games.Roulette.definitions.wheel_defns import euro_wheel_defn, euro_wheel_b
 from Games.Roulette.definitions.wheel_defns import american_wheel_defn, american_wheel_bias_colour
 from Games.Roulette.definitions.wheel_defns import template_wheel_defn, template_wheel_bias_colour
 from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
-
+"""Module currently not in use"""
 ##################
 # Wheel ui relevant definitions
 ##################

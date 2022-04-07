@@ -15,6 +15,7 @@ black feature on the same wheel
 if necessary.
 """
 # TODO add dictionaries for the boards to the definitions, maybe with a string rep of form "|1|2|\n-----\n|3|4|"
+# TODO maybe the UI aspects of these need to be separated out too
 ###############################
 # Wheel definitions and payouts
 ###############################

@@ -7,11 +7,13 @@ class Player:
 
     def __init__(self,
                  name: str,
+                 username: str,
                  password: str,
                  initial_pot: int,
                  initial_pot_datetime: datetime,
                  active_pot: int):
         self.name = name
+        self.username = username
         self.password = password
         self.initial_pot = initial_pot
         self.initial_pot_datetime = initial_pot_datetime
@@ -41,7 +43,6 @@ class Player:
             return "won"
 
 
-# TODO maybe we do / don't want payout and win criteria (and stake) as attributes here
 class Bet:
     def __init__(self,
                  min_bet: int,
