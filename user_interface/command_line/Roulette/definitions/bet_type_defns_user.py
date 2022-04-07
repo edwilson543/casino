@@ -1,39 +1,35 @@
-from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
 from Games.Roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
+from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
 
-"""UI classes that inherit from the relevant class in bet_type_defns
+"""UI classes that inherit from the relevant class in bet_type_defns.
 These classes are to add the UI that allows users to make their bet choice."""
 
+
+# TODO these could instead just be inherited directly form the Roulette Bet base class?
 
 class ColoursBetUser(ColoursBet):
     def __init__(self,
                  min_bet: int = 5,
                  max_bet: int = 50,
-                 bet_type_id: str = 'C',
-                 win_criteria: list = None,
-                 payout: int = None,
-                 playing_wheel_id: str = None,
-                 wheel: RouletteWheelUser = None):
-        super().__init__(min_bet, max_bet, bet_type_id, win_criteria, payout, playing_wheel_id, wheel)
+                 bet_type_id: str = 'C'):
+        super().__init__(min_bet, max_bet, bet_type_id)
 
-    def get_user_bet_choice(self):
+    def get_user_bet_choice(self, playing_wheel: RouletteWheel):
         """
-        Method to define the user's bet choice
-        Returns: user colour choice (as a string)
+        Method to define the user's bet choice - they are required to enter a valid colour on the given wheel.
+        Returns: user colour choice (as a string, example: 'red').
+        Note that bet confirmation is done in the bet_placement_user class, because:
+        1) It's generic to all bets
+        2) It ideally shows potential bet return, which is not defined here
         """
         while True:
             bet_choice = input(
-                f"What colour would you like to bet on?\n{self.playing_wheel.colour_options}\n--->").upper()
-            if bet_choice in self.playing_wheel.colour_ids.keys():
-                bet_choice_colour = self.playing_wheel.colour_ids[bet_choice]
-                confirmation = input(f"Confirm bet on {bet_choice_colour}\n?"
-                                     f"[Y]es, [N]o\n--->").upper()
-                if confirmation != 'Y':
-                    continue
-                print(f"Bet placed on {bet_choice_colour}!")
+                f"What colour would you like to bet on?\n{playing_wheel.colour_options}\n--->").upper()
+            if bet_choice in playing_wheel.colour_ids.keys():
+                bet_choice_colour = playing_wheel.colour_ids[bet_choice]
                 return bet_choice_colour
             else:
-                print("Invalid colour choice, please try again")
+                print(f"{bet_choice} not a valid choice, please try again")
 
 
 class StraightUpBetUser(StraightUpBet):
@@ -42,26 +38,17 @@ class StraightUpBetUser(StraightUpBet):
     def __init__(self,
                  min_bet: int = 10,
                  max_bet: int = 20,
-                 bet_type_id: str = 'S',
-                 win_criteria: list = None,
-                 payout: int = None,
-                 playing_wheel_id: str = None,
-                 playing_wheel: RouletteWheelUser = None):
-        super().__init__(min_bet, max_bet, bet_type_id, win_criteria, payout, playing_wheel_id, playing_wheel)
+                 bet_type_id: str = 'S'):
+        super().__init__(min_bet, max_bet, bet_type_id)
 
-    def get_user_bet_choice(self):
-        number_options_text = self.playing_wheel.user_number_options_text()
-        number_options_range = self.playing_wheel.user_number_options_range()
+    def get_user_bet_choice(self, playing_wheel: RouletteWheel):
+        number_options_text = playing_wheel.user_number_options_text()
+        number_options_range = playing_wheel.user_number_options_range()
         while True:
             bet_choice = input(f"What number would you like to bet on?\nThe options are {number_options_text}.\n--->")
             try:
                 bet_choice_int = int(bet_choice)
                 if bet_choice_int in number_options_range:
-                    confirmation = input(f"Confirm bet on {bet_choice_int}\n?"
-                                         f"[Y]es, [N]o\n--->").upper()
-                    if confirmation != 'Y':
-                        continue
-                    print(f"Bet placed on {bet_choice_int}!")
                     return bet_choice_int
                 else:
                     print(f"{bet_choice} is not a valid bet choice, please try again")
