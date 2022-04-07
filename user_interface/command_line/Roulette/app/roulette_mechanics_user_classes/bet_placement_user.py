@@ -32,8 +32,3 @@ class BetPlacementUser(BetPlacement):
             else:
                 print(f"£{self.stake} placed on {bet_choice}!")
                 return bet_choice
-
-from Games.Roulette.definitions.wheel_defns import EuroWheel
-
-bet_placer = BetPlacementUser(bet_type_id='C', stake=10, playing_wheel=EuroWheel())
-bet_placer.get_user_bet_choice()
