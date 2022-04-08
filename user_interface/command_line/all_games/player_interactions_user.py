@@ -1,4 +1,3 @@
-from Games.games_base_classes import Player
 from Games.players.existing_players import existing_players
 from Games.Roulette.definitions.game_parameters import deposit_parameters
 from Games.Roulette.definitions.game_parameters import top_up_parameters
@@ -22,7 +21,12 @@ class PlayerUserInteractions:
         self.min_top_up = min_top_up
         self.top_up_multiples = top_up_multiples
 
-    def existing_or_new_player(self) -> Player:
+    def all_games_set_up(self):
+        active_player = self.existing_or_new_player()
+        active_player = self.initial_deposit_or_top_up(active_player=active_player)
+        return active_player
+
+    def existing_or_new_player(self):
         """Method to determine whether the user wants to access an existing player, or create a new player"""
         print("Welcome to Balint and Ed's online casino!")
         # and allow functionality choose what game they'd like to play
@@ -39,12 +43,12 @@ class PlayerUserInteractions:
             else:
                 print(f"{player_type} not a valid option, please try again")
 
-    def initial_deposit_or_top_up(self, active_player: Player) -> Player:
+    def initial_deposit_or_top_up(self, active_player):
         """Method to get the user to either set an initial deposit if they are playing as a guest or as a new player,
         or to top up if playing as an existing player."""
-        if active_player.player_type == 'G' or 'N':
+        if active_player.player_type in ['G', 'N']:  # i.e. if player is a guest or new player, make them deposit
             return self.get_user_deposit_amount(new_player=active_player)
-        elif active_player.player_type == 'E':
+        elif active_player.player_type == 'E':  # i.e. if it's an existing player, use top up prompt method
             return self.check_top_up_worthwhile(existing_player=active_player)
         else:
             raise ValueError(
@@ -54,7 +58,7 @@ class PlayerUserInteractions:
     # Lower level methods called in the existing_or_new_player method above
     ##########
 
-    def access_player(self) -> Player:
+    def access_player(self):
         """Method to set the active_player within the game"""
         while True:
             username = input(f"What is your username?\n--->").lower()
@@ -63,11 +67,12 @@ class PlayerUserInteractions:
             else:
                 print(f"No user with username: {username} found. Please try again.")
 
-    def player_password_check(self, active_player: Player) -> Player:
+    def player_password_check(self, active_player):
         """Method to wrap the access_player method"""
         for attempt in range(5):
-            password = input(f"Please enter your password\n--->")
+            password = input(f"Please enter your password.\n--->")
             if password == active_player.password:
+                print(f"Welcome back, {active_player.name}!")
                 return active_player
             elif attempt == 4:
                 sys.exit("Too many invalid attempts")
@@ -81,7 +86,7 @@ class PlayerUserInteractions:
     # lower level methods called in the initial_deposit_or_top_up method above
     ##########
 
-    def get_user_deposit_amount(self, new_player: Player) -> Player:
+    def get_user_deposit_amount(self, new_player):
         """
         Method to get new/guest users to specify how much they want to deposit.
         Parameters: new_player. This will either be a new or guest user, and hence the initial_pot,
@@ -101,13 +106,14 @@ class PlayerUserInteractions:
                     if confirmation != 'Y':
                         continue
                     print(f"You have deposited £{deposit_amount_int} to play with")
-                    return new_player.set_initial_pot(amount=deposit_amount_int)
+                    new_player.set_initial_pot(amount=deposit_amount_int)
+                    return new_player
                 else:
                     print('Invalid deposit amount - please try again and refer to deposit criteria.')
             except ValueError:
                 print('Invalid deposit amount - please try again and refer to deposit criteria.')
 
-    def check_top_up_worthwhile(self, existing_player: Player) -> Player:
+    def check_top_up_worthwhile(self, existing_player):
         """Method to check whether the user pot is below the threshold for a top up prompt to be worthwhile,
         and then make a top_up if it is worthwhile"""
         if existing_player.active_pot > threshold_for_top_up_prompt:
@@ -116,7 +122,7 @@ class PlayerUserInteractions:
             return self.get_user_top_up_amount(existing_player=existing_player)  # increased player pot if top up
 
     # method called in the check_top_up_worthwhile, if it is worthwhile
-    def get_user_top_up_amount(self, existing_player: Player) -> Player:
+    def get_user_top_up_amount(self, existing_player):
         """Method to get the user to specify if and then how much they want to top up by.
         Parameters: existing player - a player already fully defined in the existing_players dict. (With the
         exception perhaps of last_top_up_datetime).
@@ -142,9 +148,10 @@ class PlayerUserInteractions:
                                          "[Y]es, [N]o \n--->").upper()
                     if confirmation != 'Y':
                         continue
+                    existing_player.add_top_up_to_pot(amount=top_up_int)
                     print(f"You have deposited £{top_up_int}.\n"
-                          f"Your new pot is £{top_up_int + existing_player.active_pot}")
-                    return existing_player.add_top_up_to_pot(amount=top_up_int)
+                          f"Your new pot is £{top_up_int + existing_player.active_pot}.")
+                    return existing_player
                 else:
                     print('Invalid top up amount - please try again and refer to criteria.')
             except ValueError:

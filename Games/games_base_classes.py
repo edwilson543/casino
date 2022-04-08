@@ -45,7 +45,7 @@ class Player:
     def get_full_status_report(self):
         print(f"You are playing as: {self.name}.\n"
               f"Your current pot is £{self.active_pot}.\n"
-              f"You last topped up at {self.last_top_up_datetime}"
+              f"You last topped up at {self.last_top_up_datetime}.\n"
               f"Since {str(self.initial_pot_datetime)}, you have {self.won_or_lost()}:"
               f"£{abs(self.active_pot - self.initial_pot)}")
 

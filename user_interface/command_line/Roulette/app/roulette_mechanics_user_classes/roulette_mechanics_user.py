@@ -17,6 +17,21 @@ from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
 from Games.Roulette.definitions.wheel_defns import wheel_options
 
 
+################
+# Game set up - this could be moved out to be at Game level/ renamed log in process etc.
+################
+def roulette_setup():
+    """Method to access command line game selection, and choose the player/play as gues/new player"""
+    play_setup = PlayerUserInteractions()
+    active_player = play_setup.existing_or_new_player()  # allows user to play as guest/ existing/ new player
+    active_player = play_setup.initial_deposit_or_top_up(active_player)
+    return active_player
+
+
+##########
+# Class pulling together all the components of the Roulette game and command line UI
+##########
+
 class RouletteGameUser:
     """
     Class to pull together all components of the roulette game, so they can be looped over
@@ -53,16 +68,6 @@ class RouletteGameUser:
         self.all_in_status = all_in_status
         self.navigation_id = navigation_id
         self.active_wheel = active_wheel  # TODO link up elsewhere
-
-    ################
-    # Updated
-    # Game set up
-    ################
-    def roulette_setup(self):
-        """Method to access command line game selection, and choose the player/play as gues/new player"""
-        play_setup = PlayerUserInteractions()
-        self.active_player = play_setup.existing_or_new_player()  # allows user to play as guest/ existing/ new player
-        self.active_player = play_setup.initial_deposit_or_top_up(self.active_player)
 
     def roulette_loop(self):
         """Method to loop over all game components, based on the navigation_id re-determined at end"""

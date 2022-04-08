@@ -29,7 +29,7 @@ class Balint(Player):
                  initial_pot: int = 100,
                  initial_pot_datetime: datetime = datetime(2022, 4, 7),
                  active_pot: int = 5,
-                 last_top_up_datetime: datetime = None):
+                 last_top_up_datetime: datetime = datetime(2022, 4, 7)):
         super().__init__(player_type, name, username, password,
                          initial_pot, initial_pot_datetime, active_pot, last_top_up_datetime)
 
@@ -43,7 +43,7 @@ class Guest(Player):
                  initial_pot: int = 0,
                  initial_pot_datetime: datetime = datetime(2022, 4, 7),
                  active_pot: int = 0,
-                 last_top_up_datetime: datetime = None):
+                 last_top_up_datetime: datetime = datetime(2022, 4, 7)):
         super().__init__(player_type, name, username, password,
                          initial_pot, initial_pot_datetime, active_pot, last_top_up_datetime)
 
