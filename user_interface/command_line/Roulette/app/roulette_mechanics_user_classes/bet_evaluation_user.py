@@ -3,7 +3,7 @@ from Games.Roulette.definitions.game_parameters import pause_durations
 from time import sleep
 
 
-class BetEvaluation:
+class BetEvaluationUser:
     """Class to spin the wheel and see if the user wins their bet."""
     def __init__(self, potential_winnings: int, winning_slots: list, user_pot: int, wheel_id: str):
         self.potential_winnings = potential_winnings

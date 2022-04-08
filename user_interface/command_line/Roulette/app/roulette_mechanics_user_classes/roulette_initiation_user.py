@@ -1,6 +1,6 @@
 from Games.Roulette.definitions.wheel_defns import wheel_options, wheel_options_text
 
-
+# Move to bet choice process
 class RouletteInitiatorUser:
     """
     Class to initiate the roulette game.
