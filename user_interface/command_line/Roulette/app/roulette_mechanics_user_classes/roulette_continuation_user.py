@@ -25,7 +25,8 @@ class RouletteContinuationUser(PlayerUserInteractions):
 
     def keep_playing(self, active_player: Player):
         while True:
-            active_player.get_profit_report()  # to be updated with more relavant method
+            active_player.get_profit_report()  # TODO update with something relavant method e.g. this session
+            # then create an active session attribute for the players
             proceed = input(f"Would you like to continue playing?\n[Y]es, [N]o\n--->").upper()
             if proceed == "N":
                 sys.exit(f"Game over.\nYour final pot is £{active_player.active_pot}\n")  # make more relevant

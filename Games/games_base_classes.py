@@ -52,7 +52,7 @@ class Player:
     def get_profit_report(self):
         print(f"Your current pot is £{self.active_pot}.\n"
               f"Since {str(self.initial_pot_datetime)}, you have {self.won_or_lost()}:"
-              f"{abs(self.active_pot - self.initial_pot)}")
+              f"£{abs(self.active_pot - self.initial_pot)}.")
 
     # lower level UI methods
 
