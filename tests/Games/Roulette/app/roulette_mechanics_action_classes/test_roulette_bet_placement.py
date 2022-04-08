@@ -1,14 +1,35 @@
-from Games.Roulette.app.roulette_mechanics_action_classes.bet_placement import RouletteWheelWagers
+from Games.Roulette.app.roulette_mechanics_action_classes.bet_placement import BetPlacement
+from Games.Roulette.definitions.wheel_defns import EuroWheel
+import pytest
 
-test_bet_placer_colours = RouletteWheelWagers(bet_type_id='C', wheel_id='E', stake=10)
+test_bet_placer_colours = BetPlacement(bet_type_id='C', stake=10, playing_wheel=EuroWheel())
 
 
-class TestRouletteWheelWagers:
-    def test_get_winning_slots(self):
-        """Test to see if the mapping of bet_type_id -> bet method is working correctly"""
-        winning_set = test_bet_placer_colours.get_winning_slots_colours(player_bet=['R'])  # test for colour red
-        assert winning_set == [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+class TestBetPlacementColours:
+    def test_get_winning_slots_colours_red(self):
+        """Test to see if get_winning_slots correctly calls the bet_type's get_winning_slots_list method"""
+        winning_set = test_bet_placer_colours.get_winning_slots(bet_choice='red')  # test for colour red
+        red_winning_slots = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+        assert winning_set == red_winning_slots
 
-    def test_get_winning_slots_colours(self):
-        winning_set = test_bet_placer_colours.get_winning_slots_colours(player_bet=['R'])  # test for colour red
-        assert winning_set == [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+    def test_get_winning_slots_colours_green(self):
+        winning_set = test_bet_placer_colours.get_winning_slots(bet_choice='green') # test for colour green
+        assert winning_set == [0]
+
+    def test_get_winning_slots_invalid_colour(self):
+        """Test to see if the error in the bet_type's get_winning_slots_list is working"""
+        with pytest.raises(ValueError):
+            test_bet_placer_colours.get_winning_slots(bet_choice='orange')
+
+    def test_get_potential_winnings_red_bet(self):
+        red_winning_slots = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+        calculated_red_payout = test_bet_placer_colours.get_potential_winnings(winning_slots_list=red_winning_slots)
+        expected_red_payout = 2 * test_bet_placer_colours.stake
+        assert calculated_red_payout == expected_red_payout
+
+
+
+test_bet_placer_straight_up = BetPlacement(bet_type_id='S', stake=10, playing_wheel=EuroWheel())
+
+class TestBetPlacementStraightUp:
+    pass

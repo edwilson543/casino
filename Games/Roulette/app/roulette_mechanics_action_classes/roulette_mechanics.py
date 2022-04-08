@@ -1,7 +1,7 @@
 from Games.Roulette.definitions.game_parameters import deposit_parameters, top_up_parameters
 from Games.Roulette.app.roulette_mechanics_action_classes.roulette_initiation import RouletteInitiator
 from Games.Roulette.app.roulette_mechanics_action_classes.bet_selection import BetSelector
-from Games.Roulette.app.roulette_mechanics_action_classes.bet_placement import RouletteWheelWagers
+from Games.Roulette.app.roulette_mechanics_action_classes.bet_placement_legacy import RouletteWheelWagers
 from Games.Roulette.app.roulette_mechanics_action_classes.bet_evaluation import BetEvaluation
 from Games.Roulette.app.roulette_mechanics_action_classes.roulette_continuation import RouletteContinuation
 from Games.Roulette.definitions.navigation_defns import navigation_dict
@@ -113,6 +113,6 @@ class RouletteGame:
                                                 min_top_up=self.min_top_up,
                                                 top_up_multiples=self.top_up_multiples,
                                                 stake=self.active_stake)
-            self.active_top_up = 0 # otherwise user gets auto top up if previously have topped up
+            self.active_top_up = 0  # otherwise user gets auto top up if previously have topped up
             self.active_top_up, self.navigation_id = continuation.game_continuation_steps()
             self.active_user_pot += self.active_top_up

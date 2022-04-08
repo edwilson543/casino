@@ -13,13 +13,6 @@ class RouletteInitiator:
 
     # Could maybe define a method here that does all 3 in one?
 
-    def game_initiator(self):
-        """Method to initiate the game by getting the user to type 'go'"""
-        while True:  # initiate game
-            user_ready = input("Type 'GO' when ready to play \n--->").upper()
-            if user_ready == "GO":
-                break
-
     def deposit_amount(self):
         """Method to get the user to specify how much they want to deposit."""
         while True:

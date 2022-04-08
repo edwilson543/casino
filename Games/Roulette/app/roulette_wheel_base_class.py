@@ -1,8 +1,6 @@
 import numpy as np
 
 
-# TODO get rid of the payout scaler and change so that return is 1/fake probability , where fake probability
-# is win slots / (number of slots - green slots). Make sure to define the colour used to bias the wheel
 class RouletteWheel:
     """Base class for the roulette wheel - from which we can define different wheel configurations"""
 

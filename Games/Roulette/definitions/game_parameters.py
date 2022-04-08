@@ -1,6 +1,7 @@
 #################
 # Game parameters
 #################
+#TODO could swap these all for Enums or something??
 deposit_parameters = {'min_deposit': 100, 'deposit_multiples': 10} # min % multiples must be 0
 threshold_for_top_up_prompt = 50
 top_up_parameters = {'min_top_up': 50, 'top_up_multiples': 10} # min % multiples must be 0
