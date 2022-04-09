@@ -3,6 +3,45 @@ from Games.Roulette.definitions.game_parameters import deposit_parameters
 from Games.Roulette.definitions.game_parameters import top_up_parameters
 from Games.Roulette.definitions.game_parameters import threshold_for_top_up_prompt
 import sys
+import functools
+
+
+##########
+# Functions to access players, requiring user input of password
+# TODO would these 2 functions ideally be called in the class below??
+##########
+
+def password_proected(n_attempts):
+    def decorator_password_protected(func):
+        @functools.wraps(func)
+        def wrapper_password_protected(*args, **kwargs):
+            desired_player = func(*args, **kwargs)
+            for k in range(n_attempts):
+                password = input(f"Please enter your password.\n--->")
+                if password == desired_player.password:
+                    print(f"Welcome back, {desired_player.name}!")
+                    return desired_player
+                elif k == n_attempts - 1:
+                    sys.exit("Too many invalid attempts, your session has been terminated.")
+                else:
+                    attempts_remaining = n_attempts - k - 1
+                    print(f"Incorrect password - please try again.\nYou have {attempts_remaining} attempts remaining")
+            return desired_player
+
+        return wrapper_password_protected
+
+    return decorator_password_protected
+
+
+@password_proected(n_attempts=5)
+def access_player():
+    """Method to set the active_player within the game"""
+    while True:
+        username = input(f"What is your username?\n--->").lower()
+        if username in existing_players:
+            return existing_players[username]
+        else:
+            print(f"No user with username: {username} found. Please try again.")
 
 
 class PlayerUserInteractions:
@@ -26,7 +65,8 @@ class PlayerUserInteractions:
         active_player = self.initial_deposit_or_top_up(active_player=active_player)
         return active_player
 
-    def existing_or_new_player(self):
+    @staticmethod
+    def existing_or_new_player():
         """Method to determine whether the user wants to access an existing player, or create a new player"""
         print("Welcome to Balint and Ed's online casino!")
         # and allow functionality choose what game they'd like to play
@@ -36,7 +76,7 @@ class PlayerUserInteractions:
             if player_type == 'G':
                 return existing_players['guest']
             elif player_type == 'E':
-                return self.player_password_check(self.access_player())  # TODO find out how to use decorator instead
+                return access_player()  # TODO find out how to use decorator instead
             elif player_type == 'N':
                 print("New player functionality not built yet")
                 continue
@@ -57,28 +97,6 @@ class PlayerUserInteractions:
     ##########
     # Lower level methods called in the existing_or_new_player method above
     ##########
-    @staticmethod
-    def access_player():
-        """Method to set the active_player within the game"""
-        while True:
-            username = input(f"What is your username?\n--->").lower()
-            if username in existing_players:
-                return existing_players[username]
-            else:
-                print(f"No user with username: {username} found. Please try again.")
-
-    @staticmethod
-    def player_password_check(active_player):
-        """Method to wrap the access_player method"""
-        for attempt in range(5):
-            password = input(f"Please enter your password.\n--->")
-            if password == active_player.password:
-                print(f"Welcome back, {active_player.name}!")
-                return active_player
-            elif attempt == 4:
-                sys.exit("Too many invalid attempts")
-            else:
-                print(f"Incorrect password - please try again.\nYou have {4 - attempt} attempts remaining")
 
     def create_new_player(self):  # TODO define this, will require some sort of reading/writing
         pass
