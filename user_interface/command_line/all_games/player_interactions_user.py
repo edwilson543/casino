@@ -150,7 +150,7 @@ class PlayerUserInteractions:
                         continue
                     existing_player.add_top_up_to_pot(amount=top_up_int)
                     print(f"You have deposited £{top_up_int}.\n"
-                          f"Your new pot is £{top_up_int + existing_player.active_pot}.")
+                          f"Your new pot is £{existing_player.active_pot}.")
                     return existing_player
                 else:
                     print('Invalid top up amount - please try again and refer to criteria.')

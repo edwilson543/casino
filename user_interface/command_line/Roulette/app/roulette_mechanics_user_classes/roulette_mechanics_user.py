@@ -106,7 +106,6 @@ class RouletteGameUser:
                 bet_selection = BetSelector(wheel_id=self.active_wheel_id, player_funds=self.active_player.active_pot)
                 self.active_stake, self.all_in_status = bet_selection.choose_stake_amount(
                     bet_type=self.active_bet_type_id)
-                self.active_player.take_stake_from_pot(self.active_stake)
 
             # Bet placing up to immediately before outcome evaluation
             ############
@@ -136,7 +135,7 @@ class RouletteGameUser:
                 self.active_player.add_winnings_to_pot(self.active_winnings)
 
             ##########
-            # UPPP
+            # Partially updated
             # Establish game continuation criteria
             ##########
             if self.all_in_status:
