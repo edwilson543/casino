@@ -57,8 +57,8 @@ class PlayerUserInteractions:
     ##########
     # Lower level methods called in the existing_or_new_player method above
     ##########
-
-    def access_player(self):
+    @staticmethod
+    def access_player():
         """Method to set the active_player within the game"""
         while True:
             username = input(f"What is your username?\n--->").lower()
@@ -67,7 +67,8 @@ class PlayerUserInteractions:
             else:
                 print(f"No user with username: {username} found. Please try again.")
 
-    def player_password_check(self, active_player):
+    @staticmethod
+    def player_password_check(active_player):
         """Method to wrap the access_player method"""
         for attempt in range(5):
             password = input(f"Please enter your password.\n--->")
@@ -79,7 +80,7 @@ class PlayerUserInteractions:
             else:
                 print(f"Incorrect password - please try again.\nYou have {4 - attempt} attempts remaining")
 
-    def create_new_player(self):  # TODO define this
+    def create_new_player(self):  # TODO define this, will require some sort of reading/writing
         pass
 
     ##########
@@ -121,7 +122,7 @@ class PlayerUserInteractions:
         else:
             return self.get_user_top_up_amount(existing_player=existing_player)  # increased player pot if top up
 
-    # method called in the check_top_up_worthwhile, if it is worthwhile
+    # method called in the check_top_up_worthwhile, if it is worthwhile, i.e. user pot is low
     def get_user_top_up_amount(self, existing_player):
         """Method to get the user to specify if and then how much they want to top up by.
         Parameters: existing player - a player already fully defined in the existing_players dict. (With the
