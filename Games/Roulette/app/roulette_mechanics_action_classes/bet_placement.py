@@ -18,7 +18,7 @@ class BetPlacement:
 
         self.bet_type = bet_type_options[self.bet_type_id]
 
-    def get_winning_slots(self, bet_choice: Union[int, str, list]) -> list[int]:
+    def get_winning_slots(self, bet_choice): #TODO use type hint Union[int, str, list]) -> list[int], not working on hp laptop
         """
         Finds winning list based on the user bet_choice. The bet_type attribute 'win_criteria' is set based on the
         bet choice, and then returned.

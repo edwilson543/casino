@@ -1,7 +1,12 @@
+from Games.games_base_classes import Player
 from Games.Roulette.definitions.wheel_defns import wheel_options
 from Games.Roulette.definitions.game_parameters import pause_durations
 from time import sleep
 
+##########
+# NOT UPDATED
+##########
+# TODO make this a subclass of the bet evaluation class, maintaining the UI
 
 class BetEvaluationUser:
     """Class to spin the wheel and see if the user wins their bet."""

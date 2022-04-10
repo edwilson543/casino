@@ -1,6 +1,9 @@
 from Games.Roulette.definitions.wheel_defns import wheel_options, wheel_options_text
 
-# Move to bet choice process
+##########
+# NOT UPDATED
+##########
+# Can almost definitely get rid of this, by moving the wheel choice into the bet selection module
 class RouletteInitiatorUser:
     """
     Class to initiate the roulette game.

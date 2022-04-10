@@ -1,7 +1,9 @@
 from Games.Roulette.definitions.bet_type_defns import bet_cats_and_types, bet_cat_options_text
 from Games.Roulette.definitions.bet_type_defns import bet_type_options_text, bet_type_min_max_bet
 import sys
-
+##########
+# Not updated (or the potential parent class)
+##########
 
 class BetSelector:
     """class to allow users to select the type of bet to place

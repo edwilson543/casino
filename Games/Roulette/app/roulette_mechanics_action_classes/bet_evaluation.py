@@ -1,7 +1,11 @@
+from Games.games_base_classes import Player
 from Games.Roulette.definitions.wheel_defns import wheel_options
 from Games.Roulette.definitions.game_parameters import pause_durations
 from time import sleep
 
+# Definitely want to keep this class
+# TODO make this class just spin the wheel and evaluate against any given bet
+# Definitely spli out the evaluate_bet method into 2, based on the if-else s
 
 class BetEvaluation:
     """Class to spin the wheel and see if the user wins their bet."""
@@ -11,6 +15,7 @@ class BetEvaluation:
         self.user_pot = user_pot
         self.wheel_id = wheel_id
         self.wheel = wheel_options[wheel_id]
+
 
     def evaluate_bet(self):
         while True:
