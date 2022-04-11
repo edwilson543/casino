@@ -17,7 +17,8 @@ class BetPlacementEvaluationUser(BetPlacementEvaluation):
                  stake: int,
                  playing_wheel: RouletteWheel):
         super().__init__(bet_type_id, stake, playing_wheel)
-        self.bet_type = bet_type_options_user[self.bet_type_id] #TODO replace with data storage thing
+        self.bet_type = bet_type_options_user[self.bet_type_id]
+        # TODO make bet_type a parameter
 
     def get_user_bet_choice(self) -> Union[int, str, list]:
         """gets user to specify their bet (navigation unique to the bet type)

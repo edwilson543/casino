@@ -1,21 +1,19 @@
 from Games.games_base_classes import Player
+from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
+from Games.Roulette.definitions.wheel_defns import wheel_options
+
 from user_interface.command_line.Roulette.definitions.navigation_defns_user import navigation_dict
 from user_interface.command_line.all_games.player_interactions_user import PlayerUserInteractions
 from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.roulette_initiation_user import \
     RouletteInitiatorUser
-from Games.Roulette.app.roulette_mechanics_action_classes.bet_selection import BetSelector
-
+from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_selection_user import BetSelector
 from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_placement_evaluation_user import \
     BetPlacementEvaluationUser
-
-from Games.Roulette.app.roulette_mechanics_action_classes.bet_evaluation import BetEvaluation
 from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
     RouletteContinuationUser
 
 import sys
 # added whilst updating
-from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
-from Games.Roulette.definitions.wheel_defns import wheel_options
 
 
 ################
@@ -68,7 +66,8 @@ class RouletteGameUser:
         self.active_winnings = active_winnings
         self.all_in_status = all_in_status
         self.navigation_id = navigation_id
-        self.active_wheel = active_wheel  # TODO link up elsewhere
+        self.active_wheel = active_wheel
+        #  TODO - check whether any of these attributes can be got rid of
 
     def roulette_loop(self):
         """Method to loop over all game components, based on the navigation_id re-determined at end"""
@@ -124,7 +123,6 @@ class RouletteGameUser:
             ##########
             # UPDATED
             ##########
-
             # Bet evaluation
             if self.navigation_id in navigation_dict['from_bet_evaluation']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
@@ -132,22 +130,7 @@ class RouletteGameUser:
                 self.active_player.take_stake_from_pot(self.active_stake)
                 self.active_winnings = bet_placer_evaluater.evaluate_user_bet(bet_choice=self.active_bet_choice)
                 self.active_player.add_winnings_to_pot(self.active_winnings)
-                # self.active_winning_slots = bet_placer_evaluater.get_winning_slots(self.active_bet_choice)
-                # self.active_potential_winnings = bet_placer_evaluater.get_winnings(self.active_winning_slots)
 
-            # Bet evaluation
-            ###############
-            # PARTIALLY UPDATED
-            ###############
-            # if self.navigation_id in navigation_dict['from_bet_evaluation']:
-            #     """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
-            #     self.active_player.take_stake_from_pot(self.active_stake)  # included here incase user does a repeat bet
-            #     bet_evaluater = BetEvaluation(potential_winnings=self.active_potential_winnings,
-            #                                   winning_slots=self.active_winning_slots,
-            #                                   user_pot=self.active_player.active_pot,
-            #                                   wheel_id=self.active_wheel_id)
-            #     self.active_winnings = bet_evaluater.evaluate_bet()
-            #     self.active_player.add_winnings_to_pot(self.active_winnings)
 
             ##########
             # Partially updated

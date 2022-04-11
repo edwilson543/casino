@@ -1,6 +1,12 @@
 from Games.Roulette.definitions.bet_type_defns import bet_cats_and_types, bet_cat_options_text
 from Games.Roulette.definitions.bet_type_defns import bet_type_options_text, bet_type_min_max_bet
 import sys
+
+
+# TODO make this a subclass of WheelAndBetSelector
+# TODO write down the empty methods below (bringing in wheel method)
+# TODO do something with the stake method too, bring the high level call up to the top
+
 ##########
 # Not updated (or the potential parent class)
 ##########
@@ -12,6 +18,18 @@ class BetSelector:
     def __init__(self, wheel_id: str, player_funds: int):
         self.wheel_id = wheel_id
         self.player_funds = player_funds
+
+    def choose_playing_wheel(self):
+        pass
+
+    def choose_bet(self):
+        """
+        Method that navigates the user to choose their bet, by applying the choose_playing_wheel,
+        choose_bet_category and then the choose_bet_type methods below.
+        """
+        pass
+
+    # Lower level methods called during the choose_bet method
 
     def choose_bet_category(self):
         while True:
