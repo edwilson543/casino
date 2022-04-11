@@ -23,7 +23,7 @@ class TestBetPlacementColours:
 
     def test_get_potential_winnings_red_bet(self):
         red_winning_slots = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
-        calculated_red_payout = test_bet_placer_colours.get_potential_winnings(winning_slots_list=red_winning_slots)
+        calculated_red_payout = test_bet_placer_colours.get_winnings(winning_slots_list=red_winning_slots)
         expected_red_payout = 2 * test_bet_placer_colours.stake
         assert calculated_red_payout == expected_red_payout
 

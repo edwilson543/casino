@@ -3,6 +3,7 @@ from Games.Roulette.definitions.wheel_defns import wheel_options
 from Games.Roulette.definitions.game_parameters import pause_durations
 from time import sleep
 
+
 ##########
 # NOT UPDATED
 ##########
@@ -10,6 +11,7 @@ from time import sleep
 
 class BetEvaluationUser:
     """Class to spin the wheel and see if the user wins their bet."""
+
     def __init__(self, potential_winnings: int, winning_slots: list, user_pot: int, wheel_id: str):
         self.potential_winnings = potential_winnings
         self.winning_slots = winning_slots

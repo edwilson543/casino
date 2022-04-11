@@ -18,7 +18,33 @@ class BetPlacementEvaluation:
 
         self.bet_type = bet_type_options[self.bet_type_id]
 
-    def get_winning_slots(self, bet_choice: Union[int, str, list]) -> list:  # TODO list[int] (update to python 3.9)
+    def evaluate_bet(self, bet_choice: Union[int, str, list]) -> (int, str, bool):
+        """
+        Method to determine the outcome of spinning the wheel, relative to the user's bet.
+        Parameters: bet_choice - this is used to call the method 'get_winning_slots_list' of the bet subclass,
+        which returns a list of integers specific to the input format of the bet placement
+        Returns:
+        spin_outcome_num: an integer representing the slot of the roulette wheel the ball landed on
+        spin_outcome_col: a string representing the colour of the roulette wheel the ball landed on
+        winnings: either 0 or x>0, depending on whether the user won their bet
+        """
+        winning_slots_list = self.get_winning_slots(bet_choice=bet_choice)
+        spin_outcome_num, spin_outcome_col = self.playing_wheel.spin()
+        if spin_outcome_num in winning_slots_list:
+            winnings = self.get_winnings(winning_slots_list=winning_slots_list)
+        else:
+            winnings = 0
+        return spin_outcome_num, spin_outcome_col, winnings
+
+    def get_winnings(self, winning_slots_list: list[int]) -> int:
+        """
+        Calculates the potential winnings of the user defined bet.
+        Maybe the 'winning_slots_list' parameter could instead call the get_winning_slots method
+        """
+        unit_payout = self.bet_type.calculate_payout(playing_wheel=self.playing_wheel, win_criteria=winning_slots_list)
+        return self.stake * unit_payout
+
+    def get_winning_slots(self, bet_choice: Union[int, str, list]) -> list[int]:
         """
         Finds winning list based on the user bet_choice. The bet_type attribute 'win_criteria' is set based on the
         bet choice, and then returned.
@@ -28,12 +54,3 @@ class BetPlacementEvaluation:
         'get_winning_slots_list' method of the specific bet class.
         """
         return self.bet_type.get_winning_slots_list(playing_wheel=self.playing_wheel, choice=bet_choice)
-
-    def get_potential_winnings(self, winning_slots_list):
-        """Calculates the potential winnings of the user defined bet.
-        Maybe the 'winning_slots_list' parameter could instead call the get_winning_slots method"""
-        unit_payout = self.bet_type.calculate_payout(playing_wheel=self.playing_wheel, win_criteria=winning_slots_list)
-        return self.stake * unit_payout
-
-    def evaluate_bet(self):
-        pass

@@ -121,7 +121,7 @@ class RouletteGameUser:
                 # looking it up in a dictionary within that class
                 self.active_bet_choice = bet_placer.get_user_bet_choice()
                 self.active_winning_slots = bet_placer.get_winning_slots(self.active_bet_choice)
-                self.active_potential_winnings = bet_placer.get_potential_winnings(self.active_winning_slots)
+                self.active_potential_winnings = bet_placer.get_winnings(self.active_winning_slots)
 
             # Bet evaluation
             ###############

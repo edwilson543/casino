@@ -25,10 +25,12 @@ class BetPlacementUser(BetPlacementEvaluation):
             bet_choice = self.bet_type.get_user_bet_choice(playing_wheel=self.playing_wheel)
             confirmation = input(f"Confirm £{self.stake} stake on {bet_choice}?\n"
                                  f"Winning this bet would return: £"
-                                 f"{self.get_potential_winnings(self.get_winning_slots(bet_choice))}\n"
+                                 f"{self.get_winnings(self.get_winning_slots(bet_choice))}\n"
                                  f"[Y]es or [N]o\n--->").upper()
             if confirmation != 'Y':
                 continue
             else:
                 print(f"£{self.stake} placed on {bet_choice}!")
                 return bet_choice
+
+    def evaluate_user_bet(self):
