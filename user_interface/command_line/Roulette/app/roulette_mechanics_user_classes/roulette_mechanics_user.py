@@ -6,7 +6,7 @@ from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.ro
 from Games.Roulette.app.roulette_mechanics_action_classes.bet_selection import BetSelector
 
 from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_placement_evaluation_user import \
-    BetPlacementUser
+    BetPlacementEvaluationUser
 
 from Games.Roulette.app.roulette_mechanics_action_classes.bet_evaluation import BetEvaluation
 from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
@@ -108,34 +108,46 @@ class RouletteGameUser:
                 self.active_stake, self.all_in_status = bet_selection.choose_stake_amount(
                     bet_type=self.active_bet_type_id)
 
-            # Bet placing up to immediately before outcome evaluation
             ############
             # UPDATED
             ###########
+            # Bet placing up to immediately before outcome evaluation
+            bet_placer_evaluater = BetPlacementEvaluationUser(bet_type_id=self.active_bet_type_id,
+                                                              stake=self.active_stake,
+                                                              playing_wheel=self.active_wheel)
             if self.navigation_id in navigation_dict['from_bet_choice']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice."""
-                bet_placer = BetPlacementUser(bet_type_id=self.active_bet_type_id,
-                                              stake=self.active_stake,
-                                              playing_wheel=self.active_wheel)
                 # TODO maybe the bet_type should be an attribute of BetPlacementUser too, which is currently
                 # looking it up in a dictionary within that class
-                self.active_bet_choice = bet_placer.get_user_bet_choice()
-                self.active_winning_slots = bet_placer.get_winning_slots(self.active_bet_choice)
-                self.active_potential_winnings = bet_placer.get_winnings(self.active_winning_slots)
+                self.active_bet_choice = bet_placer_evaluater.get_user_bet_choice()
+
+            ##########
+            # UPDATED
+            ##########
+
+            # Bet evaluation
+            if self.navigation_id in navigation_dict['from_bet_evaluation']:
+                """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
+                # included here as otherwise missed by a repeat bet
+                self.active_player.take_stake_from_pot(self.active_stake)
+                self.active_winnings = bet_placer_evaluater.evaluate_user_bet(bet_choice=self.active_bet_choice)
+                self.active_player.add_winnings_to_pot(self.active_winnings)
+                # self.active_winning_slots = bet_placer_evaluater.get_winning_slots(self.active_bet_choice)
+                # self.active_potential_winnings = bet_placer_evaluater.get_winnings(self.active_winning_slots)
 
             # Bet evaluation
             ###############
             # PARTIALLY UPDATED
             ###############
-            if self.navigation_id in navigation_dict['from_bet_evaluation']:
-                """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
-                self.active_player.take_stake_from_pot(self.active_stake)  # included here incase user does a repeat bet
-                bet_evaluater = BetEvaluation(potential_winnings=self.active_potential_winnings,
-                                              winning_slots=self.active_winning_slots,
-                                              user_pot=self.active_player.active_pot,
-                                              wheel_id=self.active_wheel_id)
-                self.active_winnings = bet_evaluater.evaluate_bet()
-                self.active_player.add_winnings_to_pot(self.active_winnings)
+            # if self.navigation_id in navigation_dict['from_bet_evaluation']:
+            #     """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
+            #     self.active_player.take_stake_from_pot(self.active_stake)  # included here incase user does a repeat bet
+            #     bet_evaluater = BetEvaluation(potential_winnings=self.active_potential_winnings,
+            #                                   winning_slots=self.active_winning_slots,
+            #                                   user_pot=self.active_player.active_pot,
+            #                                   wheel_id=self.active_wheel_id)
+            #     self.active_winnings = bet_evaluater.evaluate_bet()
+            #     self.active_player.add_winnings_to_pot(self.active_winnings)
 
             ##########
             # Partially updated

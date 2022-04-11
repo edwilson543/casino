@@ -16,7 +16,7 @@ class BetPlacementEvaluation:
         self.stake = stake
         self.playing_wheel = playing_wheel
 
-        self.bet_type = bet_type_options[self.bet_type_id]
+        self.bet_type = bet_type_options[self.bet_type_id]  #TODO replace with data storage thing
 
     def evaluate_bet(self, bet_choice: Union[int, str, list]) -> (int, str, bool):
         """
