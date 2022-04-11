@@ -3,7 +3,7 @@ from Games.Roulette.definitions.bet_type_defns import bet_type_options
 from typing import Union
 
 
-class BetPlacement:
+class BetPlacementEvaluation:
     """
     Class to generate the winning criteria and potential payout of a given bet
     """
@@ -18,7 +18,7 @@ class BetPlacement:
 
         self.bet_type = bet_type_options[self.bet_type_id]
 
-    def get_winning_slots(self, bet_choice): #TODO use type hint Union[int, str, list]) -> list[int], not working on hp laptop
+    def get_winning_slots(self, bet_choice: Union[int, str, list]) -> list:  # TODO list[int] (update to python 3.9)
         """
         Finds winning list based on the user bet_choice. The bet_type attribute 'win_criteria' is set based on the
         bet choice, and then returned.
@@ -34,3 +34,6 @@ class BetPlacement:
         Maybe the 'winning_slots_list' parameter could instead call the get_winning_slots method"""
         unit_payout = self.bet_type.calculate_payout(playing_wheel=self.playing_wheel, win_criteria=winning_slots_list)
         return self.stake * unit_payout
+
+    def evaluate_bet(self):
+        pass

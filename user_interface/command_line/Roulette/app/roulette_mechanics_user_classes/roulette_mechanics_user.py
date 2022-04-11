@@ -5,7 +5,8 @@ from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.ro
     RouletteInitiatorUser
 from Games.Roulette.app.roulette_mechanics_action_classes.bet_selection import BetSelector
 
-from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_placement_user import BetPlacementUser
+from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_placement_evaluation_user import \
+    BetPlacementUser
 
 from Games.Roulette.app.roulette_mechanics_action_classes.bet_evaluation import BetEvaluation
 from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
@@ -116,6 +117,8 @@ class RouletteGameUser:
                 bet_placer = BetPlacementUser(bet_type_id=self.active_bet_type_id,
                                               stake=self.active_stake,
                                               playing_wheel=self.active_wheel)
+                # TODO maybe the bet_type should be an attribute of BetPlacementUser too, which is currently
+                # looking it up in a dictionary within that class
                 self.active_bet_choice = bet_placer.get_user_bet_choice()
                 self.active_winning_slots = bet_placer.get_winning_slots(self.active_bet_choice)
                 self.active_potential_winnings = bet_placer.get_potential_winnings(self.active_winning_slots)

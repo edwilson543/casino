@@ -1,4 +1,4 @@
-from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_placement_user import BetPlacementUser
+from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_placement_evaluation_user import BetPlacementUser
 from Games.Roulette.definitions.wheel_defns import EuroWheel
 
 

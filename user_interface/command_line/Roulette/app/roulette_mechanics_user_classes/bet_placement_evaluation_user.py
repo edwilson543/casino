@@ -1,11 +1,11 @@
 from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
-from Games.Roulette.app.roulette_mechanics_action_classes.bet_placement import BetPlacement
+from Games.Roulette.app.roulette_mechanics_action_classes.bet_placement_evaluation import BetPlacementEvaluation
 from user_interface.command_line.Roulette.definitions.bet_type_defns_user import bet_type_options_user
 
 from typing import Union
 
 
-class BetPlacementUser(BetPlacement):
+class BetPlacementUser(BetPlacementEvaluation):
     """Purpose of this subclass is to inherit the get_winning_slots and get_potential_winnings
     methods from the BetPlacement class, and
     to add the get_user_bet_choice method which is shown below"""
