@@ -63,8 +63,8 @@ class PlayerUserInteractions:
 
     def all_games_set_up(self) -> Player:
         active_player = self.existing_or_new_player()
-        active_player = self.initial_deposit_or_top_up(active_player=active_player)
         active_player.set_active_session_initial_pot_and_time()
+        active_player = self.initial_deposit_or_top_up(active_player=active_player)
         return active_player
 
     @staticmethod

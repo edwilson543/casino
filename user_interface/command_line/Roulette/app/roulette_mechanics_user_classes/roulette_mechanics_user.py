@@ -1,9 +1,9 @@
 from Games.games_base_classes import Player
 from Games.games_base_classes import Bet
 from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
+
 from user_interface.command_line.Roulette.definitions.wheel_defns_user import wheel_options_user
 from user_interface.command_line.Roulette.definitions.bet_type_defns_user import bet_type_options_user
-
 from user_interface.command_line.Roulette.definitions.navigation_defns_user import navigation_dict
 from user_interface.command_line.all_games.player_interactions_user import PlayerUserInteractions
 from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_selection_user import \
@@ -16,15 +16,11 @@ from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.ro
 from typing import Union
 import sys
 
-
-# added whilst updating
-
-
 ################
 # Game set up - this could be moved out to be at Game level/ renamed log in process etc.
 ################
 def roulette_setup() -> Player:
-    """Method to access command line game selection, and choose the player/play as gues/new player"""
+    """Method to access command line game selection, and choose the player/play as a guest/new player"""
     play_setup = PlayerUserInteractions()
     active_player = play_setup.existing_or_new_player()  # allows user to play as guest/ existing/ new player
     active_player = play_setup.initial_deposit_or_top_up(active_player)
@@ -46,29 +42,24 @@ class RouletteGameUser:
 
     def __init__(self,
                  active_player: Player = None,
-                 active_top_up_amount: int = 0,
                  active_wheel_id: str = 'E',
+                 active_wheel: RouletteWheel = None,
                  active_bet_type: Bet = None,
                  active_bet_choice: Union[int, str, list] = None,
                  active_stake: int = 20,
-                 active_winning_slots: list = None,  # resolution needed?
-                 active_potential_winnings: int = 50,
                  active_winnings: int = 0,
                  all_in_status: bool = False,
-                 navigation_id: str = 'W',
-                 active_wheel: RouletteWheel = None):
+                 navigation_id: str = 'W'):
         self.active_player = active_player
-        self.active_top_up_amount = active_top_up_amount
         self.active_wheel_id = active_wheel_id
+        self.active_wheel = active_wheel
         self.active_bet_type = active_bet_type
         self.active_bet_choice = active_bet_choice
         self.active_stake = active_stake
-        self.active_winning_slots = active_winning_slots
-        self.active_potential_winnings = active_potential_winnings
         self.active_winnings = active_winnings
         self.all_in_status = all_in_status
         self.navigation_id = navigation_id
-        self.active_wheel = active_wheel
+
         #  TODO - check whether any of these attributes can be got rid of
 
     def roulette_loop(self):
@@ -121,13 +112,12 @@ class RouletteGameUser:
             ##########
             if self.navigation_id in navigation_dict['from_bet_evaluation']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
-                # included here as otherwise missed by a repeat bet
+                # included here as otherwise misses by a repeat bet
                 self.active_player.take_stake_from_pot(self.active_stake)
                 self.active_winnings = bet_placer_evaluater.evaluate_user_bet(bet_choice=self.active_bet_choice)
                 self.active_player.add_winnings_to_pot(self.active_winnings)
 
             ##########
-            # Partially updated
             # Establish game continuation criteria
             ##########
             if self.all_in_status:

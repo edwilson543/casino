@@ -30,10 +30,12 @@ class BetPlacementEvaluationUser(BetPlacementEvaluation):
         """Returns: Stake amount, all_in_status"""
         min_bet = self.bet_type.min_bet
         if self.player_funds >= min_bet:
-            all_in_stake, all_in_status = self.choose_stake_amount_funds_exceed_min_bet()
-            return all_in_stake, all_in_status
+            stake, all_in_status = self.choose_stake_amount_funds_exceed_min_bet()
+            self.stake = stake  # so that the confirmation in get_user_bet_choice works
+            return stake, all_in_status
         else:  # TODO Add some feature here to allow user to do a top up instead
             all_in_stake, all_in_status = self.all_in()
+            self.stake = all_in_stake
             return all_in_stake, all_in_status
 
     def get_user_bet_choice(self) -> Union[int, str, list]:
