@@ -23,7 +23,7 @@ import sys
 ################
 # Game set up - this could be moved out to be at Game level/ renamed log in process etc.
 ################
-def roulette_setup():
+def roulette_setup() -> Player:
     """Method to access command line game selection, and choose the player/play as gues/new player"""
     play_setup = PlayerUserInteractions()
     active_player = play_setup.existing_or_new_player()  # allows user to play as guest/ existing/ new player
@@ -101,6 +101,7 @@ class RouletteGameUser:
                                                               stake=self.active_stake,
                                                               playing_wheel=self.active_wheel,
                                                               player_funds=self.active_player.active_pot)
+            # maybe get rid of the player_funds usage here?
             ##########
             # Stake quantification
             ##########
@@ -111,8 +112,6 @@ class RouletteGameUser:
             ##########
             # Bet placement
             ##########
-
-            # maybe get rid of the player_funds usage here?
             if self.navigation_id in navigation_dict['from_bet_choice']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice."""
                 self.active_bet_choice = bet_placer_evaluater.get_user_bet_choice()

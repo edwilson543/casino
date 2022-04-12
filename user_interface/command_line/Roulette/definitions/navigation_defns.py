@@ -22,4 +22,3 @@ navigation_options = ['R', 'C', 'S', 'T', 'W']
 #########
 navigation_text_low_funds = "Change bet: [S]take, [T]ype, [W]heel"
 navigation_options_low_funds = ['S', 'T', 'W']
-

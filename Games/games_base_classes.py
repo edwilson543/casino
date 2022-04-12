@@ -1,5 +1,11 @@
 from datetime import datetime
 
+"""
+Contents:
+Player (base class)
+Bet (base class)
+"""
+
 
 class Player:
     """Class to hold the pot and define interactions with the pot.
@@ -16,7 +22,9 @@ class Player:
                  initial_pot: int,
                  initial_pot_datetime: datetime,
                  active_pot: int,
-                 last_top_up_datetime: datetime):
+                 last_top_up_datetime: datetime,
+                 active_sesion_initial_pot: int = None,
+                 active_session_start_time: datetime = None):
         self.player_type = player_type
         self.name = name
         self.username = username
@@ -25,6 +33,8 @@ class Player:
         self.initial_pot_datetime = initial_pot_datetime
         self.active_pot = active_pot
         self.last_top_up_datetime = last_top_up_datetime
+        self.active_session_initial_pot = active_sesion_initial_pot
+        self.active_session_start_time = active_session_start_time
 
     def set_initial_pot(self, amount: int):
         self.initial_pot = amount
@@ -53,19 +63,30 @@ class Player:
         else:
             raise ValueError("Password attempted to be set at insufficient length")
 
-    # more UI focused - could go into the UI somehow
+    def set_active_session_initial_pot_and_time(self):
+        self.active_session_initial_pot = self.active_pot
+        self.active_session_start_time = datetime.now()
+
+    def calculate_active_session_duration_minutes(self) -> int:
+        duration_timedelta = datetime.now() - self.active_session_start_time
+        duration_seconds = duration_timedelta.seconds
+        duration_minutes = duration_seconds / 60
+        return int(round(duration_minutes, 0))
+
+    # more UI focused - could separate into the UI somehow
+
+    def get_active_session_report(self):
+        print(f"Your current pot is £{self.active_pot}.\n"
+              f"You have been playing for {self.calculate_active_session_duration_minutes()} minute(s), "
+              f"during which you have {self.won_or_lost()}:"
+              f"£{abs(self.active_pot - self.initial_pot)}.")
 
     def get_full_status_report(self):
         print(f"You are playing as: {self.name}.\n"
               f"Your current pot is £{self.active_pot}.\n"
               f"You last topped up at {self.last_top_up_datetime}.\n"
-              f"Since {str(self.initial_pot_datetime)}, you have {self.won_or_lost()}:"
+              f"Since {str(self.initial_pot_datetime)}, you have {self.won_or_lost()}: "
               f"£{abs(self.active_pot - self.initial_pot)}")
-
-    def get_profit_report(self):
-        print(f"Your current pot is £{self.active_pot}.\n"
-              f"Since {str(self.initial_pot_datetime)}, you have {self.won_or_lost()}:"
-              f"£{abs(self.active_pot - self.initial_pot)}.")
 
     # lower level UI methods
 
