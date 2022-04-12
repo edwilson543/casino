@@ -6,15 +6,17 @@ from user_interface.command_line.Roulette.definitions.bet_type_defns_user import
 
 from user_interface.command_line.Roulette.definitions.navigation_defns_user import navigation_dict
 from user_interface.command_line.all_games.player_interactions_user import PlayerUserInteractions
-from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.roulette_initiation_user import \
-    RouletteInitiatorUser
-from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_selection_user import WheelAndBetTypeSelectorUser
+from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_selection_user import \
+    WheelAndBetTypeSelectorUser
 from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_placement_evaluation_user import \
     BetPlacementEvaluationUser
 from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
     RouletteContinuationUser
 
+from typing import Union
 import sys
+
+
 # added whilst updating
 
 
@@ -46,7 +48,8 @@ class RouletteGameUser:
                  active_player: Player = None,
                  active_top_up_amount: int = 0,
                  active_wheel_id: str = 'E',
-                 active_bet: Bet = None,
+                 active_bet_type: Bet = None,
+                 active_bet_choice: Union[int, str, list] = None,
                  active_stake: int = 20,
                  active_winning_slots: list = None,  # resolution needed?
                  active_potential_winnings: int = 50,
@@ -57,7 +60,8 @@ class RouletteGameUser:
         self.active_player = active_player
         self.active_top_up_amount = active_top_up_amount
         self.active_wheel_id = active_wheel_id
-        self.active_bet = active_bet
+        self.active_bet_type = active_bet_type
+        self.active_bet_choice = active_bet_choice
         self.active_stake = active_stake
         self.active_winning_slots = active_winning_slots
         self.active_potential_winnings = active_potential_winnings
@@ -82,36 +86,36 @@ class RouletteGameUser:
                 """i.e. if user chose to change wheel after their bet, or this is the first loop."""
                 self.active_wheel_id, self.active_wheel = wheel_bet_selector.choose_playing_wheel()
 
-
             ##########
             # Bet selection
             ##########
             if self.navigation_id in navigation_dict['from_bet_selection']:
                 """i.e. if user chose to change wheel or change bet category, or this is the first loop.
                 or used because if they changed the wheel then also need to change bet category"""
-                self.active_bet = wheel_bet_selector.choose_bet(wheel_id=self.active_wheel_id)
+                self.active_bet_type = wheel_bet_selector.choose_bet(wheel_id=self.active_wheel_id)
 
-            # stake quantification - use of bet_selection from previous if maybe a bit unideal
-            ################
-            # NOT UPDATED
-            ##################
+            ##########
+            # Class instance of class to quantify stakes, place and evaluate bets
+            ##########
+            bet_placer_evaluater = BetPlacementEvaluationUser(bet_type=self.active_bet_type,
+                                                              stake=self.active_stake,
+                                                              playing_wheel=self.active_wheel,
+                                                              player_funds=self.active_player.active_pot)
+            ##########
+            # Stake quantification
+            ##########
             if self.navigation_id in navigation_dict['from_stake_quantification']:
                 """i.e. if user chose to change wheel or bet type or stake amount."""
-                bet_selection = WheelAndBetTypeSelectorUser(wheel_id=self.active_wheel_id, player_funds=self.active_player.active_pot)
-                self.active_stake, self.all_in_status = bet_selection.choose_stake_amount(
-                    bet_type=self.active_bet_type_id)
+                self.active_stake, self.all_in_status = bet_placer_evaluater.choose_stake_amount()
 
-
-            ###########
+            ##########
             # Bet placement
             ##########
-            bet_placer_evaluater = BetPlacementEvaluationUser(bet_type=self.active_bet,
-                                                              stake=self.active_stake,
-                                                              playing_wheel=self.active_wheel)
+
+            # maybe get rid of the player_funds usage here?
             if self.navigation_id in navigation_dict['from_bet_choice']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice."""
-                self.active_bet = bet_placer_evaluater.get_user_bet_choice()
-
+                self.active_bet_choice = bet_placer_evaluater.get_user_bet_choice()
 
             ##########
             # Bet evaluation
@@ -122,7 +126,6 @@ class RouletteGameUser:
                 self.active_player.take_stake_from_pot(self.active_stake)
                 self.active_winnings = bet_placer_evaluater.evaluate_user_bet(bet_choice=self.active_bet_choice)
                 self.active_player.add_winnings_to_pot(self.active_winnings)
-
 
             ##########
             # Partially updated

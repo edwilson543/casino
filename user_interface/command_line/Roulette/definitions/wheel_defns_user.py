@@ -2,6 +2,7 @@ from Games.Roulette.definitions.wheel_defns import euro_wheel_defn, euro_wheel_b
 from Games.Roulette.definitions.wheel_defns import american_wheel_defn, american_wheel_bias_colour
 from Games.Roulette.definitions.wheel_defns import template_wheel_defn, template_wheel_bias_colour
 from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
+
 """Module currently not in use"""
 ##################
 # Wheel ui relevant definitions
@@ -16,6 +17,7 @@ template_wheel_colour_ids = {'B': 'black', 'W': 'white'}
 template_wheel_colour_options_text = "[B]lack, [W]hite"
 
 
+# TODO add the text attribute only to RouletteWheelUser subclass, but kep colour_ids for parent class
 ###############################
 # Create subclass of the RouletteWheelUser class for each defined wheel
 ###############################
@@ -38,11 +40,12 @@ class AmericanWheelUser(RouletteWheelUser):
 
 
 class TemplateWheelUser(RouletteWheelUser):
-    slots = template_wheel_defn
-    bias_colour = template_wheel_bias_colour
-    colour_ids = template_wheel_colour_ids
-    colour_options = template_wheel_colour_options_text
-    super().__init__(slots, bias_colour, colour_ids, colour_options)
+    def __init__(self):
+        slots = template_wheel_defn
+        bias_colour = template_wheel_bias_colour
+        colour_ids = template_wheel_colour_ids
+        colour_options = template_wheel_colour_options_text
+        super().__init__(slots, bias_colour, colour_ids, colour_options)
 
 
 ##############################

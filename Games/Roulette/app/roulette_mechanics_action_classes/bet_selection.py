@@ -33,15 +33,3 @@ class WheelAndBetTypeSelector:
             return self.bet_type_look_up[bet_type_id]
         else:
             raise NameError(f"No bet type with id {bet_type_id} found.")
-
-    @staticmethod
-    def all_in_status(stake: int, bet_type: RouletteBet) -> bool:
-        """
-        Method to determine whether the player has gone all in or not.
-        If the player has gone all in, they're not allowed to continue playing.
-        Returns: True if they've gone all in, False if it's just a normal bet (i.e. stake is at least min bet)
-        """
-        if stake >= bet_type.min_bet:
-            return False
-        elif stake < bet_type.min_bet:
-            return True
