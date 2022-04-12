@@ -1,5 +1,5 @@
+from Games.Roulette.app.roulette_bet_base_class import RouletteBet
 from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
-from Games.Roulette.definitions.bet_type_defns import bet_type_options
 from typing import Union
 
 
@@ -9,20 +9,17 @@ class BetPlacementEvaluation:
     """
 
     def __init__(self,
-                 bet_type_id: str,
+                 bet_type: RouletteBet,
                  stake: int,
                  playing_wheel: RouletteWheel):
-        self.bet_type_id = bet_type_id
+        self.bet_type = bet_type
         self.stake = stake
         self.playing_wheel = playing_wheel
-
-        self.bet_type = bet_type_options[self.bet_type_id]
-        # TODO make bet_type a parameter, having updated bet selection
 
     def evaluate_bet(self, bet_choice: Union[int, str, list]) -> (int, str, bool):
         """
         Method to determine the outcome of spinning the wheel, relative to the user's bet.
-        Parameters: bet_choice - this is used to call the method 'get_winning_slots_list' of the bet subclass,
+        Parameters: bet_choice - this is used to call the method 'determine_win_criteria' of the bet subclass,
         which returns a list of integers specific to the input format of the bet placement
         Returns:
         spin_outcome_num: an integer representing the slot of the roulette wheel the ball landed on
@@ -54,4 +51,4 @@ class BetPlacementEvaluation:
         Returns: a list of the slots which would result in the user winning their bet. This is done by accessing the
         'get_winning_slots_list' method of the specific bet class.
         """
-        return self.bet_type.get_winning_slots_list(playing_wheel=self.playing_wheel, choice=bet_choice)
+        return self.bet_type.determine_win_criteria(playing_wheel=self.playing_wheel, choice=bet_choice)

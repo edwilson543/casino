@@ -1,16 +1,14 @@
-from Games.games_base_classes import Player
 from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
-from Games.Roulette.app.roulette_bet_base_class import Bet
+from Games.Roulette.app.roulette_bet_base_class import RouletteBet
 
 
-#  TODO change these look up methods to not be from a dictionary
+#  TODO change the look up methods to not be from a dictionary
 class WheelAndBetTypeSelector:
     """Class to look up wheel and bet objects based on their ids, and also to determine all in status"""
 
-    def __init__(self, active_player: Player,
+    def __init__(self,
                  wheel_look_up: dict,
                  bet_type_look_up: dict):
-        self.active_player = active_player  # initialised as don't need to change any of the active player's attributes
         self.wheel_look_up = wheel_look_up
         self.bet_type_look_up = bet_type_look_up
 
@@ -25,7 +23,7 @@ class WheelAndBetTypeSelector:
         else:
             raise NameError(f"No wheel with id {wheel_id} found.")
 
-    def get_bet_type_from_bet_type_id(self, bet_type_id: str) -> Bet:
+    def get_bet_type_from_bet_type_id(self, bet_type_id: str) -> RouletteBet:
         """
         Method to take the bet_type_id and return a live bet object (subclass).
         Parameters: bet_type_id - string, e.g. 'C' which represents ColoursBet subclass of Bet
@@ -37,7 +35,7 @@ class WheelAndBetTypeSelector:
             raise NameError(f"No bet type with id {bet_type_id} found.")
 
     @staticmethod
-    def all_in_status(stake: int, bet_type: Bet) -> bool:
+    def all_in_status(stake: int, bet_type: RouletteBet) -> bool:
         """
         Method to determine whether the player has gone all in or not.
         If the player has gone all in, they're not allowed to continue playing.

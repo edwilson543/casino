@@ -1,26 +1,25 @@
 from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
+from Games.Roulette.app.roulette_bet_base_class import RouletteBet
 from Games.Roulette.app.roulette_mechanics_action_classes.bet_placement_evaluation import BetPlacementEvaluation
-from user_interface.command_line.Roulette.definitions.bet_type_defns_user import bet_type_options_user
-from Games.Roulette.definitions.game_parameters import pause_durations
 
+from Games.Roulette.definitions.game_parameters import pause_durations
 from typing import Union
 from time import sleep
 
 
+# TODO sort out the type hint error where it's expecting a roulette bet
 class BetPlacementEvaluationUser(BetPlacementEvaluation):
     """Purpose of this subclass is to inherit the get_winning_slots and get_potential_winnings
     methods from the BetPlacement class, and
     to add the get_user_bet_choice method which is shown below"""
 
     def __init__(self,
-                 bet_type_id: str,
+                 bet_type: RouletteBet,
                  stake: int,
                  playing_wheel: RouletteWheel):
-        super().__init__(bet_type_id, stake, playing_wheel)
-        self.bet_type = bet_type_options_user[self.bet_type_id]
-        # TODO make bet_type a parameter, having updated bet selection
+        super().__init__(bet_type, stake, playing_wheel)
 
-# TODO maybe bring the stake quantification into here as well
+    # TODO maybe bring the stake quantification into here as well
 
     def get_user_bet_choice(self) -> Union[int, str, list]:
         """gets user to specify their bet (navigation unique to the bet type)
@@ -57,7 +56,6 @@ class BetPlacementEvaluationUser(BetPlacementEvaluation):
         else:
             raise ValueError("Invalid winnings amount encountered in evaluate_user_bet.")
         return winnings
-
 
     @staticmethod
     def get_user_to_spin_wheel():

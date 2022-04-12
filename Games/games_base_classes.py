@@ -85,11 +85,11 @@ class Bet:
         self.max_bet = max_bet
         self.bet_type_id = bet_type_id
 
-    def determine_win_criteria(self, *args):
+    def determine_win_criteria(self, *args, **kwargs):
         """Abstract method for calculating the win criteria of a given bet - will be game and bet specific"""
         pass
 
-    def calculate_payout(self, *args):
+    def calculate_payout(self, *args, **kwargs):
         """Abstract method for calculating the payout for a £1 bet - will be game and bet specific,
         in particular we will need"""
         pass
