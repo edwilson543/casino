@@ -2,6 +2,8 @@ from Games.games_base_classes import Player
 from datetime import datetime
 
 
+# TODO any method printing datetime should make it more readbale, currently seconds is to around 8dp...
+# TODO create a read/write mechanism that saves each game/ allows creation of new players
 ####################
 # Assign the players
 ####################

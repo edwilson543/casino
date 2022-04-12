@@ -3,7 +3,11 @@ from Games.Roulette.definitions.bet_type_defns import bet_type_options_text, bet
 import sys
 
 
-class BetSelector:
+# TODO can see two usefule methods here (which will probably end up going, but useful for now):
+# 1 Takes a bet_type_id and returns a bet_type - this way never need an active bet_type_id
+# 2 Takes a wheel_id and returns a wheel_id
+
+class WheelAndBetTypeSelector:
     """class to allow users to select the type of bet to place
     note note yet to place the bet"""
 

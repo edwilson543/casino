@@ -1,8 +1,8 @@
-from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_placement_user import BetPlacementUser
+from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_placement_evaluation_user import BetPlacementEvaluationUser
 from Games.Roulette.definitions.wheel_defns import EuroWheel
 
 
-bet_placer = BetPlacementUser(bet_type_id='C', stake=10, playing_wheel=EuroWheel())
+bet_placer = BetPlacementEvaluationUser(bet_type_id='C', stake=10, playing_wheel=EuroWheel())
 
 
 class TestBetPlacementUser:

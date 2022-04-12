@@ -36,7 +36,7 @@ class RouletteContinuationUser(PlayerUserInteractions):
                 print(f"{proceed} not a valid command, please try again")
 
     def choose_navigation(self, active_player: Player) -> str:
-        if self.stake <= active_player.active_pot:
+        if self.stake < active_player.active_pot:
             nav_text = navigation_text
             nav_options = navigation_options
         else:

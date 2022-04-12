@@ -27,7 +27,7 @@ bet_cat_options_text = {'E': "[I]nside, [O]utside", 'A': "[I]nside, [O]utside"}
 bet_cats_and_types = {'E': {'O': ['C'], 'I': ['S']}, 'A': {'O': ['C'], 'I': ['S']}}
 
 # Bet type options to be displayed once the category has been selected:
-bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight_up"}, 'A': {'O': "[C]olours", 'I': "[S]traight_up"}}
+bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight up"}, 'A': {'O': "[C]olours", 'I': "[S]traight up"}}
 # Min and max bet for each bet type:
 bet_type_min_max_bet = {'E': {'C': {'min': 5, 'max': 50}, 'S': {'min': 5, 'max': 20}},
                         'A': {'C': {'min': 5, 'max': 50}, 'S': {'min': 5, 'max': 20}}}

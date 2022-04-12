@@ -1,8 +1,8 @@
-from Games.Roulette.app.roulette_mechanics_action_classes.bet_placement import BetPlacement
+from Games.Roulette.app.roulette_mechanics_action_classes.bet_placement_evaluation import BetPlacementEvaluation
 from Games.Roulette.definitions.wheel_defns import EuroWheel
 import pytest
 
-test_bet_placer_colours = BetPlacement(bet_type_id='C', stake=10, playing_wheel=EuroWheel())
+test_bet_placer_colours = BetPlacementEvaluation(bet_type_id='C', stake=10, playing_wheel=EuroWheel())
 
 
 class TestBetPlacementColours:
@@ -23,13 +23,13 @@ class TestBetPlacementColours:
 
     def test_get_potential_winnings_red_bet(self):
         red_winning_slots = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
-        calculated_red_payout = test_bet_placer_colours.get_potential_winnings(winning_slots_list=red_winning_slots)
+        calculated_red_payout = test_bet_placer_colours.get_winnings(winning_slots_list=red_winning_slots)
         expected_red_payout = 2 * test_bet_placer_colours.stake
         assert calculated_red_payout == expected_red_payout
 
 
 
-test_bet_placer_straight_up = BetPlacement(bet_type_id='S', stake=10, playing_wheel=EuroWheel())
+test_bet_placer_straight_up = BetPlacementEvaluation(bet_type_id='S', stake=10, playing_wheel=EuroWheel())
 
 class TestBetPlacementStraightUp:
     pass
