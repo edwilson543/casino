@@ -1,84 +1,49 @@
-from Games.Roulette.definitions.bet_type_defns import bet_cats_and_types, bet_cat_options_text
-from Games.Roulette.definitions.bet_type_defns import bet_type_options_text, bet_type_min_max_bet
-import sys
+from Games.games_base_classes import Player
+from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
+from Games.Roulette.app.roulette_bet_base_class import Bet
 
 
-# TODO can see two usefule methods here (which will probably end up going, but useful for now):
-# 1 Takes a bet_type_id and returns a bet_type - this way never need an active bet_type_id
-# 2 Takes a wheel_id and returns a wheel_id
-
+#  TODO change these look up methods to not be from a dictionary
 class WheelAndBetTypeSelector:
-    """class to allow users to select the type of bet to place
-    note note yet to place the bet"""
+    """Class to look up wheel and bet objects based on their ids, and also to determine all in status"""
 
-    def __init__(self, wheel_id: str, player_funds: int):
-        self.wheel_id = wheel_id
-        self.player_funds = player_funds
+    def __init__(self, active_player: Player,
+                 wheel_look_up: dict,
+                 bet_type_look_up: dict):
+        self.active_player = active_player  # initialised as don't need to change any of the active player's attributes
+        self.wheel_look_up = wheel_look_up
+        self.bet_type_look_up = bet_type_look_up
 
-    def choose_bet_category(self):
-        while True:
-            bet_cat = input("What category of bet would you like to place?"
-                            f"\n{bet_cat_options_text[self.wheel_id]}\n--->").upper()
-            if bet_cat in list(bet_cats_and_types[self.wheel_id].keys()):
-                return bet_cat
-            else:
-                print("Not a valid bet category, try again")
-
-    def choose_bet_type(self, bet_cat):
-        while True:
-            bet_type = input("What category of bet would you like to place?"
-                             f"\n{bet_type_options_text[self.wheel_id][bet_cat]}\n--->").upper()
-            if bet_type in bet_cats_and_types[self.wheel_id][bet_cat]:
-                return bet_type
-            else:
-                print("Not a valid bet type, try again")
-
-    def choose_stake_amount(self, bet_type):
-        """Returns: Stake amount, all_in_status"""
-        min_stake = bet_type_min_max_bet[self.wheel_id][bet_type]['min']
-        if self.player_funds < min_stake:  # TODO Add some feature here to allow user to do a top up instead
-            all_in_stake, all_in_status = self.all_in()
-            return all_in_stake, all_in_status
+    def get_wheel_from_wheel_id(self, wheel_id: str) -> RouletteWheel:
+        """
+        Method to take the wheel_id and return a live wheel object (subclass).
+        Parameters: wheel_id - this is a string, e.g. 'E' in the case of the european wheel.
+        Returns: a subclass of RouletteWheel, which has all the instance attributes defined (e.g. Euro_wheel().
+        """
+        if wheel_id in self.wheel_look_up:
+            return self.wheel_look_up[wheel_id]
         else:
-            all_in_stake, all_in_status = self.choose_stake_amount_funds_exceed_min_bet(bet_type=bet_type)
-            return all_in_stake, all_in_status
+            raise NameError(f"No wheel with id {wheel_id} found.")
 
-    def choose_stake_amount_funds_exceed_min_bet(self, bet_type):
+    def get_bet_type_from_bet_type_id(self, bet_type_id: str) -> Bet:
         """
-        Returns:
-        Stake amount, all_in_status, which by default is set to false
+        Method to take the bet_type_id and return a live bet object (subclass).
+        Parameters: bet_type_id - string, e.g. 'C' which represents ColoursBet subclass of Bet
+        Returns: A subclass of Bet which is a fully defined bet class (i.e. includes bet placing).
         """
-        min_stake = bet_type_min_max_bet[self.wheel_id][bet_type]['min']
-        max_stake = bet_type_min_max_bet[self.wheel_id][bet_type]['max']
-        all_in_status = False
-        while True:
-            stake = input("How much would you like to stake?\n"
-                          f"Minimum stake: £{min_stake}, Maximum stake: £{max_stake}, integer stakes only.\n"
-                          f"You have £{self.player_funds} left to play with.\n--->")
-            try:
-                stake = int(stake.replace("£", ""))  # get rid of the £ sign if the user types one
-                if stake > self.player_funds:
-                    print(f"A £{stake} stake exceeds your current funds ({self.player_funds}).")
-                    continue
-                elif min_stake <= stake <= max_stake:
-                    confirmation = input(f"Confirm your stake of £{stake}?\n"
-                                         "[Y]es, [N]o \n--->").upper()
-                    if confirmation != 'Y':
-                        print(f"£{stake} stake placed, time to choose your bet!")
-                    return stake, all_in_status
-                else:
-                    print('Invalid stake - please try again and refer to bet criteria.')
-            except ValueError:
-                print('Invalid stake - please try again and refer to bet criteria.')
+        if bet_type_id in self.bet_type_look_up:
+            return self.bet_type_look_up[bet_type_id]
+        else:
+            raise NameError(f"No bet type with id {bet_type_id} found.")
 
-    def all_in(self):
-        all_in = input(f"The minimum bet exceeds your pot of £{self.player_funds}.\n"
-                       f"Would you like to go all in, [Y]es or [N]o?\n--->").upper()
-        while True:
-            if all_in == 'Y':
-                all_in_status = True
-                return self.player_funds, all_in_status
-            elif all_in == 'N':
-                sys.exit(f"Game over, your final pot is {self.player_funds}")
-            else:
-                print("Invalid options, please try again.")
+    @staticmethod
+    def all_in_status(stake: int, bet_type: Bet) -> bool:
+        """
+        Method to determine whether the player has gone all in or not.
+        If the player has gone all in, they're not allowed to continue playing.
+        Returns: True if they've gone all in, False if it's just a normal bet (i.e. stake is at least min bet)
+        """
+        if stake >= bet_type.min_bet:
+            return False
+        elif stake < bet_type.min_bet:
+            return True
