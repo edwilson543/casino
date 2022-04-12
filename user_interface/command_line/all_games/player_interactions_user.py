@@ -76,7 +76,7 @@ class PlayerUserInteractions:
             if player_type == 'G':
                 return existing_players['guest']
             elif player_type == 'E':
-                return access_player()  # TODO find out how to use decorator instead
+                return access_player()
             elif player_type == 'N':
                 print("New player functionality not built yet")
                 continue

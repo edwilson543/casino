@@ -54,7 +54,7 @@ class ColoursBet(RouletteBet):
                  bet_type_id: str = 'C'):
         super().__init__(min_bet, max_bet, bet_type_id)
 
-    def get_winning_slots_list(self, playing_wheel: RouletteWheel, choice: str) -> list:
+    def determine_win_criteria(self, playing_wheel: RouletteWheel, choice: str) -> list[int]:
         """Returns: list of the slot numbers of the same colour as the input colour."""
         if choice in playing_wheel.slots.values():
             return [slot_num for slot_num in playing_wheel.slots if playing_wheel.slots[slot_num] == choice]
@@ -71,7 +71,7 @@ class StraightUpBet(RouletteBet):
                  bet_type_id: str = 'S'):
         super().__init__(min_bet, max_bet, bet_type_id)
 
-    def get_winning_slots_list(self, playing_wheel: RouletteWheel, choice: int):
+    def determine_win_criteria(self, playing_wheel: RouletteWheel, choice: int) -> list[int]:
         if choice in playing_wheel.slots:
             return [choice]
         else:

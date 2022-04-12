@@ -17,7 +17,7 @@ class RouletteBet(Bet):
                  bet_type_id: str):
         super().__init__(min_bet, max_bet, bet_type_id)
 
-    def determine_win_criteria(self):
+    def determine_win_criteria(self, *args, **kwargs):
         """Abstract method for calculating the win criteria of a given bet - will be bet specific.
         The determine_win_criteria method will be used to take an input and generate a list of winning slot for a
         given bet"""
@@ -29,3 +29,8 @@ class RouletteBet(Bet):
         'the house always wins."""
         win_probability_over_estimate = len(win_criteria) / playing_wheel.bias_wheel_size()
         return floor(1 / win_probability_over_estimate)
+
+    # TODO probably want to get rid of this - it's to avoid a pycharm error prompt where RouletteBet
+    # had no method get_user_bet_choice
+    def get_user_bet_choice(self, *args, **kwargs):
+        pass

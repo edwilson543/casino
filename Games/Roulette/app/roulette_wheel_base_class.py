@@ -6,9 +6,9 @@ class RouletteWheel:
 
     def __init__(self,
                  slots: dict,
+                 bias_colour: str,
                  colour_ids: dict,
-                 colour_options: str,
-                 bias_colour: str):
+                 colour_options: str):
         """
         Parameters
         __________

@@ -50,28 +50,28 @@ template_wheel_bias_colour = 'black'
 class EuroWheel(RouletteWheel):
     def __init__(self):
         slots = euro_wheel_defn
+        bias_colour = euro_wheel_bias_colour
         colour_ids = euro_wheel_colour_ids
         colour_options = euro_wheel_colour_options_text
-        bias_colour = euro_wheel_bias_colour
-        super().__init__(slots, colour_ids, colour_options, bias_colour)
+        super().__init__(slots, bias_colour, colour_ids, colour_options)
 
 
 class AmericanWheel(RouletteWheel):
     def __init__(self):
         slots = american_wheel_defn
+        bias_colour = american_wheel_bias_colour
         colour_ids = american_wheel_colour_ids
         colour_options = american_wheel_colour_options_text
-        bias_colour = american_wheel_bias_colour
-        super().__init__(slots, colour_ids, colour_options, bias_colour)
+        super().__init__(slots, bias_colour, colour_ids, colour_options)
 
 
 class TemplateWheel(RouletteWheel):
     def __init__(self):
         slots = template_wheel_defn
+        bias_colour = template_wheel_bias_colour
         colour_ids = template_wheel_colour_ids
         colour_options = template_wheel_colour_options_text
-        bias_colour = template_wheel_bias_colour
-        super().__init__(slots, colour_ids, colour_options, bias_colour)
+        super().__init__(slots, bias_colour, colour_ids, colour_options)
 
 
 ##############################

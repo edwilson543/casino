@@ -14,7 +14,8 @@ class ColoursBetUser(ColoursBet):
                  bet_type_id: str = 'C'):
         super().__init__(min_bet, max_bet, bet_type_id)
 
-    def get_user_bet_choice(self, playing_wheel: RouletteWheel):
+    @staticmethod
+    def get_user_bet_choice(playing_wheel: RouletteWheel):
         """
         Method to define the user's bet choice - they are required to enter a valid colour on the given wheel.
         Returns: user colour choice (as a string, example: 'red').
@@ -41,7 +42,8 @@ class StraightUpBetUser(StraightUpBet):
                  bet_type_id: str = 'S'):
         super().__init__(min_bet, max_bet, bet_type_id)
 
-    def get_user_bet_choice(self, playing_wheel: RouletteWheel):
+    @staticmethod
+    def get_user_bet_choice(playing_wheel: RouletteWheel):
         number_options_text = playing_wheel.user_number_options_text()
         number_options_range = playing_wheel.user_number_options_range()
         while True:
