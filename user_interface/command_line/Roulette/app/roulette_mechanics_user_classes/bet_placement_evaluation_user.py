@@ -96,11 +96,11 @@ class BetPlacementEvaluationUser(BetPlacementEvaluation):
                     print(f"A £{stake} stake exceeds your current funds ({self.player_funds}).")
                     continue
                 elif min_bet <= stake <= max_bet:
-                    confirmation = input(f"Confirm your stake of £{stake}?\n"
-                                         "[Y]es, [N]o \n--->").upper()
-                    if confirmation != 'Y':
-                        print(f"£{stake} stake placed, time to choose your bet!")
-                    return stake, all_in_status
+                    if self.stake_confirmation(stake=stake):
+                        print(f"£{stake} bet placed, time to choose your bet!")
+                        return stake, all_in_status
+                    else:
+                        continue
                 else:
                     print('Invalid stake - please try again and refer to bet criteria.')
             except ValueError:
@@ -121,7 +121,6 @@ class BetPlacementEvaluationUser(BetPlacementEvaluation):
     ##########
     # Lower level methods called in evaluate_user_bet
     ##########
-
     @staticmethod
     def get_user_to_spin_wheel():
         """Low level method just to get the user to type spin in the game flow above"""
@@ -132,3 +131,16 @@ class BetPlacementEvaluationUser(BetPlacementEvaluation):
                 continue
             else:
                 break
+
+    ##########
+    # Lowest level method called in choose stake amount funds exceed min bet
+    ##########
+
+    @staticmethod
+    def stake_confirmation(stake) -> bool:
+        confirmation = input(f"Confirm your stake of £{stake}?\n"
+                             "[Y]es, [N]o \n--->").upper()
+        if confirmation != 'Y':
+            return False
+        else:
+            return True

@@ -77,7 +77,11 @@ class Player:
         return int(round(duration_minutes, 0))
 
     def calculate_active_session_winnings(self) -> int:
-        return abs(self.active_pot - self.active_session_initial_pot - self.active_session_top_ups)
+        if self.player_type == 'E':
+            return self.active_pot - self.active_session_initial_pot - self.active_session_top_ups
+        elif self.player_type in ['G', 'N']:
+            return self.active_pot - self.active_session_initial_pot - \
+                       self.active_session_top_ups - self.initial_pot
 
     # more UI focused - could separate into the UI somehow
 
@@ -85,19 +89,19 @@ class Player:
         print(f"Your current pot is £{self.active_pot}.\n"
               f"You have been playing for {self.calculate_active_session_duration_minutes()} minute(s), "
               f"during which time you have {self.won_or_lost()}:"
-              f"£{self.calculate_active_session_winnings()}.")
+              f"£{abs(self.calculate_active_session_winnings())}.")
 
     def get_full_status_report(self):
         print(f"You are playing as: {self.name}.\n"
               f"Your current pot is £{self.active_pot}.\n"
               f"You last topped up at {self.last_top_up_datetime}.\n"
-              f"Since {str(self.initial_pot_datetime)}, you have {self.won_or_lost()}:  "
-              f"£{abs(self.active_pot - self.initial_pot)}")
+              f"Since {str(self.initial_pot_datetime)}, you have {self.won_or_lost()}:"
+              f" £{abs(self.active_pot - self.initial_pot)}")
 
     # lower level UI methods
 
     def won_or_lost(self):
-        if self.active_pot > self.active_session_initial_pot + self.active_session_top_ups:
+        if self.calculate_active_session_winnings() > 0:
             return "won"
         else:
             return "lost"

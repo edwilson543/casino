@@ -3,9 +3,9 @@ from Games.Roulette.definitions.wheel_defns import american_wheel_defn, american
 from Games.Roulette.definitions.wheel_defns import template_wheel_defn, template_wheel_bias_colour
 from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
 
-"""Module currently not in use"""
+
 ##################
-# Wheel ui relevant definitions
+# Wheel relevant UI definitions
 ##################
 euro_wheel_colour_ids = {'G': 'green', 'R': 'red', 'B': 'black'}
 euro_wheel_colour_options_text = "[G]reen, [R]ed, [B]lack"
@@ -16,8 +16,8 @@ american_wheel_colour_options_text = "[G]reen, [R]ed, [B]lack"
 template_wheel_colour_ids = {'B': 'black', 'W': 'white'}
 template_wheel_colour_options_text = "[B]lack, [W]hite"
 
-
-# TODO add the text attribute only to RouletteWheelUser subclass, but kep colour_ids for parent class
+# TODO find out how to define specific user wheels as subclasses of the defined equivalent roulette wheel,
+# i.e. using multiple inheritance, so that their parameters don't need to be imported here
 ###############################
 # Create subclass of the RouletteWheelUser class for each defined wheel
 ###############################

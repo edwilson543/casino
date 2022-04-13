@@ -6,22 +6,16 @@ class RouletteWheel:
 
     def __init__(self,
                  slots: dict,
-                 bias_colour: str,
-                 colour_ids: dict,
-                 colour_options: str):
+                 bias_colour: str):
         """
         Parameters
         __________
         slots: slot of the roulette wheel -
         should be passed as a dictionary, with the numbers as keys and the colours as the values
-        colour_ids: a mapping of colour id (e.g. 'R') to each colour (e.g. 'red')
-        colour_options: a string used to get user input on what colour they'd like to bet on
         bias_colour: the colour whose counts are ignored when calculating stake returns. e.g. if you have a 37 slot
         wheel and one slot is green, then stakes are calculated from probabilities as 1/(x/36).
         """
         self.slots = slots
-        self.colour_ids = colour_ids
-        self.colour_options = colour_options
         self.bias_colour = bias_colour
 
     def spin(self):
@@ -47,21 +41,3 @@ class RouletteWheel:
     def wheel_size(self) -> int:
         """Returns: The number of slots on the wheel as an int, for calculating probabilities within wager defns"""
         return len(self.slots)
-
-    # UI methods - will need to be moved elsewhere
-
-    def user_number_options_text(self):
-        """
-        Returns: text string describing the numbers of the roulette wheel
-        Example output form: '0 to 36 (inclusive)'
-        Note this would need to change if defining a roulette wheel which skips numbers
-        """
-        min_number = min(list(set(self.slots.keys())))
-        max_number = max(list(set(self.slots.keys())))
-        return f"{min_number} to {max_number} (inclusive)"
-
-    def user_number_options_range(self):
-        """Returns a range which specifies the valid number choices"""
-        min_number = min(list(set(self.slots.keys())))
-        max_number = max(list(set(self.slots.keys())))
-        return range(min_number, max_number + 1)

@@ -7,4 +7,4 @@ if __name__ == '__main__':
     roulette = RouletteGameUser(active_player=active_player)
     roulette.roulette_loop()
 
-# TODO fix stake confirmation from going through with just an 'enter'
+# TODO separate out all confirmation prompts into their own methods, so they can be turned on/off in one go
