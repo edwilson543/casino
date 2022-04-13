@@ -4,7 +4,7 @@ from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
 
 from user_interface.command_line.Roulette.definitions.wheel_defns_user import wheel_options_user
 from user_interface.command_line.Roulette.definitions.bet_type_defns_user import bet_type_options_user
-from user_interface.command_line.Roulette.definitions.navigation_defns_user import navigation_dict
+from user_interface.command_line.Roulette.definitions.navigation_defns import navigation_dict
 from user_interface.command_line.all_games.player_interactions_user import PlayerUserInteractions
 from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.bet_selection_user import \
     WheelAndBetTypeSelectorUser
@@ -15,6 +15,7 @@ from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.ro
 
 from typing import Union
 import sys
+
 
 ################
 # Game set up - this could be moved out to be at Game level/ renamed log in process etc.
