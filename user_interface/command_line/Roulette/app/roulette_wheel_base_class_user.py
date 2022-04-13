@@ -3,6 +3,7 @@ from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
 
 class RouletteWheelUser(RouletteWheel):
     def __init__(self,
+                 wheel_id,
                  slots,
                  bias_colour,
                  colour_ids,
@@ -12,7 +13,7 @@ class RouletteWheelUser(RouletteWheel):
         colour_ids: a mapping of colour id (e.g. 'R') to each colour (e.g. 'red')
         colour_options: a string used to get user input on what colour they'd like to bet on
         """
-        super().__init__(slots, bias_colour)
+        super().__init__(wheel_id, slots, bias_colour)
         self.colour_ids = colour_ids
         self.colour_options = colour_options
 

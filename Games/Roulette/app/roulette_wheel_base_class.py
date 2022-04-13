@@ -1,10 +1,11 @@
 import numpy as np
 
-# maybe we should have wheel_id as an attribute?
+
 class RouletteWheel:
     """Base class for the roulette wheel - from which we can define different wheel configurations"""
 
     def __init__(self,
+                 wheel_id: str,
                  slots: dict,
                  bias_colour: str):
         """
@@ -15,6 +16,7 @@ class RouletteWheel:
         bias_colour: the colour whose counts are ignored when calculating stake returns. e.g. if you have a 37 slot
         wheel and one slot is green, then stakes are calculated from probabilities as 1/(x/36).
         """
+        self.wheel_id = wheel_id
         self.slots = slots
         self.bias_colour = bias_colour
 

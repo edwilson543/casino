@@ -7,4 +7,4 @@ if __name__ == '__main__':
     roulette = RouletteGameUser(active_player=active_player)
     roulette.roulette_loop()
 
-# TODO separate out all confirmation prompts into their own methods, so they can be turned on/off in one go
+# TODO separate out all UI confirmation prompts into their own methods, so they can be turned on/off in one go

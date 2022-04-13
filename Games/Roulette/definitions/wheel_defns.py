@@ -25,6 +25,7 @@ and adding the wheel_id as a primary key in the navigation parameters
 ###############################
 # Wheel definitions and payouts
 ###############################
+euro_wheel_id = 'E'
 euro_wheel_defn = {0: 'green', 1: 'red', 2: 'black', 3: 'red', 4: 'black', 5: 'red', 6: 'black', 7: 'red',
                    8: 'black', 9: 'red', 10: 'black', 11: 'black', 12: 'red', 13: 'black', 14: 'red', 15: 'black',
                    16: 'red', 17: 'black', 18: 'red', 19: 'red', 20: 'black', 21: 'red', 22: 'black', 23: 'red',
@@ -32,6 +33,7 @@ euro_wheel_defn = {0: 'green', 1: 'red', 2: 'black', 3: 'red', 4: 'black', 5: 'r
                    32: 'red', 33: 'black', 34: 'red', 35: 'black', 36: 'red'}
 euro_wheel_bias_colour = 'green'
 
+american_wheel_id = 'A'
 american_wheel_defn = {-1: 'green', 0: 'green', 1: 'red', 2: 'black', 3: 'red', 4: 'black', 5: 'red', 6: 'black',
                        7: 'red', 8: 'black', 9: 'red', 10: 'black', 11: 'black', 12: 'red', 13: 'black', 14: 'red',
                        15: 'black', 16: 'red', 17: 'black', 18: 'red', 19: 'red', 20: 'black', 21: 'red', 22: 'black',
@@ -40,6 +42,7 @@ american_wheel_defn = {-1: 'green', 0: 'green', 1: 'red', 2: 'black', 3: 'red', 
 # note -1 corresponds to 00, which is in effect the same as 0
 american_wheel_bias_colour = 'green'
 
+template_wheel_id = 'T'
 template_wheel_defn = {0: 'black', 1: 'white'}
 template_wheel_bias_colour = 'black'
 
@@ -49,23 +52,26 @@ template_wheel_bias_colour = 'black'
 ###############################
 class EuroWheel(RouletteWheel):
     def __init__(self):
+        wheel_id = euro_wheel_id
         slots = euro_wheel_defn
         bias_colour = euro_wheel_bias_colour
-        super().__init__(slots, bias_colour)
+        super().__init__(wheel_id, slots, bias_colour)
 
 
 class AmericanWheel(RouletteWheel):
     def __init__(self):
+        wheel_id = american_wheel_id
         slots = american_wheel_defn
         bias_colour = american_wheel_bias_colour
-        super().__init__(slots, bias_colour)
+        super().__init__(wheel_id, slots, bias_colour)
 
 
 class TemplateWheel(RouletteWheel):
     def __init__(self):
+        wheel_id = template_wheel_id
         slots = template_wheel_defn
         bias_colour = template_wheel_bias_colour
-        super().__init__(slots, bias_colour)
+        super().__init__(wheel_id, slots, bias_colour)
 
 
 ##############################
