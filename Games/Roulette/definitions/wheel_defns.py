@@ -16,9 +16,9 @@ black feature on the same wheel
 """  
 9) Add the user wheel option to the wheel_options_user dict and the wheel_options_text string, 
 so that it can be chosen in the game, with the relevant key
-
-
-9) Add relevant bet type options to the wheel in bet_type_defns, using the wheel id key from wheel_options
+10) Add the relevant bet type options to the user wheel by going to
+user_interface->command_line->Roulette->definitions-> bet_type_defns_user
+and adding the wheel_id as a primary key in the navigation parameters
 """
 # TODO add adjacency lists (maybe implementedd with a dictionary) for the boards to the definitions
 # Then in the UI wheel, add a string rep of form "|1|2|\n-----\n|3|4|"

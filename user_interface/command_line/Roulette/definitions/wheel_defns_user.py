@@ -3,7 +3,7 @@ from Games.Roulette.definitions.wheel_defns import american_wheel_defn, american
 from Games.Roulette.definitions.wheel_defns import template_wheel_defn, template_wheel_bias_colour
 from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
 
-
+"""To define a new wheel, first go to Roulette->definitions->wheel_defns"""
 ##################
 # Wheel relevant UI definitions
 ##################

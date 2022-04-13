@@ -1,16 +1,12 @@
 from Games.games_base_classes import Player
 from Games.Roulette.app.roulette_bet_base_class import RouletteBet
 from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
-from user_interface.command_line.Roulette.definitions.wheel_defns_user import wheel_options_text
-from Games.Roulette.definitions.bet_type_defns import bet_cats_and_types, bet_cat_options_text
-from Games.Roulette.definitions.bet_type_defns import bet_type_options_text, bet_type_min_max_bet
 from Games.Roulette.app.roulette_mechanics_action_classes.bet_selection import WheelAndBetTypeSelector
-import sys
 
+from user_interface.command_line.Roulette.definitions.wheel_defns_user import wheel_options_text
+from user_interface.command_line.Roulette.definitions.bet_type_defns_user import bet_cats_and_types, \
+    bet_cat_options_text, bet_type_options_text
 
-# TODO make this a subclass of WheelAndBetSelector
-# TODO write down the empty methods below (bringing in wheel method)
-# TODO do something with the stake method too, bring the high level call up to the top
 
 class WheelAndBetTypeSelectorUser(WheelAndBetTypeSelector):
     """class to allow users to select the type of bet to place
@@ -59,7 +55,7 @@ class WheelAndBetTypeSelectorUser(WheelAndBetTypeSelector):
     def choose_bet_type(self, wheel_id: str, bet_cat: str) -> RouletteBet:
         while True:
             bet_type_id = input("What category of bet would you like to place?"
-                             f"\n{bet_type_options_text[wheel_id][bet_cat]}\n--->").upper()
+                                f"\n{bet_type_options_text[wheel_id][bet_cat]}\n--->").upper()
             if bet_type_id in bet_cats_and_types[wheel_id][bet_cat]:
                 return self.get_bet_type_from_bet_type_id(bet_type_id)
             else:

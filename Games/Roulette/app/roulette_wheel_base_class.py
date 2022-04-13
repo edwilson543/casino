@@ -1,6 +1,6 @@
 import numpy as np
 
-
+# maybe we should have wheel_id as an attribute?
 class RouletteWheel:
     """Base class for the roulette wheel - from which we can define different wheel configurations"""
 

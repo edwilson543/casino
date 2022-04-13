@@ -1,12 +1,21 @@
 from Games.Roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
-from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
+from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
 
-"""UI classes that inherit from the relevant class in bet_type_defns.
-These classes are to add the UI that allows users to make their bet choice."""
+"""To define a new bet, first go to Roulette->definitions->bet_type_defns"""
+##########
+# Navigation parameters
+##########
+# Define the text strings to display the bet categories available on each wheel
+bet_cat_options_text = {'E': "[I]nside, [O]utside", 'A': "[I]nside, [O]utside"}
+# Define the dictionaries showing bet types available on each wheel, wihtin each category
+bet_cats_and_types = {'E': {'O': ['C'], 'I': ['S']}, 'A': {'O': ['C'], 'I': ['S']}}
+# Define the text strings to display for each wheel, once the bet category is selected
+bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight up"},
+                         'A': {'O': "[C]olours", 'I': "[S]traight up"}}
 
-
-# TODO these could instead just be inherited directly form the Roulette Bet base class?
-
+##########
+# Define 'get_user_bet_choice' method for each user bets
+##########
 class ColoursBetUser(ColoursBet):
     def __init__(self,
                  min_bet: int = 5,
@@ -15,7 +24,7 @@ class ColoursBetUser(ColoursBet):
         super().__init__(min_bet, max_bet, bet_type_id)
 
     @staticmethod
-    def get_user_bet_choice(playing_wheel: RouletteWheel):
+    def get_user_bet_choice(playing_wheel: RouletteWheelUser):
         """
         Method to define the user's bet choice - they are required to enter a valid colour on the given wheel.
         Returns: user colour choice (as a string, example: 'red').
@@ -26,7 +35,7 @@ class ColoursBetUser(ColoursBet):
         while True:
             bet_choice = input(
                 f"What colour would you like to bet on?\n{playing_wheel.colour_options}\n--->").upper()
-            if bet_choice in playing_wheel.colour_ids.keys():
+            if bet_choice in playing_wheel.colour_ids:
                 bet_choice_colour = playing_wheel.colour_ids[bet_choice]
                 return bet_choice_colour
             else:
@@ -34,7 +43,7 @@ class ColoursBetUser(ColoursBet):
 
 
 class StraightUpBetUser(StraightUpBet):
-    """Class for defining win criteria and payout for a straight up bet"""
+    """Class for defining win criteria and payout for a straight-up bet"""
 
     def __init__(self,
                  min_bet: int = 10,
@@ -43,7 +52,7 @@ class StraightUpBetUser(StraightUpBet):
         super().__init__(min_bet, max_bet, bet_type_id)
 
     @staticmethod
-    def get_user_bet_choice(playing_wheel: RouletteWheel):
+    def get_user_bet_choice(playing_wheel: RouletteWheelUser):
         number_options_text = playing_wheel.user_number_options_text()
         number_options_range = playing_wheel.user_number_options_range()
         while True:
@@ -58,7 +67,7 @@ class StraightUpBetUser(StraightUpBet):
                 print(f"{bet_choice} is not a valid bet choice, please try again")
 
 
-###################
-# Add the newly defined user bet class to the bet_type_options dictionary below
-###################
+##########
+# Add the newly defined user bet class to the bet_type_options_user dictionary below
+##########
 bet_type_options_user = {'C': ColoursBetUser(), 'S': StraightUpBetUser()}
