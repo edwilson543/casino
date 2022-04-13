@@ -9,7 +9,6 @@ import functools
 
 ##########
 # Functions to access players, requiring user input of password
-# TODO would these 2 functions ideally be called in the class below??
 ##########
 
 def password_proected(n_attempts):
