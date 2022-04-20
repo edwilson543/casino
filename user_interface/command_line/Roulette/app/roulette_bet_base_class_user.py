@@ -8,13 +8,14 @@ class RouletteBetUser(RouletteBet):
                  min_bet: int,
                  max_bet: int,
                  bet_type_id: str,
-                 stake: int, # new attributes here down - some to be given to parent class
+                 stake: int,
                  bet_choice: Union[int, str, list],
-                 player_funds: int,
-                 playing_wheel: RouletteWheelUser):
+                 playing_wheel: RouletteWheelUser,
+                 player_funds: int):
         super().__init__(min_bet, max_bet, bet_type_id)
         self.stake = stake
         self.bet_choice = bet_choice
-        self.player_funds = player_funds
         self.playing_wheel = playing_wheel
-        
+        self.player_funds = player_funds
+
+    def

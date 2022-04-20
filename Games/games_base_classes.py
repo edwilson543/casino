@@ -1,10 +1,10 @@
-from datetime import datetime
-
 """
 Contents:
 Player (base class)
 Bet (base class)
 """
+from datetime import datetime
+from typing import Union
 
 
 class Player:
@@ -111,16 +111,24 @@ class Bet:
     def __init__(self,
                  min_bet: int,
                  max_bet: int,
-                 bet_type_id: str):
+                 bet_type_id: str,
+                 stake: int,
+                 bet_choice: Union[int, str, list]):
         self.min_bet = min_bet
         self.max_bet = max_bet
         self.bet_type_id = bet_type_id
+        self.stake = stake
+        self.bet_choice = bet_choice
 
     def determine_win_criteria(self, *args, **kwargs):
         """Abstract method for calculating the win criteria of a given bet - will be game and bet specific"""
         pass
 
     def calculate_payout(self, *args, **kwargs):
-        """Abstract method for calculating the payout for a £1 bet - will be game and bet specific,
+        """Abstract method for calculating the payout for the bet - will be game and bet specific,
         in particular we will need"""
+        pass
+
+    def evaluate_bet(self, *args, **kwargs):
+        """Abstract method for evaluating the outcome of the bet"""
         pass

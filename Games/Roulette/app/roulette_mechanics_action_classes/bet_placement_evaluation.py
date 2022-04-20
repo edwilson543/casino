@@ -26,7 +26,7 @@ class BetPlacementEvaluation:
         spin_outcome_col: a string representing the colour of the roulette wheel the ball landed on
         winnings: either 0 or x>0, depending on whether the user won their bet
         """
-        winning_slots_list = self.get_winning_slots(bet_choice=bet_choice)
+        winning_slots_list = self.determine_win_criteria(bet_choice=bet_choice)
         spin_outcome_num, spin_outcome_col = self.playing_wheel.spin()
         if spin_outcome_num in winning_slots_list:
             winnings = self.get_winnings(winning_slots_list=winning_slots_list)
@@ -42,7 +42,7 @@ class BetPlacementEvaluation:
         unit_payout = self.bet_type.calculate_payout(playing_wheel=self.playing_wheel, win_criteria=winning_slots_list)
         return self.stake * unit_payout
 
-    def get_winning_slots(self, bet_choice: Union[int, str, list]) -> list[int]:
+    def determine_win_criteria(self, bet_choice: Union[int, str, list]) -> list[int]:
         """
         Finds winning list based on the user bet_choice. The bet_type attribute 'win_criteria' is set based on the
         bet choice, and then returned.
