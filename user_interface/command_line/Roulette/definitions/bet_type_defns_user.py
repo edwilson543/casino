@@ -4,6 +4,9 @@ from user_interface.command_line.Roulette.app.roulette_bet_base_class_user impor
 from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
 from typing import Union
 
+# TODO sort out the type hint expecting a RouletteWheel instead of a RouletteWheelUser
+# Why is this happening???
+
 ##########
 # Navigation parameters #todo move these to the navigation parameters UI???
 ##########
@@ -18,7 +21,7 @@ bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight up"},
 
 ##########
 # Define 'get_user_bet_choice' method for each user bets
-# Use MRO RouletteBetUser, specific bet class
+# Use MRO RouletteBetUser, SpecificBetClass
 ##########
 class ColoursBetUser(RouletteBetUser, ColoursBet):
     def __init__(self,
