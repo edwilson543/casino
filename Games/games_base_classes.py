@@ -81,7 +81,7 @@ class Player:
             return self.active_pot - self.active_session_initial_pot - self.active_session_top_ups
         elif self.player_type in ['G', 'N']:
             return self.active_pot - self.active_session_initial_pot - \
-                       self.active_session_top_ups - self.initial_pot
+                   self.active_session_top_ups - self.initial_pot
 
     # more UI focused - could separate into the UI somehow
 
@@ -113,12 +113,14 @@ class Bet:
                  max_bet: int,
                  bet_type_id: str,
                  stake: int,
-                 bet_choice: Union[int, str, list]):
+                 bet_choice: Union[int, str, list],
+                 payout: int):
         self.min_bet = min_bet
         self.max_bet = max_bet
         self.bet_type_id = bet_type_id
         self.stake = stake
         self.bet_choice = bet_choice
+        self.payout = payout
 
     def determine_win_criteria(self, *args, **kwargs):
         """Abstract method for calculating the win criteria of a given bet - will be game and bet specific"""
@@ -132,3 +134,16 @@ class Bet:
     def evaluate_bet(self, *args, **kwargs):
         """Abstract method for evaluating the outcome of the bet"""
         pass
+
+    def set_stake_amount(self, amount: int):
+        if self.min_bet <= amount <= self.max_bet:
+            self.stake = amount
+        else:
+            raise ValueError("Stake amount passed to set_stake_amount outside min/max bet interval")
+
+    def set_payout(self):
+        """Sets the payout attribute of the bet, by calling the calculate payout method.
+        Note the calculate_payout method is defined downstream, which will be the version
+        called here."""
+        self.payout = self.calculate_payout()
+
