@@ -6,15 +6,16 @@ from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user imp
 """To define a new wheel, first go to Roulette->definitions->wheel_defns"""
 ##################
 # Wheel relevant UI definitions
+# Note these exclude this bias colour, as this cannot be bet on as a colours bet
 ##################
-euro_wheel_colour_ids = {'G': 'green', 'R': 'red', 'B': 'black'}
-euro_wheel_colour_options_text = "[G]reen, [R]ed, [B]lack"
+euro_wheel_colour_ids = {'R': 'red', 'B': 'black'}
+euro_wheel_colour_options_text = "[R]ed, [B]lack"
 
-american_wheel_colour_ids = {'G': 'green', 'R': 'red', 'B': 'black'}
-american_wheel_colour_options_text = "[G]reen, [R]ed, [B]lack"
+american_wheel_colour_ids = {'R': 'red', 'B': 'black'}
+american_wheel_colour_options_text = "[R]ed, [B]lack"
 
-template_wheel_colour_ids = {'B': 'black', 'W': 'white'}
-template_wheel_colour_options_text = "[B]lack, [W]hite"
+template_wheel_colour_ids = {'W': 'white'}
+template_wheel_colour_options_text = "[W]hite"
 
 
 # TODO find out how to define specific user wheels as subclasses of the defined equivalent roulette wheel,

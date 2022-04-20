@@ -10,7 +10,8 @@ To define a new wheel complete the following steps:
 5) Go to wheel_defns_user in command_line -> roulette_definitions
 6) Add some colour ids - these should be unique, using as many characters as necessary e.g. BLU and BLA if blue and
 black feature on the same wheel
-7) Define a colour_options_text for that wheel, which should correspond to the colour ids
+7) Define a colour_options_text for that wheel, which should correspond to the colour ids (omitting the bias colour
+as an option for betting on)
 8) Define the wheel as a subclass of RouletteWheelUser
 """  # TODO - find out how to use multiple inheritance for defining the user wheels
 """  
