@@ -1,9 +1,11 @@
-from Games.Roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
-from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
-
 """To define a new bet, first go to Roulette->definitions->bet_type_defns"""
+from Games.Roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
+from user_interface.command_line.Roulette.app.roulette_bet_base_class_user import RouletteBetUser
+from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
+from typing import Union
+
 ##########
-# Navigation parameters
+# Navigation parameters #todo move these to the navigation parameters UI???
 ##########
 # Define the text strings to display the bet categories available on each wheel
 bet_cat_options_text = {'E': "[I]nside, [O]utside", 'A': "[I]nside, [O]utside"}
@@ -13,18 +15,26 @@ bet_cats_and_types = {'E': {'O': ['C'], 'I': ['S']}, 'A': {'O': ['C'], 'I': ['S'
 bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight up"},
                          'A': {'O': "[C]olours", 'I': "[S]traight up"}}
 
+
 ##########
 # Define 'get_user_bet_choice' method for each user bets
+# Use MRO RouletteBetUser, specific bet class
 ##########
-class ColoursBetUser(ColoursBet):
+class ColoursBetUser(RouletteBetUser, ColoursBet):
     def __init__(self,
                  min_bet: int = 5,
                  max_bet: int = 50,
-                 bet_type_id: str = 'C'):
-        super().__init__(min_bet, max_bet, bet_type_id)
+                 bet_type_id: str = 'C',
+                 stake: int = None,
+                 bet_choice: Union[int, str, list] = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: RouletteWheelUser = None):
+        super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
+                         win_criteria, payout, playing_wheel)
 
-    @staticmethod
-    def get_user_bet_choice(playing_wheel: RouletteWheelUser):
+    @RouletteBetUser.get_user_bet_choice_decorator
+    def get_user_bet_choice(self):
         """
         Method to define the user's bet choice - they are required to enter a valid colour on the given wheel.
         Returns: user colour choice (as a string, example: 'red').
@@ -34,27 +44,33 @@ class ColoursBetUser(ColoursBet):
         """
         while True:
             bet_choice = input(
-                f"What colour would you like to bet on?\n{playing_wheel.colour_options}\n--->").upper()
-            if bet_choice in playing_wheel.colour_ids:
-                bet_choice_colour = playing_wheel.colour_ids[bet_choice]
+                f"What colour would you like to bet on?\n{self.playing_wheel.colour_options}\n--->").upper()
+            if bet_choice in self.playing_wheel.colour_ids:
+                bet_choice_colour = self.playing_wheel.colour_ids[bet_choice]
                 return bet_choice_colour
             else:
                 print(f"{bet_choice} not a valid choice, please try again")
 
 
-class StraightUpBetUser(StraightUpBet):
+class StraightUpBetUser(RouletteBetUser, StraightUpBet):
     """Class for defining win criteria and payout for a straight-up bet"""
 
     def __init__(self,
                  min_bet: int = 10,
                  max_bet: int = 20,
-                 bet_type_id: str = 'S'):
-        super().__init__(min_bet, max_bet, bet_type_id)
+                 bet_type_id: str = 'S',
+                 stake: int = None,
+                 bet_choice: Union[int, str, list] = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: RouletteWheelUser = None):
+        super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
+                         win_criteria, payout, playing_wheel)
 
-    @staticmethod
-    def get_user_bet_choice(playing_wheel: RouletteWheelUser):
-        number_options_text = playing_wheel.user_number_options_text()
-        number_options_range = playing_wheel.user_number_options_range()
+    @RouletteBetUser.get_user_bet_choice_decorator
+    def get_user_bet_choice(self):
+        number_options_text = self.playing_wheel.user_number_options_text()
+        number_options_range = self.playing_wheel.user_number_options_range()
         while True:
             bet_choice = input(f"What number would you like to bet on?\nThe options are {number_options_text}.\n--->")
             try:
