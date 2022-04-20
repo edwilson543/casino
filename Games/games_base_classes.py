@@ -4,7 +4,8 @@ Player (base class)
 Bet (base class)
 """
 from datetime import datetime
-from typing import Union
+from typing import Union, Any
+from abc import abstractmethod
 
 
 class Player:
@@ -107,6 +108,7 @@ class Player:
             return "lost"
 
 
+#  TODO is it bad practice to use abstract methods and call them artificially in a setter?
 class Bet:
     def __init__(self,
                  min_bet: int,
@@ -114,36 +116,74 @@ class Bet:
                  bet_type_id: str,
                  stake: int,
                  bet_choice: Union[int, str, list],
+                 win_criteria: Any,
                  payout: int):
         self.min_bet = min_bet
         self.max_bet = max_bet
         self.bet_type_id = bet_type_id
         self.stake = stake
         self.bet_choice = bet_choice
+        self.win_criteria = win_criteria
         self.payout = payout
 
+    ##########
+    # Abstract methods
+    ##########
+
+    # this is an abstract method but not being implemented until 2 subclasses' time throws an error
     def determine_win_criteria(self, *args, **kwargs):
-        """Abstract method for calculating the win criteria of a given bet - will be game and bet specific"""
+        """
+        Abstract method for calculating the win criteria of a given bet.
+        Defined differently for each specific roulette bet (e.g. ColoursBet) in bet_type_defns.
+        """
         pass
 
+    @abstractmethod
     def calculate_payout(self, *args, **kwargs):
-        """Abstract method for calculating the payout for the bet - will be game and bet specific,
-        in particular we will need"""
+        """
+        Abstract method for calculating the payout for the bet
+        Defined in the RouletteBet class for all roulette bets.
+        """
         pass
 
+    @abstractmethod
     def evaluate_bet(self, *args, **kwargs):
-        """Abstract method for evaluating the outcome of the bet"""
+        """
+        Abstract method for evaluating the outcome of the bet
+        Defined in the RouletteBet class for all roulette bets.
+        """
         pass
+
+    ##########
+    # Setter methods for the bet attributes attributes
+    # Note that the setters depend on the versions of the above methods which are defined downstream
+    ##########
 
     def set_stake_amount(self, amount: int):
+        """Sets the stake attribute of the bet, as long as it's within the min/max interval"""
         if self.min_bet <= amount <= self.max_bet:
             self.stake = amount
         else:
             raise ValueError("Stake amount passed to set_stake_amount outside min/max bet interval")
 
-    def set_payout(self):
-        """Sets the payout attribute of the bet, by calling the calculate payout method.
-        Note the calculate_payout method is defined downstream, which will be the version
-        called here."""
-        self.payout = self.calculate_payout()
+    def set_bet_choice(self, bet_choice: Union[int, str, list]):
+        """Sets the bet choice attribute of the bet"""
+        self.bet_choice = bet_choice
 
+    def set_win_criteria(self):
+        """
+        Sets the win_criteria attribute of the bet, by calling the determine_win_criteria method.
+        Note the determine_win_criteria method is defined downstream (in RouletteBet), and the MRO ensures this
+        downstream version of the method is called here.
+        """
+        win_criteria = self.determine_win_criteria()
+        self.win_criteria = win_criteria
+
+    def set_payout(self):
+        """
+        Sets the payout attribute of the bet, by calling the calculate_payout method.
+        Note the calculate_payout method is defined downstream (in each subclass of RouletteBet defining a specific bet,
+        and the MRO ensures this downstream version of the method is called here.
+        """
+        payout = self.calculate_payout()
+        self.payout = payout

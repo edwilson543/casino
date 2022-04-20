@@ -12,29 +12,27 @@ class RouletteBet(Bet):
     ColoursBetUser,... -< ColoursBet & RouletteBetUser
     """
 
+    # maybe we want winning slots to be a set of lists, for multiple bets, likewise with payout
+    # really it could be a mapping too
     def __init__(self,
                  min_bet: int,
                  max_bet: int,
                  bet_type_id: str,
                  stake: int,
                  bet_choice: Union[int, str, list],
+                 win_criteria: list[int],
                  payout: int,
-                 playing_wheel: RouletteWheel,
-                 winning_slots: list):
-        super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice, payout)
+                 playing_wheel: RouletteWheel):
+        super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice, win_criteria, payout)
         self.playing_wheel = playing_wheel
-        self.winning_slots = winning_slots
-
-
 
     def calculate_payout(self):
         """
-        Calculates the payout of a bet.
-        Calculates the payout of a £1 roulette bet, and multiplies this by the stake.
+        Calculates the payout of a £1 roulette bet, (unit_payout) and multiplies this by the stake.
         This is determined by using the bias_wheel_size (which ignores the 'bias_colour') when calculating the
         probability of winning, so that the return always reflects a degree of the house always wins.
         """
-        win_probability_over_estimate = len(self.winning_slots) / self.playing_wheel.bias_wheel_size()
+        win_probability_over_estimate = len(self.win_criteria) / self.playing_wheel.bias_wheel_size()
         unit_payout = floor(1 / win_probability_over_estimate)
         return unit_payout * self.stake
 
@@ -49,11 +47,8 @@ class RouletteBet(Bet):
         winnings: either 0 or x>0, depending on whether the user won their bet
         """
         spin_outcome_num, spin_outcome_col = self.playing_wheel.spin()
-        if spin_outcome_num in self.winning_slots:
+        if spin_outcome_num in self.win_criteria:
             winnings = self.calculate_payout()
         else:
             winnings = 0
         return spin_outcome_num, spin_outcome_col, winnings
-
-    def set_winning_slots(self):
-        self.winning_slots = self.determine_win_criteria()
