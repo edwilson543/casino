@@ -34,16 +34,14 @@ class ColoursBetUser(RouletteBetUser, ColoursBet):
                  payout: int = None,
                  playing_wheel: RouletteWheelUser = None):
         super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
-                         win_criteria, payout, playing_wheel)
+                         win_criteria, payout)
+        self.playing_wheel = playing_wheel  # initialised outside super as otherwise interpreted as a RouletteWheel
 
     @RouletteBetUser.get_user_bet_choice_decorator
-    def get_user_bet_choice(self):
+    def get_user_bet_choice(self) -> str:
         """
-        Method to define the user's bet choice - they are required to enter a valid colour on the given wheel.
+        Method to define the user's bet choice - they are required to enter a valid colour_id on the given wheel.
         Returns: user colour choice (as a string, example: 'red').
-        Note that bet confirmation is done in the bet_placement_user class, because:
-        1) It's generic to all bets
-        2) It ideally shows potential bet return, which is not defined here
         """
         while True:
             bet_choice = input(
@@ -68,10 +66,15 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
                  payout: int = None,
                  playing_wheel: RouletteWheelUser = None):
         super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
-                         win_criteria, payout, playing_wheel)
+                         win_criteria, payout)
+        self.playing_wheel = playing_wheel
 
     @RouletteBetUser.get_user_bet_choice_decorator
-    def get_user_bet_choice(self):
+    def get_user_bet_choice(self) -> int:
+        """
+        Method to define the user's bet choice - they are required to enter a valid slot number on the given wheel.
+        Returns: user slots choice (as an int, example: 15).
+        """
         number_options_text = self.playing_wheel.user_number_options_text()
         number_options_range = self.playing_wheel.user_number_options_range()
         while True:
