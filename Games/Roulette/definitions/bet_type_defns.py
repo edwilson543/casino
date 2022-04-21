@@ -1,84 +1,90 @@
-from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
-from Games.Roulette.app.roulette_bet_base_class import RouletteBet
-
-# TODO update this description
 """
 To define a new bet type and category complete the following steps:
-1) If the bet involves defining a new category, add the category to the bet_cat_options_text, for each of the relevant
-wheels. If the bet falls within an existing category, bet_cat_options_text does not need updating.
-2) Add the bet name to the lists in the bet_cats_and_types dictionary under for the relevant wheels (first key) and for
-the relevant bet category. The wheels are the first keys, the bet categories the second keys.
-If necessary define a new category by adding a key to the dictionary.
-3) Add the bet to the bet_type_options_text, again firstly under the relevant wheel keys (first keys), and secondly
-under the relevant bet category keys (second keys) defining a new one for the category if needed.
-Note that the bet cat/type distinction is essentially trivial, but it gives the option of not displaying
-100 different bet choices in one go...
-4) Define a subclass of the RouletteBet class as below for colours/ straight up bets. These include the win criteria
-setting, and the payout calculation
-5) Add the bet subclass to the bet_type_options dictionary at the bottom of this module
-##### To update
-5) Add the methods to the dictionary which is within the RouletteWheelWagers class definitions, with the first key
-corresponding to the wheel, and the second key corresponding to the bet type.
+1) Think how to store all parameters, and make wheel relevant
+2) Create a subclass of RouletteBet base class (below) to define each bet's 'determine_win_criteria' method, which
+is used as a polymorphic method
+3) Add the subclass to the bet_type_options below
+4) Go to command_line -> Roulette -> definitions -> bet_type_defns_user
+5) Add the new bet to bet_cat_options_text, bet_cats_and_types, bet_type_options_text where relevant
+6) Define a subclass of the class defined at 3), to define the UI polymorphic method 'get_user_bet_choice'
+7) Add the newly defined user bet class to the bet_type_options_user dictionary
 """
-# TODO should this stay here, or go in the UI?
-# Step 1 as above
-bet_cat_options_text = {'E': "[I]nside, [O]utside", 'A': "[I]nside, [O]utside"}
-# Step 2 as above
-bet_cats_and_types = {'E': {'O': ['C'], 'I': ['S']}, 'A': {'O': ['C'], 'I': ['S']}}
+from Games.Roulette.app.roulette_bet_base_class import RouletteBet
+from Games.Roulette.definitions.wheel_defns import WHEEL_TYPES
 
-# Bet type options to be displayed once the category has been selected:
-bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight up"}, 'A': {'O': "[C]olours", 'I': "[S]traight up"}}
-# Min and max bet for each bet type:
+from typing import Union, TypeVar
+
+##########
+# Typevar to be used when referencing bets in type hints throughout game
+##########
+BET_TYPES = TypeVar(name="BET_TYPES", bound=RouletteBet)
+
+# TODO - find some way of defining bet parameters to be looked up from, so can be wheel specific -
+# This'll probably involve adding a wheel_id to RouletteBet and subclass as an instance attribute
+# Note the parameters are repeated in bet_type_defns_user so would need to be updated in 2 different places
+##########
+# Min and max bet for each bet type - not currently used
+##########
 bet_type_min_max_bet = {'E': {'C': {'min': 5, 'max': 50}, 'S': {'min': 5, 'max': 20}},
                         'A': {'C': {'min': 5, 'max': 50}, 'S': {'min': 5, 'max': 20}}}
 
-###############################
-# Create subclass of the RouletteBet base class to define each bet
-###############################
-"""
-In the game flow, we instantiate a bet, based on the active_bet_type_id.
-Then user will then input their bet choice, which will determine the win_criteria (which is consistently defined as a
-list of slot numbers), and this will be used to calculate the payout, (calculated as the bias_wheel_size divided by the
-length of the win_criteria list)
-"""
 
-
-# TODO may want to link the parameters out - could just define them above? or is it better to just define them within
-#  each class. Note they are repeated in bet_type_defns_user so would need to be updated in 2 different places
+# Create subclass of RouletteBet base class to define each bet's 'determine_win_criteria' method
+##########
 class ColoursBet(RouletteBet):
     """Class for defining the win criteria of a colours bet."""
 
     def __init__(self,
                  min_bet: int = 5,
                  max_bet: int = 50,
-                 bet_type_id: str = 'C'):
-        super().__init__(min_bet, max_bet, bet_type_id)
+                 bet_type_id: str = 'C',
+                 stake: int = None,
+                 bet_choice: Union[int, str, list] = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: WHEEL_TYPES = None):
+        super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
+                         win_criteria, payout, playing_wheel)
 
-    def determine_win_criteria(self, playing_wheel: RouletteWheel, choice: str) -> list[int]:
-        """Returns: list of the slot numbers of the same colour as the input colour."""
-        if choice in playing_wheel.slots.values():
-            return [slot_num for slot_num in playing_wheel.slots if playing_wheel.slots[slot_num] == choice]
+    def determine_win_criteria(self) -> list[int]:
+        """
+        Returns: list of the slot numbers of the same colour as the input colour.
+        Requires the bet_choice attribute to have already been set.
+        """
+        allowed_colours = set(self.playing_wheel.slots.values()).difference({self.playing_wheel.bias_colour})
+        if self.bet_choice in allowed_colours:
+            return [slot_num for slot_num in self.playing_wheel.slots if
+                    self.playing_wheel.slots[slot_num] == self.bet_choice]
         else:
-            raise ValueError(f"{choice} is not a colour on the {playing_wheel} Roulette wheel")
+            raise ValueError(f"{self.bet_choice} is not a colour on the {self.playing_wheel.wheel_id} Roulette wheel")
 
 
 class StraightUpBet(RouletteBet):
-    """Class for defining the win criteria and payout for a straight up bet"""
+    """Class for defining the win criteria for a straight up bet"""
 
     def __init__(self,
                  min_bet: int = 10,
                  max_bet: int = 20,
-                 bet_type_id: str = 'S'):
-        super().__init__(min_bet, max_bet, bet_type_id)
+                 bet_type_id: str = 'S',
+                 stake: int = None,
+                 bet_choice: Union[int, str, list] = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: WHEEL_TYPES = None):
+        super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
+                         win_criteria, payout, playing_wheel)
 
-    def determine_win_criteria(self, playing_wheel: RouletteWheel, choice: int) -> list[int]:
-        if choice in playing_wheel.slots:
-            return [choice]
+    def determine_win_criteria(self) -> list[int]:
+        """Returns: the bet_choice as a list (which for a colours bet will be an int).
+        Requires the bet_choice attribute to have already been set."""
+        bet_choice = self.bet_choice
+        if bet_choice in self.playing_wheel.slots:
+            return [bet_choice]
         else:
-            raise ValueError(f"{choice} is not a slot on the {playing_wheel} Roulette wheel")
+            raise ValueError(f"{self.bet_choice} is not a slot on the {self.playing_wheel.wheel_id} Roulette wheel")
 
 
-###############################
+##########
 # Add the newly defined bet class to the bet_type_options dictionary below
-###############################
+##########
 bet_type_options = {'C': ColoursBet(), 'S': StraightUpBet()}

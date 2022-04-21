@@ -1,6 +1,7 @@
 from Games.games_base_classes import Player
-from Games.Roulette.definitions.navigation_defns import navigation_text, navigation_options
-from Games.Roulette.definitions.navigation_defns import navigation_text_low_funds, navigation_options_low_funds
+from user_interface.command_line.Roulette.definitions.navigation_defns import navigation_text, navigation_options
+from user_interface.command_line.Roulette.definitions.navigation_defns import navigation_text_low_funds, \
+    navigation_options_low_funds
 from user_interface.command_line.all_games.player_interactions_user import PlayerUserInteractions
 from Games.Roulette.definitions.game_parameters import deposit_parameters
 from Games.Roulette.definitions.game_parameters import top_up_parameters
@@ -23,10 +24,10 @@ class RouletteContinuationUser(PlayerUserInteractions):
         super().__init__(min_deposit, deposit_multiples, min_top_up, top_up_multiples)
         self.stake = stake
 
-    def keep_playing(self, active_player: Player):
+    @staticmethod
+    def keep_playing(active_player: Player):
         while True:
-            active_player.get_profit_report()  # TODO update with something relavant method e.g. this session
-            # then create an active session attribute for the players
+            active_player.get_active_session_report()
             proceed = input(f"Would you like to continue playing?\n[Y]es, [N]o\n--->").upper()
             if proceed == "N":
                 sys.exit(f"Game over.\nYour final pot is £{active_player.active_pot}\n")  # make more relevant

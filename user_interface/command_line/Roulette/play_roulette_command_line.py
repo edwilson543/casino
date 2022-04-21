@@ -1,4 +1,4 @@
-from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.roulette_mechanics_user import \
+from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.roulette_mechanics_command_line import \
     RouletteGameUser
 from user_interface.command_line.all_games.player_interactions_user import PlayerUserInteractions
 
@@ -7,4 +7,4 @@ if __name__ == '__main__':
     roulette = RouletteGameUser(active_player=active_player)
     roulette.roulette_loop()
 
-# TODO fix stake confirmation from going through with just an 'enter'
+# TODO separate out all UI confirmation prompts into their own methods, so they can be turned on/off in one go

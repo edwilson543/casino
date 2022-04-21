@@ -1,3 +1,4 @@
+from Games.games_base_classes import Player
 from Games.players.existing_players import existing_players
 from Games.Roulette.definitions.game_parameters import deposit_parameters
 from Games.Roulette.definitions.game_parameters import top_up_parameters
@@ -6,9 +7,9 @@ import sys
 import functools
 
 
+#  TODO make it so that the user has to top up if funds are 0 at the end of a spin
 ##########
 # Functions to access players, requiring user input of password
-# TODO would these 2 functions ideally be called in the class below??
 ##########
 
 def password_proected(n_attempts):
@@ -60,13 +61,14 @@ class PlayerUserInteractions:
         self.min_top_up = min_top_up
         self.top_up_multiples = top_up_multiples
 
-    def all_games_set_up(self):
+    def all_games_set_up(self) -> Player:
         active_player = self.existing_or_new_player()
+        active_player.set_active_session_initial_pot_and_time()
         active_player = self.initial_deposit_or_top_up(active_player=active_player)
         return active_player
 
     @staticmethod
-    def existing_or_new_player():
+    def existing_or_new_player() -> Player:
         """Method to determine whether the user wants to access an existing player, or create a new player"""
         print("Welcome to Balint and Ed's online casino!")
         # and allow functionality choose what game they'd like to play
@@ -83,7 +85,7 @@ class PlayerUserInteractions:
             else:
                 print(f"{player_type} not a valid option, please try again")
 
-    def initial_deposit_or_top_up(self, active_player):
+    def initial_deposit_or_top_up(self, active_player) -> Player:
         """Method to get the user to either set an initial deposit if they are playing as a guest or as a new player,
         or to top up if playing as an existing player."""
         if active_player.player_type in ['G', 'N']:  # i.e. if player is a guest or new player, make them deposit
@@ -98,14 +100,14 @@ class PlayerUserInteractions:
     # Lower level methods called in the existing_or_new_player method above
     ##########
 
-    def create_new_player(self):  # TODO define this, will require some sort of reading/writing
+    def create_new_player(self) -> Player:  # TODO define this, will require some sort of reading/writing
         pass
 
     ##########
     # lower level methods called in the initial_deposit_or_top_up method above
     ##########
 
-    def get_user_deposit_amount(self, new_player):
+    def get_user_deposit_amount(self, new_player) -> Player:
         """
         Method to get new/guest users to specify how much they want to deposit.
         Parameters: new_player. This will either be a new or guest user, and hence the initial_pot,
@@ -132,7 +134,7 @@ class PlayerUserInteractions:
             except ValueError:
                 print('Invalid deposit amount - please try again and refer to deposit criteria.')
 
-    def check_top_up_worthwhile(self, existing_player):
+    def check_top_up_worthwhile(self, existing_player) -> Player:
         """Method to check whether the user pot is below the threshold for a top up prompt to be worthwhile,
         and then make a top_up if it is worthwhile"""
         if existing_player.active_pot > threshold_for_top_up_prompt:
@@ -141,7 +143,7 @@ class PlayerUserInteractions:
             return self.get_user_top_up_amount(existing_player=existing_player)  # increased player pot if top up
 
     # method called in the check_top_up_worthwhile, if it is worthwhile, i.e. user pot is low
-    def get_user_top_up_amount(self, existing_player):
+    def get_user_top_up_amount(self, existing_player) -> Player:
         """Method to get the user to specify if and then how much they want to top up by.
         Parameters: existing player - a player already fully defined in the existing_players dict. (With the
         exception perhaps of last_top_up_datetime).

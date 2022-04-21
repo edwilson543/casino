@@ -9,17 +9,14 @@ change their stake amount, which is required in the case that insufficient funds
 #########
 # Navigation options in the for loop in the roulette_mechanics module, if active stake does not exceed min bet
 #########
-navigation_text = "[R]epeat bet; change bet: [C]hoice, [S]take, [T]ype, [W]heel"
+navigation_text = "[R]epeat bets; [B]ets change, [W]heel change"
 navigation_dict = {'from_wheel_selection': ['W'],
-                   'from_bet_selection': ['T', 'W'],
-                   'from_stake_quantification': ['S', 'T', 'W'],
-                   'from_bet_choice': ['C', 'S', 'T', 'W'],
-                   'from_bet_evaluation': ['R', 'C', 'S', 'T', 'W']}
-navigation_options = ['R', 'C', 'S', 'T', 'W']
+                   'from_individual_bet_selection': ['B', 'W'],
+                   'from_bet_evaluation': ['R', 'B', 'W']}
+navigation_options = ['R', 'B', 'W']
 
 #########
 # Navigation options in the for loop in the roulette_mechanics module, if active stake does exceed min bet
 #########
-navigation_text_low_funds = "Change bet: [S]take, [T]ype, [W]heel"
-navigation_options_low_funds = ['S', 'T', 'W']
-
+navigation_text_low_funds = "[B]ets change, [W]heel change"
+navigation_options_low_funds = ['B', 'W']
