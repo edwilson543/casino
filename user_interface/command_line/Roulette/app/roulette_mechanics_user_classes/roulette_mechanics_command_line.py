@@ -62,7 +62,7 @@ class RouletteGameUser:
                 self.set_active_individual_bet(wheel_bet_selector=wheel_bet_selector)
 
             ##########
-            # Bet evaluation
+            # Bet evaluation #TODO do this as a for bet in bet list
             ##########
             if self.navigation_id in navigation_dict['from_bet_evaluation']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
