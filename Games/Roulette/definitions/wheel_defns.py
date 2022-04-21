@@ -1,4 +1,11 @@
 from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
+from typing import TypeVar
+
+##########
+# Typevar to be used when referencing wheels in tpye hints throughout game
+##########
+WHEEL_TYPES = TypeVar(name="WHEEL_TYPES", bound=RouletteWheel)
+
 
 """
 To define a new wheel complete the following steps:

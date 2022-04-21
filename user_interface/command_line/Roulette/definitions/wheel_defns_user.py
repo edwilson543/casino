@@ -3,6 +3,13 @@ from Games.Roulette.definitions.wheel_defns import american_wheel_id, american_w
 from Games.Roulette.definitions.wheel_defns import template_wheel_id, template_wheel_defn, template_wheel_bias_colour
 from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
 
+from typing import TypeVar
+
+##########
+# Typevar to be used when referencing wheels in tpye hints throughout game
+##########
+USER_WHEEL_TYPES = TypeVar(name="USER_WHEEL_TYPES", bound=RouletteWheelUser)
+
 """To define a new wheel, first go to Roulette->definitions->wheel_defns"""
 ##################
 # Wheel relevant UI definitions
@@ -17,9 +24,7 @@ american_wheel_colour_options_text = "[R]ed, [B]lack"
 template_wheel_colour_ids = {'W': 'white'}
 template_wheel_colour_options_text = "[W]hite"
 
-
-# TODO find out how to define specific user wheels as subclasses of the defined equivalent roulette wheel,
-# i.e. using multiple inheritance, so that their parameters don't need to be imported here?
+# TODO find a way of not having to import/ restate parameters here
 ##########
 # Create subclass of the RouletteWheelUser class for each defined wheel
 ##########

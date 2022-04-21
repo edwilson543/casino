@@ -7,6 +7,7 @@ import sys
 import functools
 
 
+#  TODO make it so that the user has to top up if funds are 0 at the end of a spin
 ##########
 # Functions to access players, requiring user input of password
 ##########
