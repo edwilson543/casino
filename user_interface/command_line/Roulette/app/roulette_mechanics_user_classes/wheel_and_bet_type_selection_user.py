@@ -2,7 +2,8 @@ from Games.Roulette.app.roulette_mechanics_action_classes.wheel_and_bet_type_sel
 from user_interface.command_line.Roulette.definitions.wheel_defns_user import wheel_options_text
 from user_interface.command_line.Roulette.definitions.bet_type_defns_user import bet_cats_and_types, \
     bet_cat_options_text, bet_type_options_text
-from user_interface.command_line.Roulette.definitions.typevar_defns_user import USER_WHEEL_TYPES, USER_BET_TYPES
+from user_interface.command_line.Roulette.definitions.bet_type_defns_user import USER_BET_TYPES
+from user_interface.command_line.Roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
 
 
 class WheelAndBetTypeSelectorUser(WheelAndBetTypeSelector):

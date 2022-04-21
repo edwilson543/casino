@@ -1,11 +1,13 @@
 """To define a new bet, first go to Roulette->definitions->bet_type_defns"""
 from Games.Roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
 from user_interface.command_line.Roulette.app.roulette_bet_base_class_user import RouletteBetUser
-from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
-from typing import Union
+from user_interface.command_line.Roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
+from typing import Union, TypeVar
 
-# TODO sort out the type hint expecting a RouletteWheel instead of a RouletteWheelUser
-# Why is this happening???
+##########
+# Typevar to be used when referencing user bets in type hints throughout game
+##########
+USER_BET_TYPES = TypeVar(name="USER_BET_TYPES", bound=RouletteBetUser)
 
 ##########
 # Navigation parameters #todo move these to the navigation parameters UI???
@@ -32,10 +34,9 @@ class ColoursBetUser(RouletteBetUser, ColoursBet):
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
-                 playing_wheel: RouletteWheelUser = None):
+                 playing_wheel: USER_WHEEL_TYPES = None):
         super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
-                         win_criteria, payout)
-        self.playing_wheel = playing_wheel  # initialised outside super as otherwise interpreted as a RouletteWheel
+                         win_criteria, payout, playing_wheel)
 
     @RouletteBetUser.get_user_bet_choice_decorator
     def get_user_bet_choice(self) -> str:
@@ -64,10 +65,9 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
-                 playing_wheel: RouletteWheelUser = None):
+                 playing_wheel: USER_WHEEL_TYPES = None):
         super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
-                         win_criteria, payout)
-        self.playing_wheel = playing_wheel
+                         win_criteria, payout, playing_wheel)
 
     @RouletteBetUser.get_user_bet_choice_decorator
     def get_user_bet_choice(self) -> int:
