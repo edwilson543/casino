@@ -1,13 +1,5 @@
 #  TODO change the look up methods to not be from a dictionary
-from Games.Roulette.app.roulette_bet_base_class import RouletteBet
-from Games.Roulette.app.roulette_bet_base_class import RouletteWheel
-from typing import TypeVar
-"""
-Typevars used to specify returns from the look up functions
-e.g. return from the wheel lookup is at most a RouletteWheel, or any subclass of RouletteWheel 
-"""
-WHEEL_TYPES = TypeVar(name="WHEEL_TYPES", bound=RouletteWheel)
-BET_TYPES = TypeVar(name="BET_TYPES", bound=RouletteBet)
+from Games.Roulette.definitions.typevar_defns import WHEEL_TYPES, BET_TYPES
 
 
 class WheelAndBetTypeSelector:
