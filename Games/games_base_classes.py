@@ -103,7 +103,7 @@ class Player:
     def get_active_session_report(self):
         print(f"Your current pot is £{self.active_pot}.\n"
               f"You have been playing for {self.calculate_active_session_duration_minutes()} minute(s), "
-              f"during which time you have {self.won_or_lost()}:"
+              f"during which time you have {self.won_or_lost()}: "
               f"£{abs(self.calculate_active_session_winnings())}.")
 
     def get_full_status_report(self):
