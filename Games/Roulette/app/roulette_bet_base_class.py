@@ -1,9 +1,11 @@
 from Games.games_base_classes import Bet
-from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
+from Games.Roulette.definitions.wheel_defns import WHEEL_TYPES
+
 from math import floor
 from typing import Union
 
 
+# TODO update all type hints to use Typevars
 class RouletteBet(Bet):
     """
     Each bet on the Roulette wheel will be defined as a subclass of this class.
@@ -22,15 +24,21 @@ class RouletteBet(Bet):
                  bet_choice: Union[int, str, list],
                  win_criteria: list[int],
                  payout: int,
-                 playing_wheel: RouletteWheel):
+                 playing_wheel: WHEEL_TYPES):
         super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice, win_criteria, payout)
         self.playing_wheel = playing_wheel
+
+    def set_playing_wheel(self, wheel):
+        """Method to set the playing_wheel attribute of the bet"""
+        self.playing_wheel = wheel
 
     def calculate_payout(self):
         """
         Calculates the payout of a £1 roulette bet, (unit_payout) and multiplies this by the stake.
         This is determined by using the bias_wheel_size (which ignores the 'bias_colour') when calculating the
         probability of winning, so that the return always reflects a degree of the house always wins.
+
+        Requires the win_criteria (and thus bet_choice) attribute to have already been set
         """
         win_probability_over_estimate = len(self.win_criteria) / self.playing_wheel.bias_wheel_size()
         unit_payout = floor(1 / win_probability_over_estimate)
@@ -45,6 +53,8 @@ class RouletteBet(Bet):
         spin_outcome_num: an integer representing the slot of the roulette wheel the ball landed on
         spin_outcome_col: a string representing the colour of the roulette wheel the ball landed on
         winnings: either 0 or x>0, depending on whether the user won their bet
+
+        Requires all attributes to have been set
         """
         spin_outcome_num, spin_outcome_col = self.playing_wheel.spin()
         if spin_outcome_num in self.win_criteria:

@@ -184,20 +184,20 @@ class Bet:
         """Sets the bet choice attribute of the bet"""
         self.bet_choice = bet_choice
 
-    def set_win_criteria(self):
+    def set_win_criteria(self, win_criteria: Any):
+        # Could instead call get_win_criteria here, rather than taking a parameter?
         """
         Sets the win_criteria attribute of the bet, by calling the determine_win_criteria method.
         Note the determine_win_criteria method is defined downstream (in RouletteBet), and the MRO ensures this
         downstream version of the method is called here.
         """
-        win_criteria = self.determine_win_criteria()
         self.win_criteria = win_criteria
 
-    def set_payout(self):
+    def set_payout(self, amount: int):
+        # Could instead call calculate_payout here, rather than taking a parameter?
         """
         Sets the payout attribute of the bet, by calling the calculate_payout method.
         Note the calculate_payout method is defined downstream (in each subclass of RouletteBet defining a specific bet,
         and the MRO ensures this downstream version of the method is called here.
         """
-        payout = self.calculate_payout()
-        self.payout = payout
+        self.payout = amount

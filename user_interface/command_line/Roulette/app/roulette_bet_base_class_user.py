@@ -1,6 +1,7 @@
 from Games.Roulette.app.roulette_bet_base_class import RouletteBet
-from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
-from Games.Roulette.definitions.game_parameters import pause_durations
+from user_interface.command_line.Roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
+
+from Games.Roulette.definitions.game_parameters import pause_durations  # this should be moved to the UI
 
 from typing import Union
 from time import sleep
@@ -17,7 +18,7 @@ class RouletteBetUser(RouletteBet):
                  bet_choice: Union[int, str, list],
                  win_criteria: list[int],
                  payout: int,
-                 playing_wheel: RouletteWheelUser):
+                 playing_wheel: USER_WHEEL_TYPES):
         super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
                          win_criteria, payout, playing_wheel)
 
