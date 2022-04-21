@@ -26,7 +26,8 @@ class Player:
                  last_top_up_datetime: datetime,
                  active_session_initial_pot: int = None,
                  active_session_start_time: datetime = None,
-                 active_session_top_ups: int = 0):
+                 active_session_top_ups: int = 0,
+                 all_in_status: bool = False):
         self.player_type = player_type
         self.name = name
         self.username = username
@@ -38,7 +39,11 @@ class Player:
         self.active_session_initial_pot = active_session_initial_pot
         self.active_session_start_time = active_session_start_time
         self.active_session_top_ups = active_session_top_ups
+        self.all_in_status = all_in_status
 
+    ##########
+    # Setter methods
+    ##########
     def set_initial_pot(self, amount: int):
         self.initial_pot = amount
         self.active_pot = amount
@@ -71,6 +76,13 @@ class Player:
         self.active_session_initial_pot = self.active_pot
         self.active_session_start_time = datetime.now()
 
+    def set_all_in_status(self, true_or_false: bool):
+        self.all_in_status = true_or_false
+
+    ##########
+    # Calculation methods
+    ##########
+
     def calculate_active_session_duration_minutes(self) -> int:
         duration_timedelta = datetime.now() - self.active_session_start_time
         duration_seconds = duration_timedelta.seconds
@@ -84,7 +96,9 @@ class Player:
             return self.active_pot - self.active_session_initial_pot - \
                    self.active_session_top_ups - self.initial_pot
 
-    # more UI focused - could separate into the UI somehow
+    ##########
+    # more UI focused - could separate into UI at some point
+    ##########
 
     def get_active_session_report(self):
         print(f"Your current pot is £{self.active_pot}.\n"

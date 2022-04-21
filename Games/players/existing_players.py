@@ -4,9 +4,9 @@ from datetime import datetime
 
 # TODO any method printing datetime should make it more readbale, currently seconds is to around 8dp...
 # TODO create a read/write mechanism that saves each game/ allows creation of new players
-####################
+##########
 # Assign the players
-####################
+##########
 
 class Ed(Player):
     def __init__(self,
@@ -17,9 +17,10 @@ class Ed(Player):
                  initial_pot: int = 100,
                  initial_pot_datetime: datetime = datetime(2022, 4, 7),
                  active_pot: int = 5,
-                 last_top_up_datetime: datetime = datetime(2022, 4, 7)):
-        super().__init__(player_type, name, username, password,
-                         initial_pot, initial_pot_datetime, active_pot, last_top_up_datetime)
+                 last_top_up_datetime: datetime = datetime(2022, 4, 7),
+                 all_in_status: bool = False):
+        super().__init__(player_type, name, username, password, initial_pot,
+                         initial_pot_datetime, active_pot, last_top_up_datetime, all_in_status)
 
 
 class Balint(Player):
@@ -31,9 +32,10 @@ class Balint(Player):
                  initial_pot: int = 100,
                  initial_pot_datetime: datetime = datetime(2022, 4, 7),
                  active_pot: int = 5,
-                 last_top_up_datetime: datetime = datetime(2022, 4, 7)):
-        super().__init__(player_type, name, username, password,
-                         initial_pot, initial_pot_datetime, active_pot, last_top_up_datetime)
+                 last_top_up_datetime: datetime = datetime(2022, 4, 7),
+                 all_in_status: bool = False):
+        super().__init__(player_type, name, username, password, initial_pot,
+                         initial_pot_datetime, active_pot, last_top_up_datetime, all_in_status)
 
 
 class Guest(Player):
@@ -45,9 +47,10 @@ class Guest(Player):
                  initial_pot: int = 0,
                  initial_pot_datetime: datetime = datetime(2022, 4, 7),
                  active_pot: int = 0,
-                 last_top_up_datetime: datetime = datetime(2022, 4, 7)):
-        super().__init__(player_type, name, username, password,
-                         initial_pot, initial_pot_datetime, active_pot, last_top_up_datetime)
+                 last_top_up_datetime: datetime = datetime(2022, 4, 7),
+                 all_in_status: bool = False):
+        super().__init__(player_type, name, username, password, initial_pot,
+                         initial_pot_datetime, active_pot, last_top_up_datetime, all_in_status)
 
 
 #####################
