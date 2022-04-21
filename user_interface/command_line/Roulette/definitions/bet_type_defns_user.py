@@ -9,7 +9,6 @@ from typing import Union, TypeVar
 ##########
 USER_BET_TYPES = TypeVar(name="USER_BET_TYPES", bound=RouletteBetUser)
 
-##########
 # Navigation parameters #todo move these to the navigation parameters UI???
 ##########
 # Define the text strings to display the bet categories available on each wheel
@@ -23,7 +22,7 @@ bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight up"},
 
 ##########
 # Define 'get_user_bet_choice' method for each user bets
-# Use MRO RouletteBetUser, SpecificBetClass
+# Use MRO RouletteBetUser, SpecificBetClass (shouldn't be needed for now anyway)
 ##########
 class ColoursBetUser(RouletteBetUser, ColoursBet):
     def __init__(self,
@@ -38,7 +37,6 @@ class ColoursBetUser(RouletteBetUser, ColoursBet):
         super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
                          win_criteria, payout, playing_wheel)
 
-    @RouletteBetUser.get_user_bet_choice_decorator
     def get_user_bet_choice(self) -> str:
         """
         Method to define the user's bet choice - they are required to enter a valid colour_id on the given wheel.
@@ -69,7 +67,6 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
         super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
                          win_criteria, payout, playing_wheel)
 
-    @RouletteBetUser.get_user_bet_choice_decorator
     def get_user_bet_choice(self) -> int:
         """
         Method to define the user's bet choice - they are required to enter a valid slot number on the given wheel.

@@ -6,6 +6,7 @@ from Games.Roulette.definitions.game_parameters import pause_durations  # this s
 from typing import Union
 from time import sleep
 from sys import exit
+from abc import abstractmethod
 
 
 # Do we want player funds as an attribute or as a parameter?
@@ -22,25 +23,13 @@ class RouletteBetUser(RouletteBet):
         super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
                          win_criteria, payout, playing_wheel)
 
-    def get_user_bet_choice_decorator(self):
+    @abstractmethod
+    def get_user_bet_choice(self):
         """
-        get_user_bet_choice is defined specifically for each user bet.
-        This method is the generic part of that definition
+        Abstract method for getting the bet choice from the user.
+        This is defined for each specific bet subclass of RouletteBetUser in bet_type_defns_user
         """
-
-        def wrapper_get_user_bet_choice_decorator(func):
-            while True:
-                bet_choice = func()
-                confirmation = input(f"Confirm £{self.stake} stake on {bet_choice}?\n"
-                                     f"Winning this bet would return: "
-                                     f"{self.payout}"
-                                     f"[Y]es or [N]o\n--->").upper()
-                if confirmation != 'Y':
-                    continue
-                else:
-                    print(f"£{self.stake} placed on {bet_choice}!")
-                    return bet_choice
-            return wrapper_get_user_bet_choice_decorator
+        pass
 
     def choose_stake_amount(self, player_funds: int) -> (int, bool):
         """
@@ -53,6 +42,25 @@ class RouletteBetUser(RouletteBet):
         else:  # TODO Add some feature here to allow user to do a top up instead
             all_in_stake, all_in_status = self.all_in(player_funds=player_funds)
             return all_in_stake, all_in_status
+
+    def confirm_bet_choice(self) -> bool:
+        """
+        Method to allow the user to see the payout and stake of an individual bet before confirming their choice.
+        Note that this method can only be called after all the attributes called within it have been set, note in
+        particular that it's called after temporarily setting the bet_choice.
+        Returns:
+        bool - True if they have confirmed their bet choice, in which case necessary action is taken, otherwise False,
+        in which case the bet is discarded.
+        """
+        confirmation = input(f"Confirm £{self.stake} stake on {self.bet_choice}?\n"
+                             f"Winning this bet would return: "
+                             f"£{self.payout}\n"
+                             f"[Y]es or [N]o\n--->").upper()
+        if confirmation != 'Y':
+            return False  # maybe add here an extra loop before they discard their bet
+        else:
+            print(f"£{self.stake} placed on {self.bet_choice}!")
+            return True
 
     def evaluate_user_bet(self) -> int:
         """

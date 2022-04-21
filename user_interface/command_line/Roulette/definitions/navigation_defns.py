@@ -11,7 +11,7 @@ change their stake amount, which is required in the case that insufficient funds
 #########
 navigation_text = "[R]epeat bet; change bet: [C]hoice, [S]take, [T]ype, [W]heel"
 navigation_dict = {'from_wheel_selection': ['W'],
-                   'from_bet_selection': ['T', 'W'],
+                   'from_individual_bet_selection': ['T', 'W'],
                    'from_stake_quantification': ['S', 'T', 'W'],
                    'from_bet_choice': ['C', 'S', 'T', 'W'],
                    'from_bet_evaluation': ['R', 'C', 'S', 'T', 'W']}
