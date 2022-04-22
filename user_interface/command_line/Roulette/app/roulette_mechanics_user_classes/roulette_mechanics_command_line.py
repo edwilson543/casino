@@ -68,17 +68,17 @@ class RouletteGameUser:
             if self.navigation_id in post_spin_navigation_dict['from_bet_selection']:
                 """i.e. if user has chosen to change all bets (or change wheel, need to do this too)"""
                 self.active_player.reset_active_total_stake()
-                self.set_all_active_bets_list(wheel_bet_selector=wheel_bet_selector)
+                self.set_all_active_bets_list(wheel_bet_selector=wheel_bet_selector)  # creates a list of all user bets
 
             ##########
             # Bet evaluation
             ##########
             if self.navigation_id in post_spin_navigation_dict['from_bet_evaluation']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
-                self.active_spin_outcome = self.active_wheel.user_spin()
-                self.evaluate_all_active_bets_list()
-                self.give_user_bet_news()
-                self.reset_game_attributes()
+                self.active_spin_outcome = self.active_wheel.user_spin()  # gets user to spin wheel
+                self.evaluate_all_active_bets_list()  # accumulates the winnings of each bet in the list
+                self.give_user_bet_news()  # Tells user how many of their bets won, and winnings
+                self.reset_game_attributes()  # Clears the spin/winnings outcomes, ready for the next spin
 
             ##########
             # Establish game continuation criteria
