@@ -78,9 +78,12 @@ class RouletteGameUser(RouletteGame):
             ##########
             if self.active_player.all_in_status:
                 sys.exit(f"Game over. Your final pot is £{self.active_player.active_pot}")
+
             game_continuation = RouletteContinuationUser(stake=self.active_player.active_total_stake)
             game_continuation.keep_playing(active_player=self.active_player)
-            self.active_player = game_continuation.check_top_up_worthwhile(existing_player=self.active_player)
+            # if player is low on funds, they'll be asked to top up
+            top_up = game_continuation.check_top_up_worthwhile(existing_player=self.active_player)
+            self.active_player.add_top_up_to_pot(amount=top_up)
             self.navigation_id = game_continuation.choose_navigation(active_player=self.active_player)
 
     def set_all_active_bets_list(self, wheel_bet_selector: WheelAndBetTypeSelectorUser):
@@ -103,6 +106,7 @@ class RouletteGameUser(RouletteGame):
                 break
 
     def give_user_bet_news(self):
+        """Method to tell the user the outcome of all of their bets"""
         if self.active_bet_win_count > 0:
             print(f"Congratulations! {self.active_bet_win_count} of your bets won!\n"
                   f"You've received a huge payout of £{self.active_total_winnings}")
@@ -136,36 +140,46 @@ class RouletteGameUser(RouletteGame):
             ##########
             potential_bet: USER_BET_TYPES = wheel_bet_selector.choose_bet(wheel_id=self.active_wheel_id)
             potential_bet.set_playing_wheel(wheel=self.active_wheel)
+
             ##########
             # 2 Determine stake amount
             ##########
             stake, all_in_status = potential_bet.choose_stake_amount(player_funds=self.active_player.active_pot)
-            potential_bet.set_stake_amount(amount=stake)
-            ##########
-            # 3 Determine bet choice, which is specific to the bet type
-            ##########
-            bet_choice = potential_bet.get_user_bet_choice()
-            potential_bet.set_bet_choice(bet_choice=bet_choice)
-            ##########
-            # 4 Determine the win criteria and calculate the payout of the specific bet choice, and set these to the bet
-            ##########
-            win_criteria = potential_bet.determine_win_criteria()
-            potential_bet.set_win_criteria(win_criteria=win_criteria)
+            # Stake is non-zero and all_in_status
+            if stake == 0 and not all_in_status:
+                # Stake is only 0 and all_in_status false if the user has been asked to go all in and refused
+                break
+            else:  # else the bet is just set as per normal
+                potential_bet.set_stake_amount(amount=stake)
 
-            payout = potential_bet.calculate_payout()
-            potential_bet.set_payout(amount=payout)
-            ##########
-            # Bet choice confirmation - if not confirmed, the loop restarts
-            ##########
-            if potential_bet.confirm_bet_choice():
-                self.active_player.take_stake_from_pot(amount=stake)  # also adds to player's active total stake
-                self.active_player.set_all_in_status(true_or_false=all_in_status)
-                return potential_bet
-            else:
-                continue
+                ##########
+                # 3 Determine bet choice, which is specific to the bet type
+                ##########
+                bet_choice = potential_bet.get_user_bet_choice()
+                potential_bet.set_bet_choice(bet_choice=bet_choice)
+
+                ##########
+                # 4 Determine the win criteria and calculate the payout of the specific bet choice
+                # and set these as attributes to the bet
+                ##########
+                win_criteria = potential_bet.determine_win_criteria()
+                potential_bet.set_win_criteria(win_criteria=win_criteria)
+
+                payout = potential_bet.calculate_payout()
+                potential_bet.set_payout(amount=payout)
+
+                ##########
+                # 5 Bet choice confirmation - if not confirmed, the loop restarts
+                ##########
+                if potential_bet.confirm_bet_choice():
+                    self.active_player.take_stake_from_pot(amount=stake)  # also adds to player's active total stake
+                    self.active_player.set_all_in_status(true_or_false=all_in_status)
+                    return potential_bet
+                else:
+                    continue
 
     def determine_if_user_wants_to_add_more_bets(self):
-        while True:
+        while self.active_player.active_pot > 0:
             user_wants_to_add_more_bets = input(f"You currently have £{self.active_player.active_total_stake} "
                                                 f"on the line.\n"
                                                 "Would you like to add more bets to the current wheel spin?\n"

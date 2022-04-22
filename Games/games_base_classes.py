@@ -8,6 +8,7 @@ from typing import Union, Any
 from abc import abstractmethod
 from sys import exit
 
+
 class Player:
     """Class to hold the pot and define interactions with the pot.
     Player has money taken from the pot, and added to the pot"""
@@ -133,7 +134,6 @@ class Player:
             return "lost"
 
 
-#  TODO is it bad practice to use abstract methods and call them artificially in a setter?
 class Bet:
     def __init__(self,
                  min_bet: int,

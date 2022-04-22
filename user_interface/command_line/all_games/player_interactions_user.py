@@ -2,7 +2,7 @@ from Games.games_base_classes import Player
 from Games.players.existing_players import existing_players
 from Games.Roulette.definitions.game_parameters import deposit_parameters
 from Games.Roulette.definitions.game_parameters import top_up_parameters
-from Games.Roulette.definitions.game_parameters import threshold_for_top_up_prompt
+from Games.Roulette.definitions.game_parameters import threshold_for_top_up_prompt, low_pot_forced_top_up
 import sys
 import functools
 
@@ -89,9 +89,16 @@ class PlayerUserInteractions:
         """Method to get the user to either set an initial deposit if they are playing as a guest or as a new player,
         or to top up if playing as an existing player."""
         if active_player.player_type in ['G', 'N']:  # i.e. if player is a guest or new player, make them deposit
-            return self.get_user_deposit_amount(new_player=active_player)
+            initial_deposit = self.get_user_top_up_deposit_amount(dep_top_word="deposit")
+            active_player.set_initial_pot(amount=initial_deposit)
+            return active_player
         elif active_player.player_type == 'E':  # i.e. if it's an existing player, use top up prompt method
-            return self.check_top_up_worthwhile(existing_player=active_player)
+            top_up_amount = self.check_top_up_worthwhile(existing_player=active_player)
+            if top_up_amount == 0:  # i.e. they were asked to top up but don't want to
+                return active_player
+            else:
+                active_player.add_top_up_to_pot(amount=top_up_amount)
+                return active_player
         else:
             raise ValueError(
                 f"Player: {active_player.name} has invalid player type and was passed to initial_deposit_or_top_up")
@@ -107,7 +114,17 @@ class PlayerUserInteractions:
     # lower level methods called in the initial_deposit_or_top_up method above
     ##########
 
-    def get_user_deposit_amount(self, new_player) -> Player:
+    def check_top_up_worthwhile(self, existing_player: Player) -> int:
+        """Method to check whether the user pot is below the threshold for a top up prompt to be worthwhile,
+        and then make a top_up if it is worthwhile/ they have to to keep playing"""
+        if existing_player.active_pot > threshold_for_top_up_prompt:
+            return 0  # i.e. player's pot exceeds threshold so no need for prompt
+        else:
+            if self.see_if_user_wants_to_top_up(existing_player=existing_player):
+                top_up_amount = self.get_user_top_up_deposit_amount(dep_top_word="top up")
+                return top_up_amount
+
+    def get_user_top_up_deposit_amount(self, dep_top_word: str) -> int:
         """
         Method to get new/guest users to specify how much they want to deposit.
         Parameters: new_player. This will either be a new or guest user, and hence the initial_pot,
@@ -116,60 +133,22 @@ class PlayerUserInteractions:
         active_pot set to to the user input amount.
         """
         while True:
-            deposit_amount = input("How much would you like to deposit to play with?\n"
-                                   f"Deposits are allowed as multiples of £{self.deposit_multiples},"
-                                   f"the minimum deposit is £{self.min_deposit}. \n--->")
+            amount = input(F"How much would you like to {dep_top_word} to play with?\n"
+                           f"Deposits are allowed as multiples of £{self.deposit_multiples},"
+                           f"the minimum deposit is £{self.min_deposit}. \n--->")
             try:
-                deposit_amount_int = int(deposit_amount.replace("£", ""))  # e.g. replace '£100' with '100'
-                if deposit_amount_int >= self.min_deposit and deposit_amount_int % self.deposit_multiples == 0:
-                    confirmation = input(f"Are you sure you would like to deposit £{deposit_amount_int} to play with?\n"
+                amount_int = int(amount.replace("£", ""))  # e.g. replace '£100' with '100'
+                if amount_int >= self.min_deposit and amount_int % self.deposit_multiples == 0:
+                    confirmation = input(f"Are you sure you would like to {dep_top_word} £{amount_int} to play with?\n"
                                          "[Y]es, [N]o \n--->").upper()
                     if confirmation != 'Y':
                         continue
-                    print(f"You have deposited £{deposit_amount_int} to play with")
-                    new_player.set_initial_pot(amount=deposit_amount_int)
-                    return new_player
+                    print(f"You have made a {dep_top_word} of £{amount_int} to play with!")
+                    return amount_int
                 else:
-                    print('Invalid deposit amount - please try again and refer to deposit criteria.')
+                    print(f"Invalid {dep_top_word} amount - please try again and refer to {dep_top_word} criteria.")
             except ValueError:
-                print('Invalid deposit amount - please try again and refer to deposit criteria.')
-
-    def check_top_up_worthwhile(self, existing_player) -> Player:
-        """Method to check whether the user pot is below the threshold for a top up prompt to be worthwhile,
-        and then make a top_up if it is worthwhile/ they have to to keep playing"""
-        if existing_player.active_pot > threshold_for_top_up_prompt:
-            return existing_player  # i.e. player's pot exceeds threshold so no need for prompt
-        else:
-            if self.see_if_user_wants_to_top_up(existing_player=existing_player):
-                top_up_amount = self.get_user_top_up_amount()
-                existing_player.add_top_up_to_pot(amount=top_up_amount)
-                print(f"You have deposited £{top_up_amount}.\n"
-                      f"Your new pot is £{existing_player.active_pot}.")
-                return existing_player  # increased player pot if top up
-
-    # method called in the check_top_up_worthwhile, if it is worthwhile, i.e. user pot is low
-    def get_user_top_up_amount(self) -> int:
-        """Method to get the user to specify if and then how much they want to top up by.
-        Parameters: existing player - a player already fully defined in the existing_players dict. (With the
-        exception perhaps of last_top_up_datetime).
-        Returns: The same existing player, but with either a higher pot, or the same pot. The player attributes
-        affected are active_pot and last_top_up_datetime"""
-        while True:
-            top_up_amount = input("How much would you like to top up?\n"
-                                  f"Top ups are allowed as multiples of £{self.top_up_multiples},"
-                                  f"the minimum top up is £{self.min_top_up}.\n--->")
-            try:
-                top_up_int = int(top_up_amount.replace("£", ""))  # in case someone types in e.g. £100 rather than 100
-                if top_up_int >= self.min_top_up and top_up_int % self.top_up_multiples == 0:
-                    confirmation = input(f"Are you sure you would like to top up by £{top_up_int}?\n"
-                                         "[Y]es, [N]o \n--->").upper()
-                    if confirmation != 'Y':
-                        continue
-                    return top_up_int
-                else:
-                    print('Invalid top up amount - please try again and refer to criteria.')
-            except ValueError:
-                print('Invalid top up amount - please try again and refer to criteria.')
+                print(f"Invalid {dep_top_word} amount - please try again and refer to {dep_top_word} criteria.")
 
     @staticmethod
     def see_if_user_wants_to_top_up(existing_player: Player) -> bool:
@@ -178,7 +157,7 @@ class PlayerUserInteractions:
         If they have £0 in their pot, they don't have a choice and must top up to continue playing.
         """
         while True:
-            if existing_player.active_pot > 0:
+            if existing_player.active_pot > low_pot_forced_top_up:
                 print(f"Your pot only contains £{existing_player.active_pot}.\n")
                 proceed = input("Would you like to top up?\n[Y]es, [N]o\n--->")
                 if proceed == "Y":
@@ -187,7 +166,7 @@ class PlayerUserInteractions:
                     return False
                 else:
                     print("Invalid command, please try again.")
-            elif existing_player.active_pot == 0:
+            elif existing_player.active_pot <= low_pot_forced_top_up:
                 proceed = input("You have no money left in your pot, "
                                 "to continue playing you must top up.\n"
                                 "Would you like to top up?\n[Y]es, [N]o, end game\n--->").upper()

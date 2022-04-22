@@ -2,7 +2,6 @@ from Games.Roulette.app.roulette_bet_base_class import RouletteBet
 from user_interface.command_line.Roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
 
 from typing import Union
-from sys import exit
 from abc import abstractmethod
 
 
@@ -37,7 +36,7 @@ class RouletteBetUser(RouletteBet):
             stake, all_in_status = self.choose_stake_amount_funds_exceed_min_bet(player_funds=player_funds)
             return stake, all_in_status
         else:  # TODO Add some feature here to allow user to do a top up instead
-            all_in_stake, all_in_status = self.all_in(player_funds=player_funds)
+            all_in_stake, all_in_status = self.go_all_in(player_funds=player_funds)
             return all_in_stake, all_in_status
 
     def confirm_bet_choice(self) -> bool:
@@ -76,7 +75,7 @@ class RouletteBetUser(RouletteBet):
             try:
                 stake = int(stake.replace("£", ""))  # get rid of the £ sign if the user types one
                 if stake > player_funds:
-                    print(f"A £{stake} stake exceeds your current funds ({player_funds}).")
+                    print(f"A £{stake} stake exceeds your current funds (£{player_funds}).")
                     continue
                 elif self.min_bet <= stake <= self.max_bet:
                     return stake, all_in_status
@@ -86,28 +85,19 @@ class RouletteBetUser(RouletteBet):
                 print('Invalid stake - please try again and refer to bet criteria.')
 
     @staticmethod
-    def all_in(player_funds) -> (int, bool):
+    def go_all_in(player_funds) -> (int, bool):
+        """
+        If the player wants to go all in, returns the player's pot and True.
+        If the player doesn't want to go all in, returns False
+        """
         all_in = input(f"The minimum bet exceeds your pot of £{player_funds}.\n"
                        f"Would you like to go all in, [Y]es or [N]o?\n--->").upper()
         while True:
-            if all_in == 'Y':
+            if all_in == "Y":
                 all_in_status = True
                 return player_funds, all_in_status
-            elif all_in == 'N':
-                exit(f"Game over, your final pot is {player_funds}")
+            elif all_in == "N":
+                all_in_status = False
+                return 0, all_in_status # special treatment of this case in roulette mechanics cl
             else:
                 print("Invalid options, please try again.")
-
-    ##########
-    # Lower level methods called in evaluate_user_bet
-    ##########
-    @staticmethod
-    def get_user_to_spin_wheel():
-        """Low level method just to get the user to type spin in the game flow above"""
-        while True:
-            user_ready = input("Type 'SPIN' to spin the wheel!\n--->").upper()
-            if user_ready != "SPIN":
-                print("Please try spinning the wheel again.")
-                continue
-            else:
-                break
