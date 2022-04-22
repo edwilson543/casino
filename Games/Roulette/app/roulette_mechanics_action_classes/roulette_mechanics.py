@@ -23,14 +23,11 @@ class RouletteGame:
     def evaluate_all_active_bets_list(self):
         """Method to evaluate each active bet in the list"""
         for bet in self.active_all_bets_list:
-            if bet is None:
-                break # this is the case of a denied all in bet
-            else:
-                winnings = bet.evaluate_bet(spin_outcome=self.active_spin_outcome)
-                if winnings > 0:
-                    self.active_bet_win_count += 1
-                    self.active_total_winnings += winnings
-            self.active_player.add_winnings_to_pot(amount=self.active_total_winnings)
+            winnings = bet.evaluate_bet(spin_outcome=self.active_spin_outcome)
+            if winnings > 0:
+                self.active_bet_win_count += 1
+                self.active_total_winnings += winnings
+        self.active_player.add_winnings_to_pot(amount=self.active_total_winnings)
 
     def reset_game_attributes(self):
         self.active_spin_outcome = None

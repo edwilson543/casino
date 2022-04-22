@@ -186,10 +186,7 @@ class Bet:
 
     def set_stake_amount(self, amount: int):
         """Sets the stake attribute of the bet, as long as it's within the min/max interval"""
-        if self.min_bet <= amount <= self.max_bet:
-            self.stake = amount
-        else:
-            raise ValueError("Stake amount passed to set_stake_amount outside min/max bet interval")
+        self.stake = amount
 
     def set_bet_choice(self, bet_choice: Union[int, str, list]):
         """Sets the bet choice attribute of the bet"""

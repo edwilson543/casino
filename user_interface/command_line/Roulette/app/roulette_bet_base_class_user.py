@@ -97,7 +97,6 @@ class RouletteBetUser(RouletteBet):
                 all_in_status = True
                 return player_funds, all_in_status
             elif all_in == "N":
-                all_in_status = False
-                return 0, all_in_status # special treatment of this case in roulette mechanics cl
+                exit("Game over.\nYou have insufficient funds to bet and have refused to go all in.")
             else:
                 print("Invalid options, please try again.")
