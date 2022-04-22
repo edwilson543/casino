@@ -35,7 +35,7 @@ class RouletteBetUser(RouletteBet):
         if player_funds >= min_bet:
             stake, all_in_status = self.choose_stake_amount_funds_exceed_min_bet(player_funds=player_funds)
             return stake, all_in_status
-        else:  # TODO Add some feature here to allow user to do a top up instead
+        else:  # TODO Add some feature here to allow user to do a top up instead, will also need top up method somehow
             all_in_stake, all_in_status = self.go_all_in(player_funds=player_funds)
             return all_in_stake, all_in_status
 
