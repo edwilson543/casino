@@ -23,11 +23,10 @@ class Ed(Player):
                  active_session_start_time: datetime = None,
                  active_session_top_ups: int = 0,
                  all_in_status: bool = False,
-                 active_total_stake: int = 0,
-                 active_total_potential_winnings: int = 0):
+                 active_total_stake: int = 0):
         super().__init__(player_type, name, username, password, initial_pot, initial_pot_datetime, active_pot,
                          last_top_up_datetime, active_session_initial_pot, active_session_start_time,
-                         active_session_top_ups, all_in_status, active_total_stake, active_total_potential_winnings)
+                         active_session_top_ups, all_in_status, active_total_stake)
 
 
 class Balint(Player):
@@ -44,11 +43,10 @@ class Balint(Player):
                  active_session_start_time: datetime = None,
                  active_session_top_ups: int = 0,
                  all_in_status: bool = False,
-                 active_total_stake: int = 0,
-                 active_total_potential_winnings: int = 0):
+                 active_total_stake: int = 0):
         super().__init__(player_type, name, username, password, initial_pot, initial_pot_datetime, active_pot,
                          last_top_up_datetime, active_session_initial_pot, active_session_start_time,
-                         active_session_top_ups, all_in_status, active_total_stake, active_total_potential_winnings)
+                         active_session_top_ups, all_in_status, active_total_stake)
 
 
 class Guest(Player):
@@ -65,11 +63,10 @@ class Guest(Player):
                  active_session_start_time: datetime = None,
                  active_session_top_ups: int = 0,
                  all_in_status: bool = False,
-                 active_total_stake: int = 0,
-                 active_total_potential_winnings: int = 0):
+                 active_total_stake: int = 0):
         super().__init__(player_type, name, username, password, initial_pot, initial_pot_datetime, active_pot,
                          last_top_up_datetime, active_session_initial_pot, active_session_start_time,
-                         active_session_top_ups, all_in_status, active_total_stake, active_total_potential_winnings)
+                         active_session_top_ups, all_in_status, active_total_stake)
 
 
 #####################

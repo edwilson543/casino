@@ -28,8 +28,7 @@ class Player:
                  active_session_start_time: datetime = None,
                  active_session_top_ups: int = 0,
                  all_in_status: bool = False,
-                 active_total_stake: int = 0,
-                 active_total_potential_winnings: int = 0):
+                 active_total_stake: int = 0):
         self.player_type = player_type
         self.name = name
         self.username = username
@@ -43,7 +42,6 @@ class Player:
         self.active_session_top_ups = active_session_top_ups
         self.all_in_status = all_in_status
         self.active_total_stake = active_total_stake
-        self.active_total_potential_winnings = active_total_potential_winnings
 
     ##########
     # Setter methods
@@ -65,9 +63,6 @@ class Player:
         self.active_pot -= amount
         self.active_total_stake += amount
 
-    def add_payout_to_active_total_potential_winnings(self, payout: int):
-        self.active_total_potential_winnings += payout
-
     def set_name(self, name: str):
         self.name = name
 
@@ -87,10 +82,9 @@ class Player:
     def set_all_in_status(self, true_or_false: bool):
         self.all_in_status = true_or_false
 
-    def reset_total_stake_and_potential_winnings(self):
+    def reset_active_total_stake(self):
         """Method so that when the game loops, player's active stake/ pot is reset"""
         self.active_total_stake = 0
-        self.active_total_potential_winnings = 0
 
     ##########
     # Calculation methods
