@@ -4,6 +4,7 @@ from datetime import datetime
 
 # TODO any method printing datetime should make it more readbale, currently seconds is to around 8dp...
 # TODO create a read/write mechanism that saves each game/ allows creation of new players
+# Is there any benefit to having the players as classes rather than class instances?
 ##########
 # Assign the players
 ##########
@@ -18,9 +19,15 @@ class Ed(Player):
                  initial_pot_datetime: datetime = datetime(2022, 4, 7),
                  active_pot: int = 5,
                  last_top_up_datetime: datetime = datetime(2022, 4, 7),
-                 all_in_status: bool = False):
-        super().__init__(player_type, name, username, password, initial_pot,
-                         initial_pot_datetime, active_pot, last_top_up_datetime, all_in_status)
+                 active_session_initial_pot: int = None,
+                 active_session_start_time: datetime = None,
+                 active_session_top_ups: int = 0,
+                 all_in_status: bool = False,
+                 active_total_stake: int = 0,
+                 active_total_potential_winnings: int = 0):
+        super().__init__(player_type, name, username, password, initial_pot, initial_pot_datetime, active_pot,
+                         last_top_up_datetime, active_session_initial_pot, active_session_start_time,
+                         active_session_top_ups, all_in_status, active_total_stake, active_total_potential_winnings)
 
 
 class Balint(Player):
@@ -33,9 +40,15 @@ class Balint(Player):
                  initial_pot_datetime: datetime = datetime(2022, 4, 7),
                  active_pot: int = 5,
                  last_top_up_datetime: datetime = datetime(2022, 4, 7),
-                 all_in_status: bool = False):
-        super().__init__(player_type, name, username, password, initial_pot,
-                         initial_pot_datetime, active_pot, last_top_up_datetime, all_in_status)
+                 active_session_initial_pot: int = None,
+                 active_session_start_time: datetime = None,
+                 active_session_top_ups: int = 0,
+                 all_in_status: bool = False,
+                 active_total_stake: int = 0,
+                 active_total_potential_winnings: int = 0):
+        super().__init__(player_type, name, username, password, initial_pot, initial_pot_datetime, active_pot,
+                         last_top_up_datetime, active_session_initial_pot, active_session_start_time,
+                         active_session_top_ups, all_in_status, active_total_stake, active_total_potential_winnings)
 
 
 class Guest(Player):
@@ -48,9 +61,15 @@ class Guest(Player):
                  initial_pot_datetime: datetime = datetime(2022, 4, 7),
                  active_pot: int = 0,
                  last_top_up_datetime: datetime = datetime(2022, 4, 7),
-                 all_in_status: bool = False):
-        super().__init__(player_type, name, username, password, initial_pot,
-                         initial_pot_datetime, active_pot, last_top_up_datetime, all_in_status)
+                 active_session_initial_pot: int = None,
+                 active_session_start_time: datetime = None,
+                 active_session_top_ups: int = 0,
+                 all_in_status: bool = False,
+                 active_total_stake: int = 0,
+                 active_total_potential_winnings: int = 0):
+        super().__init__(player_type, name, username, password, initial_pot, initial_pot_datetime, active_pot,
+                         last_top_up_datetime, active_session_initial_pot, active_session_start_time,
+                         active_session_top_ups, all_in_status, active_total_stake, active_total_potential_winnings)
 
 
 #####################
