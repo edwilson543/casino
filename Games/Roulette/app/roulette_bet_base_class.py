@@ -1,5 +1,6 @@
 from Games.games_base_classes import Bet
 from Games.Roulette.definitions.wheel_defns import WHEEL_TYPES
+from Games.Roulette.app.roulette_wheel_base_class import wheel_spin_return
 
 from math import floor
 from typing import Union
@@ -44,7 +45,7 @@ class RouletteBet(Bet):
         unit_payout = floor(1 / win_probability_over_estimate)
         return unit_payout * self.stake
 
-    def evaluate_bet(self):
+    def evaluate_bet(self, spin_outcome: wheel_spin_return) -> int:
         """
         Method to determine the outcome of spinning the wheel, relative to the bet_choice.
         Parameters: bet_choice - this is used to call the method 'determine_win_criteria' of the bet subclass,
@@ -56,9 +57,7 @@ class RouletteBet(Bet):
 
         Requires all attributes to have been set
         """
-        spin_outcome_num, spin_outcome_col = self.playing_wheel.spin()
-        if spin_outcome_num in self.win_criteria:
-            winnings = self.calculate_payout()
+        if spin_outcome.number_return in self.win_criteria:
+            return self.payout
         else:
-            winnings = 0
-        return spin_outcome_num, spin_outcome_col, winnings
+            return 0

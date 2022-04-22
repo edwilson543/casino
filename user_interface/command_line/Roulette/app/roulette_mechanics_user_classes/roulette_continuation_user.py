@@ -1,7 +1,7 @@
 from Games.games_base_classes import Player
-from user_interface.command_line.Roulette.definitions.navigation_defns import navigation_text, navigation_options
-from user_interface.command_line.Roulette.definitions.navigation_defns import navigation_text_low_funds, \
-    navigation_options_low_funds
+from user_interface.command_line.Roulette.definitions.navigation_defns import post_spin_navigation_text, post_spin_navigation_options
+from user_interface.command_line.Roulette.definitions.navigation_defns import post_spin_navigation_text_low_funds, \
+    post_spin_navigation_options_low_funds
 from user_interface.command_line.all_games.player_interactions_user import PlayerUserInteractions
 from Games.Roulette.definitions.game_parameters import deposit_parameters
 from Games.Roulette.definitions.game_parameters import top_up_parameters
@@ -38,11 +38,11 @@ class RouletteContinuationUser(PlayerUserInteractions):
 
     def choose_navigation(self, active_player: Player) -> str:
         if self.stake < active_player.active_pot:
-            nav_text = navigation_text
-            nav_options = navigation_options
+            nav_text = post_spin_navigation_text
+            nav_options = post_spin_navigation_options
         else:
-            nav_text = navigation_text_low_funds
-            nav_options = navigation_options_low_funds
+            nav_text = post_spin_navigation_text_low_funds
+            nav_options = post_spin_navigation_options_low_funds
         while True:
             next_step = input(f"What would you like to do?\n{nav_text}\n--->").upper()
             if next_step in nav_options:

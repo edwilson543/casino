@@ -86,3 +86,4 @@ class TemplateWheel(RouletteWheel):
 # Dictionary and associated text for the different wheel options
 ##############################
 wheel_options = {'E': EuroWheel(), 'A': AmericanWheel()}
+

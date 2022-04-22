@@ -1,5 +1,6 @@
-from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
-
+from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel, wheel_spin_return
+from Games.Roulette.definitions.game_parameters import pause_durations
+from time import sleep
 
 class RouletteWheelUser(RouletteWheel):
     def __init__(self,
@@ -32,3 +33,21 @@ class RouletteWheelUser(RouletteWheel):
         min_number = min(list(set(self.slots.keys())))
         max_number = max(list(set(self.slots.keys())))
         return range(min_number, max_number + 1)
+
+    ##########
+    # Lower level methods called in evaluate_user_bet
+    ##########
+    def user_spin(self) -> wheel_spin_return:
+        """Low level method just to get the user to type spin in the game flow"""
+        while True:
+            user_ready = input("Type 'SPIN' to spin the wheel!\n--->").upper()
+            if user_ready != "SPIN":
+                print("Please try spinning the wheel again.")
+                continue
+            else:
+                spin_outcome = self.spin()
+                print("Wheel spinning...")
+                sleep(pause_durations['medium'])
+                print(f"Ball has landed on {spin_outcome.number_return}, ({spin_outcome.colour_return})!")
+                return spin_outcome
+

@@ -1,10 +1,7 @@
 from Games.Roulette.app.roulette_bet_base_class import RouletteBet
 from user_interface.command_line.Roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
 
-from Games.Roulette.definitions.game_parameters import pause_durations  # this should be moved to the UI
-
 from typing import Union
-from time import sleep
 from sys import exit
 from abc import abstractmethod
 
@@ -62,26 +59,6 @@ class RouletteBetUser(RouletteBet):
             print(f"£{self.stake} placed on {self.bet_choice}!")
             return True
 
-    def evaluate_user_bet(self) -> int:
-        """
-        Method to give the user the outcome of their bet based on a spin of the wheel, using the evaluate_bet
-        method from the parent class BetPlacementEvaluation
-        """
-        spin_outcome_num, spin_outcome_col, winnings = self.evaluate_bet()
-        self.get_user_to_spin_wheel()
-        print("Wheel spinning...")
-        sleep(pause_durations['medium'])
-        print(f"Ball has landed on {spin_outcome_num}, ({spin_outcome_col.upper()})!")
-        if winnings > 0:
-            sleep(pause_durations['medium'])
-            print(f"Congratulations! You have won £{winnings}!\n")
-        elif winnings == 0:
-            sleep(pause_durations['medium'])
-            print("Better luck next time, your bet did not win.")
-        else:
-            raise ValueError("Invalid winnings amount encountered in evaluate_user_bet.")
-        return winnings
-
     ##########
     # Lower level methods called in choose_stake_amount
     ##########
@@ -102,13 +79,9 @@ class RouletteBetUser(RouletteBet):
                     print(f"A £{stake} stake exceeds your current funds ({player_funds}).")
                     continue
                 elif self.min_bet <= stake <= self.max_bet:
-                    if self.stake_confirmation(stake=stake):
-                        print(f"£{stake} bet placed, time to choose your bet!")
-                        return stake, all_in_status
-                    else:
-                        continue
+                    return stake, all_in_status
                 else:
-                    print('Invalid stake - please try again and refer to bet criteria.')
+                    print("Invalid stake - please try again and refer to bet criteria.")
             except ValueError:
                 print('Invalid stake - please try again and refer to bet criteria.')
 
@@ -138,16 +111,3 @@ class RouletteBetUser(RouletteBet):
                 continue
             else:
                 break
-
-    ##########
-    # Lowest level method called in choose stake amount funds exceed min bet
-    ##########
-
-    @staticmethod
-    def stake_confirmation(stake: int) -> bool:
-        confirmation = input(f"Confirm your stake of £{stake}?\n"
-                             "[Y]es, [N]o \n--->").upper()
-        if confirmation != 'Y':
-            return False
-        else:
-            return True

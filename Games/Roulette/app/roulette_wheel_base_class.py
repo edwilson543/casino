@@ -1,5 +1,7 @@
 import numpy as np
+from collections import namedtuple
 
+wheel_spin_return = namedtuple("wheel_spin_return", "number_return colour_return")
 
 class RouletteWheel:
     """Base class for the roulette wheel - from which we can define different wheel configurations"""
@@ -20,14 +22,14 @@ class RouletteWheel:
         self.slots = slots
         self.bias_colour = bias_colour
 
-    def spin(self):
+    def spin(self) -> wheel_spin_return:
         """Returns: One random spin of the wheel as a dictionary, with number and colour as the key/value pairs"""
         min_slot = min(self.slots.keys())
         max_slot = max(self.slots.keys())
         number_return = np.random.randint(low=min_slot, high=max_slot + 1)
         # note the randint interval is half-open hence need of the + 1
         colour_return = self.slots[number_return]
-        return number_return, colour_return
+        return wheel_spin_return(number_return, colour_return)
 
     def bias_wheel_size(self) -> int:
         """

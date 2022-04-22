@@ -6,17 +6,16 @@ The second set of 'low_funds' options restricts the navigation options so that t
 change their stake amount, which is required in the case that insufficient funds remain to repeat the bet.
 """
 
-#########
-# Navigation options in the for loop in the roulette_mechanics module, if active stake does not exceed min bet
-#########
-navigation_text = "[R]epeat bets; [B]ets change, [W]heel change"
-navigation_dict = {'from_wheel_selection': ['W'],
-                   'from_individual_bet_selection': ['B', 'W'],
-                   'from_bet_evaluation': ['R', 'B', 'W']}
-navigation_options = ['R', 'B', 'W']
+##########
+# Navigation options at the end of the roulette_loop in the roulette_mechanics module (after bet evaluation)
+##########
+post_spin_navigation_dict = {'from_wheel_selection': ['W'],
+                             'from_bet_selection': ['B', 'W'],
+                             'from_bet_evaluation': ['R', 'B', 'W']}
+# if active stake does not exceed min bet
+post_spin_navigation_text = "[R]epeat bets; [B]ets change, [W]heel change"
+post_spin_navigation_options = ['R', 'B', 'W']
 
-#########
-# Navigation options in the for loop in the roulette_mechanics module, if active stake does exceed min bet
-#########
-navigation_text_low_funds = "[B]ets change, [W]heel change"
-navigation_options_low_funds = ['B', 'W']
+# Navigation options at the end of the for loop in the roulette_mechanics module, if active stake does exceed min bet
+post_spin_navigation_text_low_funds = "[B]ets change, [W]heel change"
+post_spin_navigation_options_low_funds = ['B', 'W']
