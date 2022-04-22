@@ -13,7 +13,7 @@ from user_interface.command_line.Roulette.definitions.wheel_defns_user import US
 
 import sys
 
-
+# TODO split out lower level methods into a new class?
 ##########
 # Class pulling together all the components of the Roulette game and command line UI
 ##########
