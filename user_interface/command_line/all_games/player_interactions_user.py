@@ -136,28 +136,24 @@ class PlayerUserInteractions:
 
     def check_top_up_worthwhile(self, existing_player) -> Player:
         """Method to check whether the user pot is below the threshold for a top up prompt to be worthwhile,
-        and then make a top_up if it is worthwhile"""
+        and then make a top_up if it is worthwhile/ they have to to keep playing"""
         if existing_player.active_pot > threshold_for_top_up_prompt:
             return existing_player  # i.e. player's pot exceeds threshold so no need for prompt
         else:
-            return self.get_user_top_up_amount(existing_player=existing_player)  # increased player pot if top up
+            if self.see_if_user_wants_to_top_up(existing_player=existing_player):
+                top_up_amount = self.get_user_top_up_amount()
+                existing_player.add_top_up_to_pot(amount=top_up_amount)
+                print(f"You have deposited £{top_up_amount}.\n"
+                      f"Your new pot is £{existing_player.active_pot}.")
+                return existing_player  # increased player pot if top up
 
     # method called in the check_top_up_worthwhile, if it is worthwhile, i.e. user pot is low
-    def get_user_top_up_amount(self, existing_player) -> Player:
+    def get_user_top_up_amount(self) -> int:
         """Method to get the user to specify if and then how much they want to top up by.
         Parameters: existing player - a player already fully defined in the existing_players dict. (With the
         exception perhaps of last_top_up_datetime).
         Returns: The same existing player, but with either a higher pot, or the same pot. The player attributes
         affected are active_pot and last_top_up_datetime"""
-        while True:
-            proceed = input(f"Your pot only contains £{existing_player.active_pot}.\n"
-                            f"would you like to top up?\n[Y]es, [N]o\n--->").upper()
-            if proceed == 'Y':
-                break
-            elif proceed == 'N':
-                return existing_player  # output is then input, unaffected i.e. no top up
-            else:
-                print("Invalid command, please try again.")
         while True:
             top_up_amount = input("How much would you like to top up?\n"
                                   f"Top ups are allowed as multiples of £{self.top_up_multiples},"
@@ -169,11 +165,38 @@ class PlayerUserInteractions:
                                          "[Y]es, [N]o \n--->").upper()
                     if confirmation != 'Y':
                         continue
-                    existing_player.add_top_up_to_pot(amount=top_up_int)
-                    print(f"You have deposited £{top_up_int}.\n"
-                          f"Your new pot is £{existing_player.active_pot}.")
-                    return existing_player
+                    return top_up_int
                 else:
                     print('Invalid top up amount - please try again and refer to criteria.')
             except ValueError:
                 print('Invalid top up amount - please try again and refer to criteria.')
+
+    @staticmethod
+    def see_if_user_wants_to_top_up(existing_player: Player) -> bool:
+        """
+        Method to get the user to specify if they want to top up, having been given the top up prompt
+        If they have £0 in their pot, they don't have a choice and must top up to continue playing.
+        """
+        while True:
+            if existing_player.active_pot > 0:
+                print(f"Your pot only contains £{existing_player.active_pot}.\n")
+                proceed = input("Would you like to top up?\n[Y]es, [N]o\n--->")
+                if proceed == "Y":
+                    return True
+                elif proceed == "N":
+                    return False
+                else:
+                    print("Invalid command, please try again.")
+            elif existing_player.active_pot == 0:
+                proceed = input("You have no money left in your pot, "
+                                "to continue playing you must top up.\n"
+                                "Would you like to top up?\n[Y]es, [N]o, end game\n--->").upper()
+                if proceed == "Y":
+                    return True
+                elif proceed == "N":
+                    existing_player.end_session()
+                else:
+                    print("Invalid command, please try again.")
+            else:
+                raise ValueError(f"{existing_player.name} has ended up with a negative pot of"
+                                 f"£{existing_player.active_pot}.")

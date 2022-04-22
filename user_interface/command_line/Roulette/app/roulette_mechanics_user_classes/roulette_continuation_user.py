@@ -5,7 +5,6 @@ from user_interface.command_line.Roulette.definitions.navigation_defns import po
 from user_interface.command_line.all_games.player_interactions_user import PlayerUserInteractions
 from Games.Roulette.definitions.game_parameters import deposit_parameters
 from Games.Roulette.definitions.game_parameters import top_up_parameters
-import sys
 
 
 class RouletteContinuationUser(PlayerUserInteractions):
@@ -30,7 +29,7 @@ class RouletteContinuationUser(PlayerUserInteractions):
             active_player.get_active_session_report()
             proceed = input(f"Would you like to continue playing?\n[Y]es, [N]o\n--->").upper()
             if proceed == "N":
-                sys.exit(f"Game over.\nYour final pot is £{active_player.active_pot}\n")  # make more relevant
+                active_player.end_session()
             elif proceed == 'Y':
                 break
             else:

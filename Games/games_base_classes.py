@@ -6,7 +6,7 @@ Bet (base class)
 from datetime import datetime
 from typing import Union, Any
 from abc import abstractmethod
-
+from sys import exit
 
 class Player:
     """Class to hold the pot and define interactions with the pot.
@@ -119,6 +119,10 @@ class Player:
               f"You last topped up at {self.last_top_up_datetime}.\n"
               f"Since {str(self.initial_pot_datetime)}, you have {self.won_or_lost()}:"
               f" £{abs(self.active_pot - self.initial_pot)}")
+
+    def end_session(self):
+        exit(f"Thanks for playing {self.name}!\n"
+             f"Your final pot is £{self.active_pot}.")
 
     # lower level UI methods
 
