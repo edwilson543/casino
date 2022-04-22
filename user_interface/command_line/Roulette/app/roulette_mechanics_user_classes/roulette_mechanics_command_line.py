@@ -1,6 +1,7 @@
 from Games.games_base_classes import Player
-
+from Games.Roulette.app.roulette_mechanics_action_classes.roulette_mechanics import RouletteGame
 from Games.Roulette.app.roulette_wheel_base_class import wheel_spin_return
+
 from user_interface.command_line.Roulette.definitions.wheel_defns_user import wheel_options_user
 from user_interface.command_line.Roulette.definitions.bet_type_defns_user import bet_type_options_user
 from user_interface.command_line.Roulette.definitions.navigation_defns import post_spin_navigation_dict
@@ -13,12 +14,12 @@ from user_interface.command_line.Roulette.definitions.wheel_defns_user import US
 
 import sys
 
-# TODO split out lower level methods into a new class?
+
 ##########
 # Class pulling together all the components of the Roulette game and command line UI
 ##########
 
-class RouletteGameUser:
+class RouletteGameUser(RouletteGame):
     """
     Class to pull together all components of the roulette game, so they can be looped over
     Maybe there is a better way to do this than initialise dummy parameters, which never actually get used - looked at
@@ -27,26 +28,18 @@ class RouletteGameUser:
     The game loops until the user runs out of money or
     """
 
-    # TODO update bet and wheel with generic Vartypes
     def __init__(self,
                  active_player: Player = None,
                  active_wheel_id: str = None,
                  active_wheel: USER_WHEEL_TYPES = None,
                  active_all_bets_list: list = None,
                  active_spin_outcome: wheel_spin_return = None,
-                 active_bet_win_count=0,
-                 active_total_winnings=0,
+                 active_bet_win_count: int = 0,
+                 active_total_winnings: int = 0,
                  navigation_id: str = 'W'):
-        self.active_player = active_player
-        self.active_wheel_id = active_wheel_id
-        self.active_wheel = active_wheel
-        self.active_all_bets_list = active_all_bets_list
-        self.active_spin_outcome = active_spin_outcome
-        self.active_bet_win_count = active_bet_win_count
-        self.active_total_winnings = active_total_winnings
+        super().__init__(active_player, active_wheel_id, active_wheel, active_all_bets_list,
+                         active_spin_outcome, active_bet_win_count, active_total_winnings)
         self.navigation_id = navigation_id
-
-        #  TODO - check whether any of these attributes can be got rid of
 
     def roulette_loop(self):
         """Method to loop over all game components, based on the navigation_id re-determined at end"""
@@ -76,9 +69,9 @@ class RouletteGameUser:
             if self.navigation_id in post_spin_navigation_dict['from_bet_evaluation']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
                 self.active_spin_outcome = self.active_wheel.user_spin()  # gets user to spin wheel
-                self.evaluate_all_active_bets_list()  # accumulates the winnings of each bet in the list
+                super().evaluate_all_active_bets_list()  # accumulates the winnings of each bet in the list
                 self.give_user_bet_news()  # Tells user how many of their bets won, and winnings
-                self.reset_game_attributes()  # Clears the spin/winnings outcomes, ready for the next spin
+                super().reset_game_attributes()  # Clears the spin/winnings outcomes, ready for the next spin
 
             ##########
             # Establish game continuation criteria
@@ -109,27 +102,12 @@ class RouletteGameUser:
             else:
                 break
 
-    def evaluate_all_active_bets_list(self):
-        """Method to evaluate each active bet in the list"""
-        # TODO this is non ui focused - could go somewhere else, maybe new module
-        for bet in self.active_all_bets_list:
-            winnings = bet.evaluate_bet(spin_outcome=self.active_spin_outcome)
-            if winnings > 0:
-                self.active_bet_win_count += 1
-                self.active_total_winnings += winnings
-        self.active_player.add_winnings_to_pot(amount=self.active_total_winnings)
-
     def give_user_bet_news(self):
         if self.active_bet_win_count > 0:
             print(f"Congratulations! {self.active_bet_win_count} of your bets won!\n"
                   f"You've received a huge payout of £{self.active_total_winnings}")
         else:
             print("Better luck next time, none of your bets won.")
-
-    def reset_game_attributes(self):
-        self.active_spin_outcome = None
-        self.active_bet_win_count = 0
-        self.active_total_winnings = 0
 
     ##########
     # Lower level methods called in multi_bet_selection loop
@@ -188,7 +166,7 @@ class RouletteGameUser:
 
     def determine_if_user_wants_to_add_more_bets(self):
         while True:
-            user_wants_to_add_more_bets = input(f"You currently have: £{self.active_player.active_total_stake} "
+            user_wants_to_add_more_bets = input(f"You currently have £{self.active_player.active_total_stake} "
                                                 f"on the line.\n"
                                                 "Would you like to add more bets to the current wheel spin?\n"
                                                 "[Y]es, [N]o\n"
