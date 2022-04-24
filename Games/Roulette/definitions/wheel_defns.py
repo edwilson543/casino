@@ -20,7 +20,9 @@ black feature on the same wheel
 7) Define a colour_options_text for that wheel, which should correspond to the colour ids (omitting the bias colour
 as an option for betting on)
 8) Define the wheel as a subclass of RouletteWheelUser
-"""  # TODO - find out how to use multiple inheritance for defining the user wheels
+"""  # TODO - find a cleaner way of defining the user wheels -
+# multiple inheritance for inheriting default values, if this is possible?
+# named tuple/ data classes?
 """  
 9) Add the user wheel option to the wheel_options_user dict and the wheel_options_text string, 
 so that it can be chosen in the game, with the relevant key

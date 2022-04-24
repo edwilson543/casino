@@ -85,7 +85,7 @@ class RouletteBetUser(RouletteBet):
                 print('Invalid stake - please try again and refer to bet criteria.')
 
     @staticmethod
-    def go_all_in(player_funds) -> (int, bool):
+    def go_all_in(player_funds) -> (int, bool):  # TODO sort out all in functionality...
         """
         If the player wants to go all in, returns the player's pot and True.
         If the player doesn't want to go all in, returns False
@@ -98,5 +98,6 @@ class RouletteBetUser(RouletteBet):
                 return player_funds, all_in_status
             elif all_in == "N":
                 exit("Game over.\nYou have insufficient funds to bet and have refused to go all in.")
+                #  TODO find an alternative to directly calling sys.exit here - utilise Player method
             else:
                 print("Invalid options, please try again.")

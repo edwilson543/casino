@@ -13,9 +13,8 @@ class Player:
     """Class to hold the pot and define interactions with the pot.
     Player has money taken from the pot, and added to the pot"""
 
-    # TODO add an attribute along the lines of 'last played time'
+    # TODO add an attribute along the lines of 'last login time'
     # and when the player starts the game, update it to datetime.now()
-    # then add a method in_game_profit_report, to be used at game continuation
     def __init__(self,
                  player_type: str,  # restrict to 'E', 'G', 'N'
                  name: str,
@@ -28,8 +27,7 @@ class Player:
                  active_session_initial_pot: int = None,
                  active_session_start_time: datetime = None,
                  active_session_top_ups: int = 0,
-                 all_in_status: bool = False,
-                 active_total_stake: int = 0):
+                 all_in_status: bool = False):
         self.player_type = player_type
         self.name = name
         self.username = username
@@ -42,7 +40,6 @@ class Player:
         self.active_session_start_time = active_session_start_time
         self.active_session_top_ups = active_session_top_ups
         self.all_in_status = all_in_status
-        self.active_total_stake = active_total_stake
 
     ##########
     # Setter methods
@@ -62,7 +59,6 @@ class Player:
 
     def take_stake_from_pot(self, amount: int):
         self.active_pot -= amount
-        self.active_total_stake += amount
 
     def set_name(self, name: str):
         self.name = name
@@ -82,10 +78,6 @@ class Player:
 
     def set_all_in_status(self, true_or_false: bool):
         self.all_in_status = true_or_false
-
-    def reset_active_total_stake(self):
-        """Method so that when the game loops, player's active stake/ pot is reset"""
-        self.active_total_stake = 0
 
     ##########
     # Calculation methods
@@ -113,13 +105,6 @@ class Player:
               f"You have been playing for {self.calculate_active_session_duration_minutes()} minute(s), "
               f"during which time you have {self.won_or_lost()}: "
               f"£{abs(self.calculate_active_session_winnings())}.")
-
-    def get_full_status_report(self):
-        print(f"You are playing as: {self.name}.\n"
-              f"Your current pot is £{self.active_pot}.\n"
-              f"You last topped up at {self.last_top_up_datetime}.\n"
-              f"Since {str(self.initial_pot_datetime)}, you have {self.won_or_lost()}:"
-              f" £{abs(self.active_pot - self.initial_pot)}")
 
     def end_session(self):
         exit(f"Thanks for playing {self.name}!\n"

@@ -9,7 +9,7 @@ from typing import Union, TypeVar
 ##########
 USER_BET_TYPES = TypeVar(name="USER_BET_TYPES", bound=RouletteBetUser)
 
-# Navigation parameters #todo move these to the navigation parameters UI???
+# Navigation parameters # todo move these to the navigation parameters UI???
 ##########
 # Define the text strings to display the bet categories available on each wheel
 bet_cat_options_text = {'E': "[I]nside, [O]utside", 'A': "[I]nside, [O]utside"}

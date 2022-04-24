@@ -19,16 +19,8 @@ from typing import Union, TypeVar
 ##########
 BET_TYPES = TypeVar(name="BET_TYPES", bound=RouletteBet)
 
-# TODO - find some way of defining bet parameters to be looked up from, so can be wheel specific -
-# This'll probably involve adding a wheel_id to RouletteBet and subclass as an instance attribute
-# Note the parameters are repeated in bet_type_defns_user so would need to be updated in 2 different places
-##########
-# Min and max bet for each bet type - not currently used
-##########
-bet_type_min_max_bet = {'E': {'C': {'min': 5, 'max': 50}, 'S': {'min': 5, 'max': 20}},
-                        'A': {'C': {'min': 5, 'max': 50}, 'S': {'min': 5, 'max': 20}}}
 
-
+##########
 # Create subclass of RouletteBet base class to define each bet's 'determine_win_criteria' method
 ##########
 class ColoursBet(RouletteBet):

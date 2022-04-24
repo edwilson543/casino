@@ -7,7 +7,6 @@ import sys
 import functools
 
 
-#  TODO make it so that the user has to top up if funds are 0 at the end of a spin
 ##########
 # Functions to access players, requiring user input of password
 ##########
@@ -115,8 +114,12 @@ class PlayerUserInteractions:
     ##########
 
     def check_top_up_worthwhile(self, existing_player: Player) -> int:
-        """Method to check whether the user pot is below the threshold for a top up prompt to be worthwhile,
-        and then make a top_up if it is worthwhile/ they have to to keep playing"""
+        """
+        Method to check whether the user pot is below the threshold for a top up prompt to be worthwhile,
+        and then make a top_up if it is worthwhile/ they have to to keep playing.
+        Note that user will be forced to top up by see_if_user_wants_to_top_up in order to continue
+        playing, if their pot is below a pre-determined threshold.
+        """
         if existing_player.active_pot > threshold_for_top_up_prompt:
             return 0  # i.e. player's pot exceeds threshold so no need for prompt
         else:
@@ -126,9 +129,9 @@ class PlayerUserInteractions:
 
     def get_user_top_up_deposit_amount(self, dep_top_word: str) -> int:
         """
-        Method to get new/guest users to specify how much they want to deposit.
-        Parameters: new_player. This will either be a new or guest user, and hence the initial_pot,
-        initial_pot_datetime, and active_pot are not yet determined. This method is to set these attributes.
+        Method to get users to specify how much they want to deposit/ top up.
+        Parameters: dep_top_word - the word to be displayed in the text depending on whether the user is being
+        asked to deposit, or to top up.
         Returns: A Player object, which is the input player with the initial_pot, initial_pot_datetime, and
         active_pot set to to the user input amount.
         """

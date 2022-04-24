@@ -6,7 +6,7 @@ from math import floor
 from typing import Union
 
 
-# TODO update all type hints to use Typevars
+# TODO update all type hints to use Typevars - bet_choice probably one to do
 class RouletteBet(Bet):
     """
     Each bet on the Roulette wheel will be defined as a subclass of this class.
