@@ -34,11 +34,12 @@ class RouletteGameUser(RouletteGame):
                  active_wheel_id: str = None,
                  active_wheel: USER_WHEEL_TYPES = None,
                  active_all_bets_list: list = None,
+                 active_total_stake: int = 0,
                  active_spin_outcome: wheel_spin_return = None,
                  active_bet_win_count: int = 0,
                  active_total_winnings: int = 0,
                  navigation_id: str = 'W'):
-        super().__init__(active_player, active_wheel_id, active_wheel, active_all_bets_list,
+        super().__init__(active_player, active_wheel_id, active_wheel, active_all_bets_list, active_total_stake,
                          active_spin_outcome, active_bet_win_count, active_total_winnings)
         self.navigation_id = navigation_id
 
@@ -61,7 +62,7 @@ class RouletteGameUser(RouletteGame):
             ##########
             if self.navigation_id in post_spin_navigation_dict['from_bet_selection']:
                 """i.e. if user has chosen to change all bets (or change wheel, need to do this too)"""
-                self.active_player.reset_active_total_stake()
+                self.active_total_stake = 0  # so that it does not accumulate from previous bets
                 self.set_all_active_bets_list(wheel_bet_selector=wheel_bet_selector)  # creates a list of all user bets
 
             ##########
@@ -69,6 +70,8 @@ class RouletteGameUser(RouletteGame):
             ##########
             if self.navigation_id in post_spin_navigation_dict['from_bet_evaluation']:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
+                self.active_player.take_stake_from_pot(amount=self.active_total_stake)  # included here as otherwise
+                # gets missed by a quick repeat of all bets
                 self.active_spin_outcome = self.active_wheel.user_spin()  # gets user to spin wheel
                 super().evaluate_all_active_bets_list()  # accumulates the winnings of each bet in the list
                 self.give_user_bet_news()  # Tells user how many of their bets won, and winnings
@@ -80,7 +83,7 @@ class RouletteGameUser(RouletteGame):
             if self.active_player.all_in_status:
                 sys.exit(f"Game over. Your final pot is £{self.active_player.active_pot}.")
 
-            game_continuation = RouletteContinuationUser(stake=self.active_player.active_total_stake)
+            game_continuation = RouletteContinuationUser(stake=self.active_total_stake)
             game_continuation.keep_playing(active_player=self.active_player)
             # if player is low on funds, they'll be asked to top up
             top_up = game_continuation.check_top_up_worthwhile(existing_player=self.active_player)
@@ -101,7 +104,7 @@ class RouletteGameUser(RouletteGame):
             self.active_all_bets_list.append(individual_bet)
             if self.active_player.all_in_status:  # i.e. if the player has gone all in, don't let them add more bets...
                 break
-            elif self.active_player.active_pot < min_pot_to_add_more_bets: # i.e. user pot low so no more bets
+            elif self.active_player.active_pot < min_pot_to_add_more_bets:  # i.e. user pot low so no more bets
                 break
             elif self.determine_if_user_wants_to_add_more_bets():
                 continue
@@ -170,7 +173,7 @@ class RouletteGameUser(RouletteGame):
             # 5 Bet choice confirmation - if not confirmed, the loop restarts
             ##########
             if potential_bet.confirm_bet_choice():
-                self.active_player.take_stake_from_pot(amount=stake)  # also adds to player's active total stake
+                self.active_total_stake += stake  # adds to active total stake in game
                 self.active_player.set_all_in_status(true_or_false=all_in_status)
                 return potential_bet
             else:
@@ -178,7 +181,7 @@ class RouletteGameUser(RouletteGame):
 
     def determine_if_user_wants_to_add_more_bets(self):
         while True:
-            user_wants_to_add_more_bets = input(f"You currently have £{self.active_player.active_total_stake} "
+            user_wants_to_add_more_bets = input(f"You currently have £{self.active_total_stake} "
                                                 f"on the line.\n"
                                                 "Would you like to add more bets to the current wheel spin?\n"
                                                 "[Y]es, [N]o\n"
