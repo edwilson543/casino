@@ -167,11 +167,18 @@ class Bet:
 
     ##########
     # Setter methods for the bet attributes attributes
-    # Note that the setters depend on the versions of the above methods which are defined downstream
     ##########
 
+    def set_min_bet(self, amount: int):
+        """Sets the min_bet of the bet"""
+        self.min_bet = amount
+
+    def set_max_bet(self, amount: int):
+        """Sets the max_bet of the bet"""
+        self.max_bet = amount
+
     def set_stake_amount(self, amount: int):
-        """Sets the stake attribute of the bet, as long as it's within the min/max interval"""
+        """Sets the stake attribute of the bet"""
         self.stake = amount
 
     def set_bet_choice(self, bet_choice: Union[int, str, list]):
