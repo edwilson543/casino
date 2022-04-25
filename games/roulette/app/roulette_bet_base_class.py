@@ -15,8 +15,6 @@ class RouletteBet(Bet):
     ColoursBetUser,... -< ColoursBet & RouletteBetUser
     """
 
-    # maybe we want winning slots to be a set of lists, for multiple bets, likewise with payout
-    # really it could be a mapping too
     def __init__(self,
                  min_bet: int,
                  max_bet: int,

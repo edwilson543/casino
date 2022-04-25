@@ -12,6 +12,3 @@ class TestRouletteWheel:
 
     def test_wheel_colour_counts_red(self):
         assert euro_wheel.colour_counts(colour='red') == 18
-
-    def test_user_number_options_range(self):
-        assert euro_wheel.user_number_options_range() == range(0, 37)
