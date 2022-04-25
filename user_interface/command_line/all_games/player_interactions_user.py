@@ -1,8 +1,8 @@
-from Games.games_base_classes import Player
-from Games.players.existing_players import existing_players
-from Games.Roulette.definitions.game_parameters import deposit_parameters
-from Games.Roulette.definitions.game_parameters import top_up_parameters
-from Games.Roulette.definitions.game_parameters import threshold_for_top_up_prompt, low_pot_forced_top_up
+from games.games_base_classes import Player
+from games.players.existing_players import existing_players
+from games.roulette.definitions.game_parameters import deposit_parameters
+from games.roulette.definitions.game_parameters import top_up_parameters
+from games.roulette.definitions.game_parameters import threshold_for_top_up_prompt, low_pot_forced_top_up
 import sys
 import functools
 

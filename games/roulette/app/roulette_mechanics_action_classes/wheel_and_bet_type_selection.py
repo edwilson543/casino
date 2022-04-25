@@ -1,6 +1,6 @@
 #  TODO change the look up methods to not be from a dictionary
-from Games.Roulette.definitions.bet_type_defns import BET_TYPES
-from Games.Roulette.definitions.wheel_defns import WHEEL_TYPES
+from games.roulette.definitions.bet_type_defns import BET_TYPES
+from games.roulette.definitions.wheel_defns import WHEEL_TYPES
 
 
 class WheelAndBetTypeSelector:

@@ -4,13 +4,13 @@ To define a new bet type and category complete the following steps:
 2) Create a subclass of RouletteBet base class (below) to define each bet's 'determine_win_criteria' method, which
 is used as a polymorphic method
 3) Add the subclass to the bet_type_options below
-4) Go to command_line -> Roulette -> definitions -> bet_type_defns_user
+4) Go to command_line -> roulette -> definitions -> bet_type_defns_user
 5) Add the new bet to bet_cat_options_text, bet_cats_and_types, bet_type_options_text where relevant
 6) Define a subclass of the class defined at 3), to define the UI polymorphic method 'get_user_bet_choice'
 7) Add the newly defined user bet class to the bet_type_options_user dictionary
 """
-from Games.Roulette.app.roulette_bet_base_class import RouletteBet
-from Games.Roulette.definitions.wheel_defns import WHEEL_TYPES
+from games.roulette.app.roulette_bet_base_class import RouletteBet
+from games.roulette.definitions.wheel_defns import WHEEL_TYPES
 
 from typing import Union, TypeVar
 
@@ -48,7 +48,7 @@ class ColoursBet(RouletteBet):
             return [slot_num for slot_num in self.playing_wheel.slots if
                     self.playing_wheel.slots[slot_num] == self.bet_choice]
         else:
-            raise ValueError(f"{self.bet_choice} is not a colour on the {self.playing_wheel.wheel_id} Roulette wheel")
+            raise ValueError(f"{self.bet_choice} is not a colour on the {self.playing_wheel.wheel_id} roulette wheel")
 
 
 class StraightUpBet(RouletteBet):
@@ -73,7 +73,7 @@ class StraightUpBet(RouletteBet):
         if bet_choice in self.playing_wheel.slots:
             return [bet_choice]
         else:
-            raise ValueError(f"{self.bet_choice} is not a slot on the {self.playing_wheel.wheel_id} Roulette wheel")
+            raise ValueError(f"{self.bet_choice} is not a slot on the {self.playing_wheel.wheel_id} roulette wheel")
 
 
 ##########

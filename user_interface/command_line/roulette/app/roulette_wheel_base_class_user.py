@@ -1,5 +1,5 @@
-from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel, wheel_spin_return
-from Games.Roulette.definitions.game_parameters import pause_durations
+from games.roulette.app.roulette_wheel_base_class import RouletteWheel, wheel_spin_return
+from games.roulette.definitions.game_parameters import pause_durations
 from time import sleep
 
 class RouletteWheelUser(RouletteWheel):

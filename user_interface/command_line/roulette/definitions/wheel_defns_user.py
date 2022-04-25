@@ -1,7 +1,7 @@
-from Games.Roulette.definitions.wheel_defns import euro_wheel_id, euro_wheel_defn, euro_wheel_bias_colour
-from Games.Roulette.definitions.wheel_defns import american_wheel_id, american_wheel_defn, american_wheel_bias_colour
-from Games.Roulette.definitions.wheel_defns import template_wheel_id, template_wheel_defn, template_wheel_bias_colour
-from user_interface.command_line.Roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
+from games.roulette.definitions.wheel_defns import euro_wheel_id, euro_wheel_defn, euro_wheel_bias_colour
+from games.roulette.definitions.wheel_defns import american_wheel_id, american_wheel_defn, american_wheel_bias_colour
+from games.roulette.definitions.wheel_defns import template_wheel_id, template_wheel_defn, template_wheel_bias_colour
+from user_interface.command_line.roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
 
 from typing import TypeVar
 
@@ -10,7 +10,7 @@ from typing import TypeVar
 ##########
 USER_WHEEL_TYPES = TypeVar(name="USER_WHEEL_TYPES", bound=RouletteWheelUser)
 
-"""To define a new wheel, first go to Roulette->definitions->wheel_defns"""
+"""To define a new wheel, first go to roulette->definitions->wheel_defns"""
 ##################
 # Wheel relevant UI definitions
 # Note these exclude this bias colour, as this cannot be bet on as a colours bet

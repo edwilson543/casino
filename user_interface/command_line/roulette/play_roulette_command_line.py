@@ -1,4 +1,4 @@
-from user_interface.command_line.Roulette.app.roulette_mechanics_user_classes.roulette_mechanics_command_line import \
+from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.roulette_mechanics_command_line import \
     RouletteGameUser
 from user_interface.command_line.all_games.player_interactions_user import PlayerUserInteractions
 

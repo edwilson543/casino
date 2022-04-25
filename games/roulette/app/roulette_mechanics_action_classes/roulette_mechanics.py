@@ -1,6 +1,6 @@
-from Games.games_base_classes import Player
-from Games.Roulette.app.roulette_wheel_base_class import wheel_spin_return
-from Games.Roulette.definitions.wheel_defns import WHEEL_TYPES
+from games.games_base_classes import Player
+from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
+from games.roulette.definitions.wheel_defns import WHEEL_TYPES
 
 
 class RouletteGame:

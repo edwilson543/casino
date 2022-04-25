@@ -1,4 +1,4 @@
-from Games.Roulette.app.roulette_wheel_base_class import RouletteWheel
+from games.roulette.app.roulette_wheel_base_class import RouletteWheel
 from typing import TypeVar
 
 ##########
@@ -27,7 +27,7 @@ as an option for betting on)
 9) Add the user wheel option to the wheel_options_user dict and the wheel_options_text string, 
 so that it can be chosen in the game, with the relevant key
 10) Add the relevant bet type options to the user wheel by going to
-user_interface->command_line->Roulette->definitions-> bet_type_defns_user
+user_interface->command_line->roulette->definitions-> bet_type_defns_user
 and adding the wheel_id as a primary key in the navigation parameters
 """
 # TODO add adjacency lists (maybe implementedd with a dictionary) for the boards to the definitions

@@ -1,5 +1,5 @@
-from Games.Roulette.app.roulette_mechanics_action_classes.bet_placement_evaluation import BetPlacementEvaluation
-from Games.Roulette.definitions.wheel_defns import EuroWheel
+from games.roulette.app.roulette_mechanics_action_classes.bet_placement_evaluation import BetPlacementEvaluation
+from games.roulette.definitions.wheel_defns import EuroWheel
 import pytest
 
 test_bet_placer_colours = BetPlacementEvaluation(bet_type_id='C', stake=10, playing_wheel=EuroWheel())

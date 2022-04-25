@@ -1,6 +1,6 @@
-from Games.games_base_classes import Bet
-from Games.Roulette.definitions.wheel_defns import WHEEL_TYPES
-from Games.Roulette.app.roulette_wheel_base_class import wheel_spin_return
+from games.games_base_classes import Bet
+from games.roulette.definitions.wheel_defns import WHEEL_TYPES
+from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 
 from math import floor
 from typing import Union
@@ -9,7 +9,7 @@ from typing import Union
 # TODO update all type hints to use Typevars - bet_choice probably one to do
 class RouletteBet(Bet):
     """
-    Each bet on the Roulette wheel will be defined as a subclass of this class.
+    Each bet on the roulette wheel will be defined as a subclass of this class.
     RouletteBet <- RouletteBetUser | +
     RouletteBet <- ColoursBet, StraightUpBet, ... | + determine_win_criteria
     ColoursBetUser,... -< ColoursBet & RouletteBetUser
