@@ -107,8 +107,9 @@ class Player:
               f"£{abs(self.calculate_active_session_winnings())}.")
 
     def end_session(self):
-        exit(f"Thanks for playing {self.name}!\n"
-             f"Your final pot is £{self.active_pot}.")
+        print(f"Thanks for playing {self.name}!\n"
+              f"Your final pot is £{self.active_pot}.")
+        exit()
 
     # lower level UI methods
 
