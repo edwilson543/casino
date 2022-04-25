@@ -1,7 +1,14 @@
 #################
 # Game parameters
 #################
-#TODO could swap these all for some tuples etc.
+#TODO could swap these all for a class
+class DepositParameters:
+    min_deposit = 100
+
+class GameParameters:
+    deposit_parameters = DepositParameters
+    pass
+
 deposit_parameters = {'min_deposit': 100, 'deposit_multiples': 10} # min % multiples must be 0
 threshold_for_top_up_prompt = 10
 low_pot_forced_top_up = 10

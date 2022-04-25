@@ -59,6 +59,7 @@ class PlayerInteractionsUser:  # TODO make this a subclass of PlayerInteractions
         self.deposit_multiples = deposit_multiples
         self.min_top_up = min_top_up
         self.top_up_multiples = top_up_multiples
+    # TODO replace the attributes with the global data storage
 
     def all_games_set_up(self) -> Player:
         active_player = self.existing_or_new_player()

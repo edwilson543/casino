@@ -9,16 +9,6 @@ from typing import Union, TypeVar
 ##########
 USER_BET_TYPES = TypeVar(name="USER_BET_TYPES", bound=RouletteBetUser)
 
-# Navigation parameters # todo move these to the navigation parameters UI???
-##########
-# Define the text strings to display the bet categories available on each wheel
-bet_cat_options_text = {'E': "[I]nside, [O]utside", 'A': "[I]nside, [O]utside"}
-# Define the dictionaries showing bet types available on each wheel, wihtin each category
-bet_cats_and_types = {'E': {'O': ['C'], 'I': ['S']}, 'A': {'O': ['C'], 'I': ['S']}}
-# Define the text strings to display for each wheel, once the bet category is selected
-bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight up"},
-                         'A': {'O': "[C]olours", 'I': "[S]traight up"}}
-
 
 ##########
 # Define 'get_user_bet_choice' method for each user bets
@@ -90,3 +80,13 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
 # Add the newly defined user bet class to the bet_type_options_user dictionary below
 ##########
 bet_type_options_user = {'C': ColoursBetUser(), 'S': StraightUpBetUser()}
+
+# Navigation parameters # todo move these to the navigation parameters UI???
+##########
+# Define the text strings to display the bet categories available on each wheel
+bet_cat_options_text = {'E': "[I]nside, [O]utside", 'A': "[I]nside, [O]utside"}
+# Define the dictionaries showing bet types available on each wheel, wihtin each category
+bet_cats_and_types = {'E': {'O': ['C'], 'I': ['S']}, 'A': {'O': ['C'], 'I': ['S']}}
+# Define the text strings to display for each wheel, once the bet category is selected
+bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight up"},
+                         'A': {'O': "[C]olours", 'I': "[S]traight up"}}

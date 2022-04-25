@@ -7,7 +7,7 @@ class WheelAndBetTypeSelector:
     """Class to look up wheel and bet objects based on their ids, and also to determine all in status"""
 
     def __init__(self,
-                 wheel_look_up: dict,
+                 wheel_look_up: dict,  # TODO pass in an enum using WheelOptions[Callable]
                  bet_type_look_up: dict):
         self.wheel_look_up = wheel_look_up
         self.bet_type_look_up = bet_type_look_up

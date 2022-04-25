@@ -81,3 +81,7 @@ class StraightUpBet(RouletteBet):
 # Add the newly defined bet class to the bet_type_options dictionary below
 ##########
 bet_type_options = {'C': ColoursBet(), 'S': StraightUpBet()}
+
+class BetTypeOptions(Enum):
+    C = ColoursBet
+    S = StraightUpBet

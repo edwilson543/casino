@@ -1,11 +1,11 @@
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel
 from typing import TypeVar
+from enum import Enum
 
 ##########
 # Typevar to be used when referencing wheels in tpye hints throughout game
 ##########
 WHEEL_TYPES = TypeVar(name="WHEEL_TYPES", bound=RouletteWheel)
-
 
 """
 To define a new wheel complete the following steps:
@@ -30,6 +30,16 @@ so that it can be chosen in the game, with the relevant key
 user_interface->command_line->roulette->definitions-> bet_type_defns_user
 and adding the wheel_id as a primary key in the navigation parameters
 """
+
+
+##########
+# Colours
+##########
+class Colours:
+    RED = 'red'
+    # TODO finsih and implement below
+
+
 # TODO add adjacency lists (maybe implementedd with a dictionary) for the boards to the definitions
 # Then in the UI wheel, add a string rep of form "|1|2|\n-----\n|3|4|"
 ###############################
@@ -89,3 +99,7 @@ class TemplateWheel(RouletteWheel):
 ##############################
 wheel_options = {'E': EuroWheel(), 'A': AmericanWheel()}
 
+
+class WheelOptions(Enum):
+    E = EuroWheel
+    pass

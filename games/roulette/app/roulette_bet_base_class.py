@@ -31,6 +31,11 @@ class RouletteBet(Bet):
         """Method to set the playing_wheel attribute of the bet"""
         self.playing_wheel = wheel
 
+    def set_min_max_bet(self):
+        """Method to look up and set the min/max bet of the roulette bet, (which is specific to the wheel)"""
+        # TODO use property decorator and look up what it does
+        pass
+
     def calculate_payout(self):
         """
         Calculates the payout of a £1 roulette bet, (unit_payout) and multiplies this by the stake.
