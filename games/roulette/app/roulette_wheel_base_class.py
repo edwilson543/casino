@@ -40,7 +40,7 @@ class RouletteWheel:
 
     def colour_counts(self, colour: str) -> int:
         """Returns: the number of slots on the wheel of the specified colour"""
-        return sum(map(colour.__eq__, self.slots.values()))
+        return sum(value == colour for value in self.slots.values())
 
     def wheel_size(self) -> int:
         """Returns: The number of slots on the wheel as an int, for calculating probabilities within wager defns"""
