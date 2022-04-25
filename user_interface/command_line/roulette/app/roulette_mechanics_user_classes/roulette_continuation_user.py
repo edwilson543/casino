@@ -2,12 +2,12 @@ from games.games_base_classes import Player
 from user_interface.command_line.roulette.definitions.navigation_defns import post_spin_navigation_text, post_spin_navigation_options
 from user_interface.command_line.roulette.definitions.navigation_defns import post_spin_navigation_text_low_funds, \
     post_spin_navigation_options_low_funds
-from user_interface.command_line.all_games.player_interactions_user import PlayerUserInteractions
+from user_interface.command_line.all_games.player_interactions_user import PlayerInteractionsUser
 from games.roulette.definitions.game_parameters import deposit_parameters
 from games.roulette.definitions.game_parameters import top_up_parameters
 
 
-class RouletteContinuationUser(PlayerUserInteractions):
+class RouletteContinuationUser(PlayerInteractionsUser):
     """
     Class to keep the game going until the user runs out of money or quits.
     We'll need to expand to include play on same wheel, new bet type.

@@ -11,7 +11,7 @@ import functools
 # Functions to access players, requiring user input of password
 ##########
 
-def password_proected(n_attempts):
+def password_protected(n_attempts):
     def decorator_password_protected(func):
         @functools.wraps(func)
         def wrapper_password_protected(*args, **kwargs):
@@ -33,7 +33,7 @@ def password_proected(n_attempts):
     return decorator_password_protected
 
 
-@password_proected(n_attempts=5)
+@password_protected(n_attempts=5)
 def access_player():
     """Method to set the active_player within the game"""
     while True:
@@ -44,7 +44,7 @@ def access_player():
             print(f"No user with username: {username} found. Please try again.")
 
 
-class PlayerUserInteractions:
+class PlayerInteractionsUser:  # TODO make this a subclass of PlayerInteractions
     """
     Class to initiate the roulette game.
     Methods to get the user to initiate the game, set their initial deposit, and choose the wheel they want to play on
@@ -106,7 +106,7 @@ class PlayerUserInteractions:
     # Lower level methods called in the existing_or_new_player method above
     ##########
 
-    def create_new_player(self) -> Player:  # TODO define this, will require some sort of reading/writing
+    def create_player_user(self) -> Player:  # TODO define this, using super class method
         pass
 
     ##########
