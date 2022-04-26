@@ -36,12 +36,11 @@ class RouletteBet(Bet):
         """
         Method to look up the min/max bet of the roulette bet, which is specific to the wheel, from the
         BetParameters, and then set these as instance attributes for the min/max bet.
-        Note this method will only work on subclasses of this class, whose name corresponds to data
+        Note this method will only work on subclasses of this class, whose name corresponds to the underlying data,
+        once the wheel has already been set
         """
-        bet_name = type(self).__name__  # will be e.g. 'ColoursBet' for a specific bet subclass
-        wheel_name = type(self.playing_wheel).__name__  # will be e.g. 'EuroWheel' for a specific playing_wheel
-        bet_data = getattr(BetParameters, bet_name)  # a class with all bet data + hierarchy of wheel specific bet data
-        wheel_specific_bet_data = getattr(bet_data, wheel_name)
+        bet_data = getattr(BetParameters, self.bet_type_id)  # class with bet data+ hierarchy of wheel specific bet data
+        wheel_specific_bet_data = getattr(bet_data, self.playing_wheel.wheel_id)
         min_bet = wheel_specific_bet_data.min_bet
         max_bet = wheel_specific_bet_data.max_bet
         self.set_min_bet(amount=min_bet)

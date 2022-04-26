@@ -13,8 +13,8 @@ test_roulette_bet = RouletteBet(min_bet=5, max_bet=20, bet_type_id='T', stake=20
 class TestRouletteBet:
     def test_set_min_max_bet(self):
         """Test to check if the look up and setting of min/max bet parameters is working"""
-        expected_min_bet = BetParameters.ColoursBet.EuroWheel.min_bet
-        expected_max_bet = BetParameters.ColoursBet.EuroWheel.max_bet
+        expected_min_bet = BetParameters.C.E.min_bet  # C.E. => ColoursBetEuroWheel
+        expected_max_bet = BetParameters.C.E.max_bet
         test_roulette_bet_no_min_max_bet.set_min_max_bet()
         actual_min_bet = test_roulette_bet_no_min_max_bet.min_bet
         actual_max_bet = test_roulette_bet_no_min_max_bet.max_bet

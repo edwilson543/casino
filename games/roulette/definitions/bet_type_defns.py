@@ -13,6 +13,7 @@ from games.roulette.app.roulette_bet_base_class import RouletteBet
 from games.roulette.definitions.wheel_defns import WHEEL_TYPES
 
 from typing import Union, TypeVar
+from enum import Enum
 
 ##########
 # Typevar to be used when referencing bets in type hints throughout game
@@ -27,9 +28,9 @@ class ColoursBet(RouletteBet):
     """Class for defining the win criteria of a colours bet."""
 
     def __init__(self,
-                 min_bet: int = 5,
-                 max_bet: int = 50,
-                 bet_type_id: str = 'C',
+                 min_bet: int = None,
+                 max_bet: int = None,
+                 bet_type_id: str = 'C', # can probably go
                  stake: int = None,
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,
@@ -56,9 +57,9 @@ class StraightUpBet(RouletteBet):
     """Class for defining the win criteria for a straight up bet"""
 
     def __init__(self,
-                 min_bet: int = 10,
-                 max_bet: int = 20,
-                 bet_type_id: str = 'S',
+                 min_bet: int = None,
+                 max_bet: int = None,
+                 bet_type_id: str = 'S', # can probably go
                  stake: int = None,
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,
@@ -82,6 +83,7 @@ class StraightUpBet(RouletteBet):
 ##########
 bet_type_options = {'C': ColoursBet(), 'S': StraightUpBet()}
 
-class BetTypeOptions(Enum):
-    C = ColoursBet
-    S = StraightUpBet
+
+class BetTypeOptions:
+    C = ColoursBet()
+    S = StraightUpBet()
