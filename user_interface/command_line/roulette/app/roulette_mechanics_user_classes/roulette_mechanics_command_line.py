@@ -146,11 +146,14 @@ class RouletteGameUser(RouletteGame):
             ##########
             potential_bet: USER_BET_TYPES = wheel_bet_selector.choose_bet(wheel_id=self.active_wheel_id)
             potential_bet.set_playing_wheel(wheel=self.active_wheel)
+            potential_bet.set_min_max_bet()
 
             ##########
             # 2 Determine stake amount
             ##########
-            stake, all_in_status = potential_bet.choose_stake_amount(player_funds=self.active_player.active_pot)
+            player_funds = self.active_player.active_pot - self.active_total_stake
+            # i.e. active pot less bets they've already added to current spin
+            stake, all_in_status = potential_bet.choose_stake_amount(player_funds=player_funds)
             potential_bet.set_stake_amount(amount=stake)
 
             ##########
