@@ -1,6 +1,7 @@
 from games.games_base_classes import Bet
 from games.roulette.definitions.wheel_defns import WHEEL_TYPES
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
+from games.roulette.definitions.bet_parameters import BetParameters
 
 from math import floor
 from typing import Union
@@ -16,14 +17,14 @@ class RouletteBet(Bet):
     """
 
     def __init__(self,
-                 min_bet: int,
-                 max_bet: int,
-                 bet_type_id: str,
-                 stake: int,
-                 bet_choice: Union[int, str, list],
-                 win_criteria: list[int],
-                 payout: int,
-                 playing_wheel: WHEEL_TYPES):
+                 min_bet: int = None,
+                 max_bet: int = None,
+                 bet_type_id: str = None,
+                 stake: int = None,
+                 bet_choice: Union[int, str, list] = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: WHEEL_TYPES = None):
         super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice, win_criteria, payout)
         self.playing_wheel = playing_wheel
 
@@ -32,9 +33,19 @@ class RouletteBet(Bet):
         self.playing_wheel = wheel
 
     def set_min_max_bet(self):
-        """Method to look up and set the min/max bet of the roulette bet, (which is specific to the wheel)"""
-        # TODO use property decorator and look up what it does
-        pass
+        """
+        Method to look up the min/max bet of the roulette bet, which is specific to the wheel, from the
+        BetParameters, and then set these as instance attributes for the min/max bet.
+        Note this method will only work on subclasses of this class, whose name corresponds to data
+        """
+        bet_name = type(self).__name__  # will be e.g. 'ColoursBet' for a specific bet subclass
+        wheel_name = type(self.playing_wheel).__name__  # will be e.g. 'EuroWheel' for a specific playing_wheel
+        bet_data = getattr(BetParameters, bet_name)  # a class with all bet data + hierarchy of wheel specific bet data
+        wheel_specific_bet_data = getattr(bet_data, wheel_name)
+        min_bet = wheel_specific_bet_data.min_bet
+        max_bet = wheel_specific_bet_data.max_bet
+        self.set_min_bet(amount=min_bet)
+        self.set_max_bet(amount=max_bet)
 
     def calculate_payout(self):
         """
