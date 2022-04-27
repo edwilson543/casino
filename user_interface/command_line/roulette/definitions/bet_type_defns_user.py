@@ -1,5 +1,6 @@
 """To define a new bet, first go to roulette->definitions->bet_type_defns"""
 from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
+from games.roulette.definitions.bet_parameters import BetTypeIds
 from user_interface.command_line.roulette.app.roulette_bet_base_class_user import RouletteBetUser
 from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
 from typing import Union, TypeVar
@@ -18,7 +19,7 @@ class ColoursBetUser(RouletteBetUser, ColoursBet):
     def __init__(self,
                  min_bet: int = 5,
                  max_bet: int = 50,
-                 bet_type_id: str = 'C',
+                 bet_type_id: str = BetTypeIds.ColoursBet,
                  stake: int = None,
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,
@@ -48,7 +49,7 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
     def __init__(self,
                  min_bet: int = 10,
                  max_bet: int = 20,
-                 bet_type_id: str = 'S',
+                 bet_type_id: str = BetTypeIds.StraightUpBet,
                  stake: int = None,
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,

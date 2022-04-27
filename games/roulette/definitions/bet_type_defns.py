@@ -11,9 +11,8 @@ is used as a polymorphic method
 """
 from games.roulette.app.roulette_bet_base_class import RouletteBet
 from games.roulette.definitions.wheel_defns import WHEEL_TYPES
-
+from games.roulette.definitions.bet_parameters import BetTypeIds
 from typing import Union, TypeVar
-from enum import Enum
 
 ##########
 # Typevar to be used when referencing bets in type hints throughout game
@@ -30,7 +29,7 @@ class ColoursBet(RouletteBet):
     def __init__(self,
                  min_bet: int = None,
                  max_bet: int = None,
-                 bet_type_id: str = 'C', # can probably go
+                 bet_type_id: str = BetTypeIds.ColoursBet,
                  stake: int = None,
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,
@@ -59,7 +58,7 @@ class StraightUpBet(RouletteBet):
     def __init__(self,
                  min_bet: int = None,
                  max_bet: int = None,
-                 bet_type_id: str = 'S', # can probably go
+                 bet_type_id: str = BetTypeIds.StraightUpBet,
                  stake: int = None,
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,
