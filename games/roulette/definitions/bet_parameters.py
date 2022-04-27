@@ -1,8 +1,8 @@
+from enum import Enum
 from dataclasses import dataclass
 
 
-@dataclass(frozen=True)
-class BetTypeIds:
+class BetTypeIds(str, Enum):
     ColoursBet = 'C'
     StraightUpBet = 'S'
 
@@ -20,24 +20,26 @@ class BetParameters:
     Note that the bet class names (C/S etc.) must match the BetTypeIds string ('C'/'S' etc.)
     Similarly, the wheel class names (E/A etc.) must match the WheelIds string ('E'/'A' etc.) in wheel parameters
     """
+
     #  TODO double check there isn't a way of getting the C/E/A to be dynamically defined
+    #  TODO give roulette wheel a name and use it here
 
-    class C:  # ColoursBet
+    class E:  # EuroWheel
 
-        class E:  # EuroWheel
+        class ColoursBet:
             min_bet = 5
             max_bet = 50
 
-        class A:  # AmericanWheel
-            min_bet = 5
-            max_bet = 50
-
-    class S:  # StraightUpBet
-
-        class E:  # EuroWheel
+        class StraightUpBet:
             min_bet = 2
             max_bet = 20
 
-        class A:  # AmericanWheel
+    class A:  # AmericanWheel
+
+        class ColoursBet:
+            min_bet = 5
+            max_bet = 50
+
+        class StraightUpBet:
             min_bet = 2
             max_bet = 20
