@@ -4,17 +4,18 @@ from time import sleep
 
 class RouletteWheelUser(RouletteWheel):
     def __init__(self,
-                 wheel_id,
-                 slots,
-                 bias_colour,
-                 colour_ids,
-                 colour_options):
+                 wheel_name: str,
+                 wheel_id: str,
+                 slots: dict,
+                 bias_colour: str,
+                 colour_ids: dict,
+                 colour_options: str):
         """
         Added instance attributes:
         colour_ids: a mapping of colour id (e.g. 'R') to each colour (e.g. 'red')
         colour_options: a string used to get user input on what colour they'd like to bet on
         """
-        super().__init__(wheel_id, slots, bias_colour)
+        super().__init__(wheel_name, wheel_id, slots, bias_colour)
         self.colour_ids = colour_ids
         self.colour_options = colour_options
 
