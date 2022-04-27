@@ -1,7 +1,7 @@
 from enum import Enum
 from dataclasses import dataclass
 
-straight_up_bet_id = "S"  # TODO dynamically reference all bet type IDs
+straight_up_bet_id = "S"  # TODO dynamically reference all bet type IDs. Define once then refer to variable
 
 
 class BetTypeIds(str, Enum):
