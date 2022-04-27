@@ -1,16 +1,17 @@
 #  TODO change the look up methods to not be from a dictionary
 from games.roulette.definitions.bet_type_defns import BET_TYPES
 from games.roulette.definitions.wheel_defns import WHEEL_TYPES
+from games.roulette.definitions.bet_type_defns import BetTypeOptions
 
 
 class WheelAndBetTypeSelector:
     """Class to look up wheel and bet objects based on their ids, and also to determine all in status"""
 
     def __init__(self,
-                 wheel_look_up: dict,  # TODO pass in an enum using WheelOptions[Callable]
-                 bet_type_look_up: dict):
+                 wheel_look_up: dict, # TODO pass in an enum using WheelOptions[Callable]
+                 bet_type_look_up_class=BetTypeOptions):
         self.wheel_look_up = wheel_look_up
-        self.bet_type_look_up = bet_type_look_up
+        self.bet_type_look_up_class = bet_type_look_up_class
 
     def get_wheel_from_wheel_id(self, wheel_id: str) -> WHEEL_TYPES:
         """
@@ -30,8 +31,8 @@ class WheelAndBetTypeSelector:
         Parameters: bet_type_id - string, e.g. 'C' which represents ColoursBet subclass of Bet
         Returns: A subclass of Bet which is a fully defined bet class (i.e. includes bet placing).
         """
-        if bet_type_id in self.bet_type_look_up:
-            bet_type = self.bet_type_look_up[bet_type_id]
+        if hasattr(self.bet_type_look_up_class, bet_type_id):
+            bet_type = getattr(self.bet_type_look_up_class, bet_type_id)
             return bet_type
         else:
             raise NameError(f"No bet type with id {bet_type_id} found.")

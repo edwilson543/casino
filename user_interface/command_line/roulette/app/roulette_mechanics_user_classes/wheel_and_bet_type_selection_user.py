@@ -4,6 +4,7 @@ from user_interface.command_line.roulette.definitions.bet_type_defns_user import
     bet_cat_options_text, bet_type_options_text
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
 from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
+from user_interface.command_line.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
 
 
 class WheelAndBetTypeSelectorUser(WheelAndBetTypeSelector):
@@ -12,7 +13,7 @@ class WheelAndBetTypeSelectorUser(WheelAndBetTypeSelector):
 
     def __init__(self,
                  wheel_look_up: dict,
-                 bet_type_look_up: dict):
+                 bet_type_look_up=BetTypeOptionsUser):
         super().__init__(wheel_look_up, bet_type_look_up)
 
     def choose_playing_wheel(self) -> (str, USER_WHEEL_TYPES):

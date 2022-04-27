@@ -4,7 +4,7 @@ from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.definitions.game_parameters import min_pot_to_add_more_bets
 
 from user_interface.command_line.roulette.definitions.wheel_defns_user import wheel_options_user
-from user_interface.command_line.roulette.definitions.bet_type_defns_user import bet_type_options_user
+from user_interface.command_line.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
 from user_interface.command_line.roulette.definitions.navigation_defns import post_spin_navigation_dict
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.wheel_and_bet_type_selection_user import \
     WheelAndBetTypeSelectorUser
@@ -49,7 +49,7 @@ class RouletteGameUser(RouletteGame):
         while True:
 
             wheel_bet_selector = WheelAndBetTypeSelectorUser(wheel_look_up=wheel_options_user,
-                                                             bet_type_look_up=bet_type_options_user)
+                                                             bet_type_look_up=BetTypeOptionsUser)
             ##########
             # Wheel selection
             ##########
@@ -146,6 +146,7 @@ class RouletteGameUser(RouletteGame):
             ##########
             potential_bet: USER_BET_TYPES = wheel_bet_selector.choose_bet(wheel_id=self.active_wheel_id)
             potential_bet.set_playing_wheel(wheel=self.active_wheel)
+            potential_bet.set_bet_type_id()
             potential_bet.set_min_max_bet()
 
             ##########
