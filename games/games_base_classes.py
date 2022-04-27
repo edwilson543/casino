@@ -122,16 +122,18 @@ class Player:
 
 class Bet:
     def __init__(self,
+                 bet_type: str,
+                 bet_type_id: str,
                  min_bet: int,
                  max_bet: int,
-                 bet_type_id: str,
                  stake: int,
                  bet_choice: Union[int, str, list],
                  win_criteria: Any,
                  payout: int):
+        self.bet_type = bet_type
+        self.bet_type_id = bet_type_id
         self.min_bet = min_bet
         self.max_bet = max_bet
-        self.bet_type_id = bet_type_id
         self.stake = stake
         self.bet_choice = bet_choice
         self.win_criteria = win_criteria
