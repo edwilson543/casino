@@ -2,6 +2,7 @@
 from games.roulette.definitions.bet_type_defns import BET_TYPES
 from games.roulette.definitions.wheel_defns import WHEEL_TYPES
 from games.roulette.definitions.bet_type_defns import BetTypeOptions
+from games.roulette.definitions.bet_parameters import BetTypeIds
 
 
 class WheelAndBetTypeSelector:
@@ -31,8 +32,11 @@ class WheelAndBetTypeSelector:
         Parameters: bet_type_id - string, e.g. 'C' which represents ColoursBet subclass of Bet
         Returns: A subclass of Bet which is a fully defined bet class (i.e. includes bet placing).
         """
-        if hasattr(self.bet_type_look_up_class, bet_type_id):
-            bet_type = getattr(self.bet_type_look_up_class, bet_type_id)
+        try:
+            bet_type_name = BetTypeIds(bet_type_id).name
+            bet_type = getattr(self.bet_type_look_up_class, bet_type_name).value
             return bet_type
-        else:
-            raise NameError(f"No bet type with id {bet_type_id} found.")
+        except ValueError:
+            raise NameError(f"User has been allowed to pass invalid bet type id:"
+                            f" {bet_type_id} to {self.bet_type_look_up_class}.")
+

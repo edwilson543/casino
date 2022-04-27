@@ -3,6 +3,7 @@ from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
 from user_interface.command_line.roulette.app.roulette_bet_base_class_user import RouletteBetUser
 from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
 from typing import Union, TypeVar
+from enum import Enum
 
 #  TODO we probably don't need the user_wheel_types? Can just use wheel types?
 
@@ -84,9 +85,9 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
 ##########
 # Add the newly defined user bet class to the BetTypeOptionsUser class below
 ##########
-class BetTypeOptionsUser:
-    C = ColoursBetUser()
-    S = StraightUpBetUser()
+class BetTypeOptionsUser(Enum):
+    ColoursBet = ColoursBetUser()
+    StraightUpBet = StraightUpBetUser()
 
 
 # Navigation parameters # todo move these to the navigation parameters UI???
@@ -98,3 +99,5 @@ bet_cats_and_types = {'E': {'O': ['C'], 'I': ['S']}, 'A': {'O': ['C'], 'I': ['S'
 # Define the text strings to display for each wheel, once the bet category is selected
 bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight up"},
                          'A': {'O': "[C]olours", 'I': "[S]traight up"}}
+
+print(type(BetTypeOptionsUser.ColoursBet.value))
