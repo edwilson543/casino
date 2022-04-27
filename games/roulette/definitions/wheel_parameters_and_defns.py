@@ -117,7 +117,7 @@ class WheelIds(str, Enum):
     AMERICANWHEEL = american_wheel_id
 
 
-class WheelParameters(RouletteWheelParameters, Enum):
+class WheelParameters(Enum):
     EUROWHEEL = euro_wheel_parameters
     AMERICANWHEEL = american_wheel_parameters
 

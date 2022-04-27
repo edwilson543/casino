@@ -1,5 +1,5 @@
 from games.roulette.app.roulette_bet_base_class import RouletteBet
-from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
+from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import USER_WHEEL_TYPES
 
 from typing import Union
 from abc import abstractmethod

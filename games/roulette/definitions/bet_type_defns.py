@@ -10,7 +10,7 @@ is used as a polymorphic method
 7) Add the newly defined user bet class to the bet_type_options_user dictionary
 """
 from games.roulette.app.roulette_bet_base_class import RouletteBet
-from games.roulette.definitions.wheel_defns import WHEEL_TYPES
+from games.roulette.definitions.wheel_parameters_and_defns import WHEEL_TYPES
 from typing import Union, TypeVar
 
 ##########

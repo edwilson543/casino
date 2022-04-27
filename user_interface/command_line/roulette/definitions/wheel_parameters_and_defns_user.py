@@ -18,20 +18,20 @@ USER_WHEEL_TYPES = TypeVar(name="USER_WHEEL_TYPES", bound=RouletteWheelUser)
 euro_wheel_colour_ids = {'R': 'red', 'B': 'black'}  # TODO update to use Colours
 euro_wheel_colour_options_text = "[R]ed, [B]lack"
 
-euro_wheel_user = RouletteWheelUser(wheel_name=WheelParameters.EUROWHEEL.wheel_name,
-                                    wheel_id=WheelParameters.EUROWHEEL.wheel_id,
-                                    slots=WheelParameters.EUROWHEEL.slots,
-                                    bias_colour=WheelParameters.EUROWHEEL.bias_colour,
+euro_wheel_user = RouletteWheelUser(wheel_name=WheelParameters.EUROWHEEL.value.wheel_name,
+                                    wheel_id=WheelParameters.EUROWHEEL.value.wheel_id,
+                                    slots=WheelParameters.EUROWHEEL.value.slots,
+                                    bias_colour=WheelParameters.EUROWHEEL.value.bias_colour,
                                     colour_ids=euro_wheel_colour_ids,
                                     colour_options=euro_wheel_colour_options_text)
 
 american_wheel_colour_ids = {'R': 'red', 'B': 'black'}  # TODO update to use Colours
 american_wheel_colour_options_text = "[R]ed, [B]lack"
 
-american_wheel_user = RouletteWheelUser(wheel_name=WheelParameters.AMERICANWHEEL.wheel_name,
-                                        wheel_id=WheelParameters.AMERICANWHEEL.wheel_id,
-                                        slots=WheelParameters.AMERICANWHEEL.slots,
-                                        bias_colour=WheelParameters.AMERICANWHEEL.bias_colour,
+american_wheel_user = RouletteWheelUser(wheel_name=WheelParameters.AMERICANWHEEL.value.wheel_name,
+                                        wheel_id=WheelParameters.AMERICANWHEEL.value.wheel_id,
+                                        slots=WheelParameters.AMERICANWHEEL.value.slots,
+                                        bias_colour=WheelParameters.AMERICANWHEEL.value.bias_colour,
                                         colour_ids=euro_wheel_colour_ids,
                                         colour_options=euro_wheel_colour_options_text)
 
@@ -42,6 +42,8 @@ american_wheel_user = RouletteWheelUser(wheel_name=WheelParameters.AMERICANWHEEL
 class WheelOptionsUser(Enum):
     EUROWHEEL = euro_wheel_user
     AMERICANWHEEL = american_wheel_user
+
+wheel_options_text = "[E]uropean, [A]merican"
 
 ##########
 # Create subclass of the RouletteWheelUser class for each defined wheel

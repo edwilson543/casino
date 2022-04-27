@@ -4,7 +4,7 @@ from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.definitions.game_parameters import min_pot_to_add_more_bets
 from games.roulette.definitions.bet_parameters import BetTypeIds, BetParameters
 
-from user_interface.command_line.roulette.definitions.wheel_defns_user import wheel_options_user
+from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import wheel_options_user
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
 from user_interface.command_line.roulette.definitions.navigation_defns import post_spin_navigation_dict
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.wheel_and_bet_type_selection_user import \
@@ -12,7 +12,7 @@ from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.wh
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
     RouletteContinuationUser
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
-from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
+from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import USER_WHEEL_TYPES
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import bet_cats_and_types, \
     bet_cat_options_text, bet_type_options_text
 

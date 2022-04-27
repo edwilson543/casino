@@ -1,5 +1,5 @@
 from games.roulette.definitions.bet_type_defns import ColoursBet
-from games.roulette.definitions.wheel_defns import EuroWheel
+from games.roulette.definitions.wheel_parameters_and_defns import EuroWheel
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.definitions.bet_parameters import BetParameters
 

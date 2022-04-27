@@ -1,7 +1,7 @@
 """To define a new bet, first go to roulette->definitions->bet_type_defns"""
 from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
 from user_interface.command_line.roulette.app.roulette_bet_base_class_user import RouletteBetUser
-from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
+from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import USER_WHEEL_TYPES
 from typing import Union, TypeVar
 from enum import Enum
 
@@ -83,7 +83,7 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
 
 
 ##########
-# Add the newly defined user bet class to the BetTypeOptionsUser class below
+# Enum for storing all the bet classes
 ##########
 class BetTypeOptionsUser(Enum):
     COLOURSBET = ColoursBetUser()

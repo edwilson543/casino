@@ -1,4 +1,4 @@
-from games.roulette.definitions.wheel_defns import EuroWheel
+from games.roulette.definitions.wheel_parameters_and_defns import EuroWheel
 from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
 import pytest
 

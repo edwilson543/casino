@@ -1,4 +1,4 @@
-from games.roulette.definitions.wheel_defns import wheel_options
+from games.roulette.definitions.wheel_parameters_and_defns import wheel_options
 
 euro_wheel = wheel_options['E']
 
