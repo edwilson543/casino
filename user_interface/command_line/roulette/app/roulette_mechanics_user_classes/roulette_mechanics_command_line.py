@@ -2,6 +2,7 @@ from games.games_base_classes import Player
 from games.roulette.app.roulette_mechanics_action_classes.roulette_mechanics import RouletteGame
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.definitions.game_parameters import min_pot_to_add_more_bets
+from games.roulette.definitions.bet_parameters import BetTypeIds, BetParameters
 
 from user_interface.command_line.roulette.definitions.wheel_defns_user import wheel_options_user
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
@@ -12,6 +13,9 @@ from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.ro
     RouletteContinuationUser
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
 from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
+from user_interface.command_line.roulette.definitions.bet_type_defns_user import bet_cats_and_types, \
+    bet_cat_options_text, bet_type_options_text
+
 
 import sys
 
@@ -90,6 +94,13 @@ class RouletteGameUser(RouletteGame):
             self.active_player.add_top_up_to_pot(amount=top_up)
             self.navigation_id = game_continuation.choose_navigation(active_player=self.active_player)
 
+    ##########
+    # Tier 2 Methods called in roulette_loop
+    ##########
+
+    def set_playing_wheel(self):
+        pass
+
     def set_all_active_bets_list(self, wheel_bet_selector: WheelAndBetTypeSelectorUser):
         """
         Method to repeatedly allow users to define bets and add them to the current spin.
@@ -120,7 +131,7 @@ class RouletteGameUser(RouletteGame):
             print("Better luck next time, none of your bets won.")
 
     ##########
-    # Lower level methods called in multi_bet_selection loop
+    # Tier 3 methods called in set_all_active_bets_list
     ##########
 
     def get_individual_bet(self, wheel_bet_selector: WheelAndBetTypeSelectorUser) -> USER_BET_TYPES:
@@ -196,3 +207,37 @@ class RouletteGameUser(RouletteGame):
                 return False
             else:
                 print("Invalid command, please try again")
+
+    ##########
+    # Methods called in get individual bet
+    ##########
+    def choose_bet(self, wheel_id: str) -> USER_BET_TYPES:
+        """
+        Method that navigates the user to choose their bet, by applying the choose_playing_wheel,
+        choose_bet_category and then the choose_bet_type methods below.
+        """
+        bet_cat = self.choose_bet_category(wheel_id=wheel_id)
+        bet_type = self.choose_bet_type(wheel_id=wheel_id, bet_cat=bet_cat)
+        return bet_type
+
+    # Lowest level methods called during the choose_bet method
+    @staticmethod
+    def choose_bet_category(wheel_id: str) -> str:
+        text = BetParameters
+        while True:
+            bet_cat = input("What category of bet would you like to place?"
+                            f"\n{bet_cat_options_text[wheel_id]}\n--->").upper()
+            if bet_cat in list(bet_cats_and_types[wheel_id].keys()):
+                return bet_cat
+            else:
+                print("Not a valid bet category, try again")
+
+    def choose_bet_type(self, wheel_id: str, bet_cat: str) -> USER_BET_TYPES:
+        while True:
+            bet_type_id = input("What type of bet would you like to place?"
+                                f"\n{bet_type_options_text[wheel_id][bet_cat]}\n--->").upper()
+            if bet_type_id in bet_cats_and_types[wheel_id][bet_cat]:
+                bet_type = self.get_bet_type_from_bet_type_id(bet_type_id)
+                return bet_type
+            else:
+                print("Not a valid bet type, try again")

@@ -1,6 +1,8 @@
 from games.games_base_classes import Player
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
+from games.roulette.definitions.bet_type_defns import BET_TYPES
 from games.roulette.definitions.wheel_defns import WHEEL_TYPES
+from games.roulette.definitions.bet_parameters import BetTypeIds
 
 
 class RouletteGame:
@@ -21,6 +23,21 @@ class RouletteGame:
         self.active_spin_outcome = active_spin_outcome
         self.active_bet_win_count = active_bet_win_count
         self.active_total_winnings = active_total_winnings
+
+    @staticmethod
+    def get_bet_type_from_bet_type_id(bet_type_id: str, bet_type_look_up) -> BET_TYPES:
+        """
+        Method to take the bet_type_id and return a live bet object (subclass).
+        Parameters: bet_type_id - string, e.g. 'C' which represents ColoursBet subclass of Bet
+        Returns: A subclass of Bet which is a fully defined bet class (i.e. includes bet placing).
+        """
+        try:
+            bet_type_name = BetTypeIds(bet_type_id).name
+            bet_type = getattr(bet_type_look_up, bet_type_name).value
+            return bet_type
+        except ValueError:
+            raise NameError(f"User has been allowed to pass invalid bet type id:"
+                            f" {bet_type_id} to {bet_type_look_up}.")
 
     def evaluate_all_active_bets_list(self):
         """Method to evaluate each active bet in the list"""

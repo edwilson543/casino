@@ -18,7 +18,7 @@ class WheelAndBetTypeSelector:
         """
         Method to take the wheel_id and return a live wheel object (subclass).
         Parameters: wheel_id - this is a string, e.g. 'E' in the case of the european wheel.
-        Returns: a subclass of RouletteWheel, which has all the instance attributes defined (e.g. Euro_wheel().
+        Returns: a subclass of RouletteWheel, which has all the instance attributes defined (e.g. Euro_wheel()).
         """
         if wheel_id in self.wheel_look_up:
             wheel = self.wheel_look_up[wheel_id]
