@@ -11,7 +11,6 @@ is used as a polymorphic method
 """
 from games.roulette.app.roulette_bet_base_class import RouletteBet
 from games.roulette.definitions.wheel_defns import WHEEL_TYPES
-from games.roulette.definitions.bet_parameters import BetTypeIds
 from typing import Union, TypeVar
 
 ##########
@@ -27,16 +26,18 @@ class ColoursBet(RouletteBet):
     """Class for defining the win criteria of a colours bet."""
 
     def __init__(self,
+                 bet_type: str = "ColoursBet",
+                 bet_type_id: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
-                 bet_type_id: str = BetTypeIds.ColoursBet,
                  stake: int = None,
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
-        super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
-                         win_criteria, payout, playing_wheel)
+
+        super().__init__(bet_type,  bet_type_id, min_bet, max_bet, stake,
+                         bet_choice, win_criteria, payout, playing_wheel)
 
     def determine_win_criteria(self) -> list[int]:
         """
@@ -56,16 +57,17 @@ class StraightUpBet(RouletteBet):
     """Class for defining the win criteria for a straight up bet"""
 
     def __init__(self,
+                 bet_type: str = "StraightUpBet",
+                 bet_type_id: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
-                 bet_type_id: str = BetTypeIds.StraightUpBet,
                  stake: int = None,
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
-        super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
-                         win_criteria, payout, playing_wheel)
+        super().__init__(bet_type,  bet_type_id, min_bet, max_bet, stake,
+                         bet_choice, win_criteria, payout, playing_wheel)
 
     def determine_win_criteria(self) -> list[int]:
         """Returns: the bet_choice as a list (which for a colours bet will be an int).
@@ -78,11 +80,14 @@ class StraightUpBet(RouletteBet):
 
 
 ##########
-# Add the newly defined bet class to the bet_type_options dictionary below
+# Add the newly defined user bet class to the BetTypeOptions class below
 ##########
-bet_type_options = {'C': ColoursBet(), 'S': StraightUpBet()}
-
-
 class BetTypeOptions:
     C = ColoursBet()
     S = StraightUpBet()
+
+#  TODO how do we make the keys dynamically defined so the ids don't need updating here?
+
+from games.roulette.definitions.bet_parameters import BetTypeIds
+a = {BetTypeIds.ColoursBet.value: ColoursBet()}
+

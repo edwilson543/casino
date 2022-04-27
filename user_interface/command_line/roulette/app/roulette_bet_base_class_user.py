@@ -8,15 +8,16 @@ from abc import abstractmethod
 # Do we want player funds as an attribute or as a parameter?
 class RouletteBetUser(RouletteBet):
     def __init__(self,
+                 bet_type: str,
+                 bet_type_id: str,
                  min_bet: int,
                  max_bet: int,
-                 bet_type_id: str,
                  stake: int,
                  bet_choice: Union[int, str, list],
                  win_criteria: list[int],
                  payout: int,
                  playing_wheel: USER_WHEEL_TYPES):
-        super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
+        super().__init__(bet_type, bet_type_id, min_bet, max_bet, stake, bet_choice,
                          win_criteria, payout, playing_wheel)
 
     @abstractmethod

@@ -1,7 +1,7 @@
 from games.games_base_classes import Bet
 from games.roulette.definitions.wheel_defns import WHEEL_TYPES
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
-from games.roulette.definitions.bet_parameters import BetParameters
+from games.roulette.definitions.bet_parameters import BetParameters, BetTypeIds
 
 from math import floor
 from typing import Union
@@ -17,16 +17,22 @@ class RouletteBet(Bet):
     """
 
     def __init__(self,
+                 bet_type: str,
+                 bet_type_id: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
-                 bet_type_id: str = None,
                  stake: int = None,
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
-        super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice, win_criteria, payout)
+        super().__init__(bet_type, bet_type_id, min_bet, max_bet, stake, bet_choice, win_criteria, payout)
         self.playing_wheel = playing_wheel
+
+    def set_bet_type_id(self):
+        bet_type = self.bet_type
+        bet_type_id = getattr(BetTypeIds, bet_type).value  # want Enum value not the enum
+        self.bet_type_id = bet_type_id
 
     def set_playing_wheel(self, wheel):
         """Method to set the playing_wheel attribute of the bet"""
@@ -39,10 +45,10 @@ class RouletteBet(Bet):
         Note this method will only work on subclasses of this class, whose name corresponds to the underlying data,
         once the wheel has already been set
         """
-        bet_data = getattr(BetParameters, self.bet_type_id)  # class with bet data+ hierarchy of wheel specific bet data
-        wheel_specific_bet_data = getattr(bet_data, self.playing_wheel.wheel_id)
-        min_bet = wheel_specific_bet_data.min_bet
-        max_bet = wheel_specific_bet_data.max_bet
+        wheel_bet_data = getattr(BetParameters, self.playing_wheel.wheel_id)
+        bet_data = getattr(wheel_bet_data, self.bet_type)
+        min_bet = bet_data.min_bet
+        max_bet = bet_data.max_bet
         self.set_min_bet(amount=min_bet)
         self.set_max_bet(amount=max_bet)
 
