@@ -33,6 +33,7 @@ class FullDefinitionOfWheelBets:
 euro_wheel_bet_cats = BetCatTypeOptions(options=['I', 'O'], options_text="[I]nside, [O]utside")
 euro_wheel_inside_bet_types = BetCatTypeOptions(options=['S'], options_text="[S]traight up")
 euro_wheel_outside_bet_types = BetCatTypeOptions(options=['C'], options_text="[C]olours")
+
 euro_wheel_colours_bet_parameters = IndividualBetParameters(min_bet=5, max_bet=50)
 euro_wheel_straight_up_bet_parameters = IndividualBetParameters(min_bet=2, max_bet=20)
 
@@ -46,6 +47,7 @@ euro_wheel_full_definition = FullDefinitionOfWheelBets(
 american_wheel_bet_cats = BetCatTypeOptions(options=['I', 'O'], options_text="[I]nside, [O]utside")
 american_wheel_inside_bet_types = BetCatTypeOptions(options=['S'], options_text="[S]traight up")
 american_wheel_outside_bet_types = BetCatTypeOptions(options=['C'], options_text="[C]olours")
+
 american_wheel_colours_bet_parameters = IndividualBetParameters(min_bet=5, max_bet=50)
 american_wheel_straight_up_bet_parameters = IndividualBetParameters(min_bet=2, max_bet=20)
 
