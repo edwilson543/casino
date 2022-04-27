@@ -26,7 +26,7 @@ class ColoursBet(RouletteBet):
     """Class for defining the win criteria of a colours bet."""
 
     def __init__(self,
-                 bet_type: str = "ColoursBet",
+                 bet_type: str = "COLOURSBET",
                  bet_type_id: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
@@ -57,7 +57,7 @@ class StraightUpBet(RouletteBet):
     """Class for defining the win criteria for a straight up bet"""
 
     def __init__(self,
-                 bet_type: str = "StraightUpBet",
+                 bet_type: str = "STRAIGHTUPBET",
                  bet_type_id: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
@@ -81,13 +81,8 @@ class StraightUpBet(RouletteBet):
 
 ##########
 # Add the newly defined user bet class to the BetTypeOptions class below
+# Note this currently is not linked anywhere
 ##########
 class BetTypeOptions:
-    C = ColoursBet()
-    S = StraightUpBet()
-
-#  TODO how do we make the keys dynamically defined so the ids don't need updating here?
-
-from games.roulette.definitions.bet_parameters import BetTypeIds
-a = {BetTypeIds.ColoursBet.value: ColoursBet()}
-
+    COLOURSBET = ColoursBet()
+    STRAIGHTUPBET = StraightUpBet()

@@ -3,8 +3,8 @@ from dataclasses import dataclass
 
 
 class BetTypeIds(str, Enum):
-    ColoursBet = 'C'
-    StraightUpBet = 'S'
+    COLOURSBET = 'C'
+    STRAIGHTUPBET = 'S'
 
 
 @dataclass(frozen=True)
@@ -26,20 +26,20 @@ class BetParameters:
 
     class E:  # EuroWheel
 
-        class ColoursBet:
+        class COLOURSBET:
             min_bet = 5
             max_bet = 50
 
-        class StraightUpBet:
+        class STRAIGHTUPBET:
             min_bet = 2
             max_bet = 20
 
     class A:  # AmericanWheel
 
-        class ColoursBet:
+        class COLOURSBET:
             min_bet = 5
             max_bet = 50
 
-        class StraightUpBet:
+        class STRAIGHTUPBET:
             min_bet = 2
             max_bet = 20

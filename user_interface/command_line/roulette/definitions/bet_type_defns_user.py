@@ -19,7 +19,7 @@ USER_BET_TYPES = TypeVar(name="USER_BET_TYPES", bound=RouletteBetUser)
 ##########
 class ColoursBetUser(RouletteBetUser, ColoursBet):
     def __init__(self,
-                 bet_type: str = "StraightUpBet",
+                 bet_type: str = "COLOURSBET",
                  bet_type_id: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
@@ -50,7 +50,7 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
     """Class for defining win criteria and payout for a straight-up bet"""
 
     def __init__(self,
-                 bet_type: str = "StraightUpBet",
+                 bet_type: str = "STRAIGHTUPBET",
                  bet_type_id: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
@@ -86,8 +86,8 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
 # Add the newly defined user bet class to the BetTypeOptionsUser class below
 ##########
 class BetTypeOptionsUser(Enum):
-    ColoursBet = ColoursBetUser()
-    StraightUpBet = StraightUpBetUser()
+    COLOURSBET = ColoursBetUser()
+    STRAIGHTUPBET = StraightUpBetUser()
 
 
 # Navigation parameters # todo move these to the navigation parameters UI???
@@ -99,5 +99,3 @@ bet_cats_and_types = {'E': {'O': ['C'], 'I': ['S']}, 'A': {'O': ['C'], 'I': ['S'
 # Define the text strings to display for each wheel, once the bet category is selected
 bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight up"},
                          'A': {'O': "[C]olours", 'I': "[S]traight up"}}
-
-print(type(BetTypeOptionsUser.ColoursBet.value))
