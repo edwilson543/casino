@@ -9,7 +9,7 @@ from dataclasses import dataclass, fields, Field
 from typing import Tuple
 
 
-#  todo how to avoid repeatedly writing "Colours Bet" in enum NAMES/ dataclass Fields?
+#  todo how to avoid repeatedly writing "COLOURS_BET" in enum NAMES/ dataclass Fields?
 ##########
 # GLOBAL parameters of each bet type - name, id and command line prompts
 ##########
