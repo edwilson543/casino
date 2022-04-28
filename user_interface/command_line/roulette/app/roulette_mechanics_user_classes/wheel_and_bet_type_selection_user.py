@@ -6,7 +6,7 @@ from user_interface.command_line.roulette.definitions.bet_type_defns_user import
 from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import USER_WHEEL_TYPES
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
 from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import WheelOptionsUser
-from games.roulette.definitions.bet_parameters import BetParameters
+from games.roulette.definitions.bet_parameters import WheelBetParameters
 
 class WheelAndBetTypeSelectorUser(WheelAndBetTypeSelector):
     """class to allow users to select the type of bet to place
@@ -48,7 +48,7 @@ class WheelAndBetTypeSelectorUser(WheelAndBetTypeSelector):
                 print("Not a valid bet category, try again")
 
     def choose_bet_type(self, wheel_name: str, bet_cat: str) -> USER_BET_TYPES:
-        bet_type_text = getattr(getattr(getattr(BetParameters, wheel_name), bet_cat), bet_cat_options_text)
+        bet_type_text = getattr(getattr(getattr(WheelBetParameters, wheel_name), bet_cat), bet_cat_options_text)
         while True:
             bet_type_id = input("What type of bet would you like to place?"
                                 f"\n{bet_type_options_text[wheel_name][bet_cat]}\n--->").upper()
