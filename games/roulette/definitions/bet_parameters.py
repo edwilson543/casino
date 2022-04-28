@@ -10,20 +10,6 @@ from dataclasses import dataclass
 ##########
 # GLOBAL parameters of each bet type
 ##########
-class BetType:
-    def __init__(self,
-                 COLOURSBET,
-                 STRAIGHTUPBET,
-                 NEWBET=None):
-        self.COLOURSBET = COLOURSBET
-        self.STRAIGHTUPBET = STRAIGHTUPBET
-        self.NEWBET = NEWBET
-
-BetTypeId = BetType(COLOURSBET="C",
-                    STRAIGHTUPBET="S",
-                    NEWBET=None)
-
-
 class BetTypeIds(str, Enum):
     """
     Class specifying the ID of each bet type
@@ -32,6 +18,31 @@ class BetTypeIds(str, Enum):
     COLOURSBET = "C"
     STRAIGHTUPBET = "S"
     NEWBET = None
+
+# default_colours_bet = RouletteBetData(XYZ) - defined using BetTypeIds
+# default_straight_up = StraightUpBetData(XYZ) - defined using BetTypeIds
+
+# @dataclass
+# WheelBetData:
+#   COLOURSBET = colours_bet
+#   STRAIGHTUPBET = straight_up_bet
+
+# default_wheel_bet_data = RouletteBetData(COLOURSBET=colours_bet)
+
+# @dataclass
+# class WheelBetParameters:
+#   EUROWHEEL = default_wheel_bet_data
+#   AMERICANWHEEL = default_wheel_bet_data
+
+
+
+@dataclass()
+class RouletteBetData:
+     bet_type: str
+     bet_type_id: str
+     min_bet: int
+     max_bet: int
+     prompt: str
 
 
 class BetTypeNames(str, Enum):

@@ -17,7 +17,7 @@ class RouletteBet(Bet):
     """
 
     def __init__(self,
-                 bet_type: str,
+                 bet_type: str,  # TODO define bet type/ betype id outside of this
                  bet_type_id: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
