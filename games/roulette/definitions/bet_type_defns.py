@@ -42,7 +42,7 @@ class ColoursBet(RouletteBet):
                     self.playing_wheel.slots[slot_num] == self.bet_choice]
         else:
             raise ValueError(f"{self.bet_choice} is not a permitted colours bet on the "
-                             f"{self.playing_wheel.wheel_id} roulette wheel")
+                             f"{self.playing_wheel.wheel_name} roulette wheel")
 
 
 class StraightUpBet(RouletteBet):
@@ -67,7 +67,7 @@ class StraightUpBet(RouletteBet):
         if bet_choice in self.playing_wheel.slots:
             return [bet_choice]
         else:
-            raise ValueError(f"{self.bet_choice} is not a slot on the {self.playing_wheel.wheel_id} roulette wheel")
+            raise ValueError(f"{self.bet_choice} is not a slot on the {self.playing_wheel.wheel_name} roulette wheel")
 
 
 ##########

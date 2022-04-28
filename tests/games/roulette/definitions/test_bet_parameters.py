@@ -11,9 +11,3 @@ class TestIndividualWheelMinMaxBetParameters:
         actual_prompt = test_wheel_parameters.construct_wheel_bet_options_prompt()
         assert expected_prompt == actual_prompt
 
-    def test_get_wheel_bet_type_ids(self):
-        expected_set = {"C", "S"}  # Note that order is not important here
-        actual_list = test_wheel_parameters.get_wheel_bet_type_ids()
-        actual_set = set(actual_list)
-        assert expected_set == actual_set
-
