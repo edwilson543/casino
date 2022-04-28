@@ -2,10 +2,10 @@ from games.roulette.app.roulette_wheel_base_class import RouletteWheel, wheel_sp
 from games.roulette.definitions.game_parameters import pause_durations
 from time import sleep
 
+
 class RouletteWheelUser(RouletteWheel):
     def __init__(self,
                  wheel_name: str,
-                 wheel_id: str,
                  slots: dict,
                  bias_colour: str,
                  colour_ids: dict,
@@ -15,7 +15,7 @@ class RouletteWheelUser(RouletteWheel):
         colour_ids: a mapping of colour id (e.g. 'R') to each colour (e.g. 'red')
         colour_options: a string used to get user input on what colour they'd like to bet on
         """
-        super().__init__(wheel_name, wheel_id, slots, bias_colour)
+        super().__init__(wheel_name, slots, bias_colour)
         self.colour_ids = colour_ids
         self.colour_options = colour_options
 
@@ -51,4 +51,3 @@ class RouletteWheelUser(RouletteWheel):
                 sleep(pause_durations['medium'])
                 print(f"Ball has landed on {spin_outcome.number_return}, ({spin_outcome.colour_return})!")
                 return spin_outcome
-

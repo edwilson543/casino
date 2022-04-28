@@ -9,6 +9,7 @@ from dataclasses import dataclass, fields, Field
 from typing import Tuple
 
 
+#  todo how to avoid repeatedly writing "Colours Bet" in enum NAMES/ dataclass Fields?
 ##########
 # GLOBAL parameters of each bet type - name, id and command line prompts
 ##########
@@ -51,17 +52,7 @@ default_new_bet = MinMaxBetParameters(min_bet=0, max_bet=0)
 class IndividualWheelMinMaxBetParameters:
     COLOURS_BET: MinMaxBetParameters = default_colours_bet
     STRAIGHTUP_BET: MinMaxBetParameters = default_straight_up_bet
-
     # new bet goes here but will raise an error if included in the prompt
-
-    def get_wheel_bet_type_ids(self) -> list[str]:
-        """Method to return a list of bet types valid on the wheel (listed by their IDs)"""
-        bet_types_tuple = fields(self.__class__)  # creates a tuple of the data class fields
-        bet_type_ids_list = []
-        for bet_type in bet_types_tuple:
-            bet_type_id = getattr(BetTypeIds, bet_type.name).value
-            bet_type_ids_list.append(bet_type_id)
-        return bet_type_ids_list
 
     def construct_wheel_bet_options_prompt(self) -> str:
         """Method to construct a command line prompt specific to the wheel, of the bet type options on that wheel"""
@@ -83,9 +74,6 @@ default_wheel_min_max_bet_data = IndividualWheelMinMaxBetParameters()
 
 @dataclass(frozen=True)
 class WheelMinMaxBetParameters:
-    EUROWHEEL = default_wheel_min_max_bet_data
-    AMERICANWHEEL = default_wheel_min_max_bet_data
+    EURO_WHEEL = default_wheel_min_max_bet_data
+    AMERICAN_WHEEL = default_wheel_min_max_bet_data
     NEW_WHEEL = None
-
-print(default_wheel_min_max_bet_data)
-print(default_wheel_min_max_bet_data.construct_wheel_bet_options_prompt())

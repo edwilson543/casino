@@ -11,7 +11,6 @@ class RouletteWheel:
 
     def __init__(self,
                  wheel_name: str,
-                 wheel_id: str,
                  slots: dict,
                  bias_colour: str):
         """
@@ -23,7 +22,6 @@ class RouletteWheel:
         wheel and one slot is green, then stakes are calculated from probabilities as 1/(x/36).
         """
         self.wheel_name = wheel_name
-        self.wheel_id = wheel_id
         self.slots = slots
         self.bias_colour = bias_colour
 

@@ -1,17 +1,11 @@
 """
-To define a new bet type and category complete the following steps:
-1) Think how to store all parameters, and make wheel relevant
-2) Create a subclass of RouletteBet base class (below) to define each bet's 'determine_win_criteria' method, which
-is used as a polymorphic method
-3) Add the subclass to the bet_type_options below
-4) Go to command_line -> roulette -> definitions -> bet_type_defns_user
-5) Add the new bet to bet_cat_options_text, bet_cats_and_types, bet_type_options_text where relevant
-6) Define a subclass of the class defined at 3), to define the UI polymorphic method 'get_user_bet_choice'
-7) Add the newly defined user bet class to the bet_type_options_user dictionary
+To define a new bet type complete the following steps:
 """
 from games.roulette.app.roulette_bet_base_class import RouletteBet
 from games.roulette.definitions.wheel_parameters_and_defns import WHEEL_TYPES
+from games.roulette.definitions.bet_parameters import BetTypeIds
 from typing import Union, TypeVar
+from enum import Enum
 
 ##########
 # Typevar to be used when referencing bets in type hints throughout game
@@ -26,8 +20,6 @@ class ColoursBet(RouletteBet):
     """Class for defining the win criteria of a colours bet."""
 
     def __init__(self,
-                 bet_type: str = "COLOURSBET",
-                 bet_type_id: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
                  stake: int = None,
@@ -35,8 +27,8 @@ class ColoursBet(RouletteBet):
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
-
-        super().__init__(bet_type,  bet_type_id, min_bet, max_bet, stake,
+        bet_type = BetTypeIds.COLOURS_BET.name
+        super().__init__(bet_type, min_bet, max_bet, stake,
                          bet_choice, win_criteria, payout, playing_wheel)
 
     def determine_win_criteria(self) -> list[int]:
@@ -57,8 +49,6 @@ class StraightUpBet(RouletteBet):
     """Class for defining the win criteria for a straight up bet"""
 
     def __init__(self,
-                 bet_type: str = "STRAIGHTUPBET",
-                 bet_type_id: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
                  stake: int = None,
@@ -66,7 +56,8 @@ class StraightUpBet(RouletteBet):
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
-        super().__init__(bet_type,  bet_type_id, min_bet, max_bet, stake,
+        bet_type = BetTypeIds.STRAIGHTUP_BET.name
+        super().__init__(bet_type, min_bet, max_bet, stake,
                          bet_choice, win_criteria, payout, playing_wheel)
 
     def determine_win_criteria(self) -> list[int]:
@@ -80,9 +71,8 @@ class StraightUpBet(RouletteBet):
 
 
 ##########
-# Add the newly defined user bet class to the BetTypeOptions class below
-# Note this currently is not linked anywhere
+# Add the newly defined user bet class to the BetTypeOptions Enum below
 ##########
-class BetTypeOptions:
-    COLOURSBET = ColoursBet()
-    STRAIGHTUPBET = StraightUpBet()
+class BetTypeOptions(Enum):
+    COLOURS_BET = ColoursBet()
+    STRAIGHTUP_BET = StraightUpBet()

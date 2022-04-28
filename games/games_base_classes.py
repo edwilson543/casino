@@ -123,7 +123,6 @@ class Player:
 class Bet:
     def __init__(self,
                  bet_type: str,
-                 bet_type_id: str,
                  min_bet: int,
                  max_bet: int,
                  stake: int,
@@ -131,7 +130,6 @@ class Bet:
                  win_criteria: Any,
                  payout: int):
         self.bet_type = bet_type
-        self.bet_type_id = bet_type_id
         self.min_bet = min_bet
         self.max_bet = max_bet
         self.stake = stake

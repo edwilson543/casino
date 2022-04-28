@@ -2,10 +2,6 @@ from games.games_base_classes import Player
 from games.roulette.app.roulette_mechanics_action_classes.roulette_mechanics import RouletteGame
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.definitions.game_parameters import min_pot_to_add_more_bets
-from games.roulette.definitions.bet_parameters import BetTypeIds, WheelBetParameters
-
-from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import wheel_options_user
-from user_interface.command_line.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
 from user_interface.command_line.roulette.definitions.navigation_defns import post_spin_navigation_dict
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.wheel_and_bet_type_selection_user import \
     WheelAndBetTypeSelectorUser
@@ -13,9 +9,6 @@ from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.ro
     RouletteContinuationUser
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
 from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import USER_WHEEL_TYPES
-from user_interface.command_line.roulette.definitions.bet_type_defns_user import bet_cats_and_types, \
-    bet_cat_options_text, bet_type_options_text
-
 
 import sys
 
@@ -35,7 +28,6 @@ class RouletteGameUser(RouletteGame):
 
     def __init__(self,
                  active_player: Player = None,
-                 active_wheel_id: str = None,
                  active_wheel: USER_WHEEL_TYPES = None,
                  active_all_bets_list: list = None,
                  active_total_stake: int = 0,
@@ -43,7 +35,7 @@ class RouletteGameUser(RouletteGame):
                  active_bet_win_count: int = 0,
                  active_total_winnings: int = 0,
                  navigation_id: str = 'W'):
-        super().__init__(active_player, active_wheel_id, active_wheel, active_all_bets_list, active_total_stake,
+        super().__init__(active_player, active_wheel, active_all_bets_list, active_total_stake,
                          active_spin_outcome, active_bet_win_count, active_total_winnings)
         self.navigation_id = navigation_id
 
@@ -52,14 +44,13 @@ class RouletteGameUser(RouletteGame):
 
         while True:
 
-            wheel_bet_selector = WheelAndBetTypeSelectorUser(wheel_look_up=wheel_options_user,
-                                                             bet_type_look_up=BetTypeOptionsUser)
+            wheel_bet_selector = WheelAndBetTypeSelectorUser()
             ##########
             # Wheel selection
             ##########
             if self.navigation_id in post_spin_navigation_dict['from_wheel_selection']:
                 """i.e. if user chose to change wheel after their bet, or this is the first loop."""
-                self.active_wheel_id, self.active_wheel = wheel_bet_selector.choose_playing_wheel()
+                self.active_wheel = wheel_bet_selector.choose_playing_wheel()
 
             ##########
             # Individual bet selection and accumulation
@@ -155,9 +146,8 @@ class RouletteGameUser(RouletteGame):
             ##########
             # 1 Choose bet type
             ##########
-            potential_bet: USER_BET_TYPES = wheel_bet_selector.choose_bet(wheel_id=self.active_wheel_id)
+            potential_bet: USER_BET_TYPES = wheel_bet_selector.choose_bet_type(wheel_name=self.active_wheel.wheel_name)
             potential_bet.set_playing_wheel(wheel=self.active_wheel)
-            potential_bet.set_bet_type_id()
             potential_bet.set_min_max_bet()
 
             ##########
@@ -207,37 +197,3 @@ class RouletteGameUser(RouletteGame):
                 return False
             else:
                 print("Invalid command, please try again")
-
-    ##########
-    # Methods called in get individual bet
-    ##########
-    def choose_bet(self, wheel_id: str) -> USER_BET_TYPES:
-        """
-        Method that navigates the user to choose their bet, by applying the choose_playing_wheel,
-        choose_bet_category and then the choose_bet_type methods below.
-        """
-        bet_cat = self.choose_bet_category(wheel_id=wheel_id)
-        bet_type = self.choose_bet_type(wheel_id=wheel_id, bet_cat=bet_cat)
-        return bet_type
-
-    # Lowest level methods called during the choose_bet method
-    @staticmethod
-    def choose_bet_category(wheel_id: str) -> str:
-        text = WheelBetParameters
-        while True:
-            bet_cat = input("What category of bet would you like to place?"
-                            f"\n{bet_cat_options_text[wheel_id]}\n--->").upper()
-            if bet_cat in list(bet_cats_and_types[wheel_id].keys()):
-                return bet_cat
-            else:
-                print("Not a valid bet category, try again")
-
-    def choose_bet_type(self, wheel_id: str, bet_cat: str) -> USER_BET_TYPES:
-        while True:
-            bet_type_id = input("What type of bet would you like to place?"
-                                f"\n{bet_type_options_text[wheel_id][bet_cat]}\n--->").upper()
-            if bet_type_id in bet_cats_and_types[wheel_id][bet_cat]:
-                bet_type = self.get_bet_type_from_bet_type_id(bet_type_id)
-                return bet_type
-            else:
-                print("Not a valid bet type, try again")

@@ -4,6 +4,7 @@ from games.roulette.definitions.wheel_parameters_and_defns import WHEEL_TYPES
 from games.roulette.definitions.wheel_parameters_and_defns import WheelIds
 from games.roulette.definitions.bet_parameters import BetTypeIds
 
+
 # TODO what type hint should be used for the look up? it's an enum of bet/wheel objects
 class WheelAndBetTypeSelector:
     """Class to look up wheel and bet objects based on their ids, and also to determine all in status"""
@@ -20,9 +21,11 @@ class WheelAndBetTypeSelector:
             wheel_name = WheelIds(wheel_id).name
             wheel = getattr(wheel_look_up, wheel_name).value
             return wheel
-        except AttributeError:
-            raise AttributeError(f"User has been allowed to pass invalid wheel id:"
-                                 f" {wheel_id} to {wheel_look_up}.")
+        except ValueError:
+            raise ValueError(f"User has been allowed to pass invalid wheel id:"
+                                 f" {wheel_id} to {wheel_look_up}, in method"
+                                 f"'get_wheel_from_wheel_id")
+
     @staticmethod
     def get_bet_type_from_bet_type_id(bet_type_id: str, bet_type_look_up) -> BET_TYPES:
         """
@@ -35,6 +38,6 @@ class WheelAndBetTypeSelector:
             bet_type_name = BetTypeIds(bet_type_id).name
             bet_type = getattr(bet_type_look_up, bet_type_name).value
             return bet_type
-        except AttributeError:
-            raise AttributeError(f"User has been allowed to pass invalid bet type id:"
+        except ValueError:
+            raise ValueError(f"User has been allowed to pass invalid bet type id:"
                                  f" {bet_type_id} to {bet_type_look_up}.")

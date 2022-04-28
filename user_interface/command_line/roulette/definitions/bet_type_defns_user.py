@@ -1,11 +1,11 @@
 """To define a new bet, first go to roulette->definitions->bet_type_defns"""
 from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
+from games.roulette.definitions.bet_parameters import BetTypeIds
 from user_interface.command_line.roulette.app.roulette_bet_base_class_user import RouletteBetUser
 from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import USER_WHEEL_TYPES
 from typing import Union, TypeVar
 from enum import Enum
 
-#  TODO we probably don't need the user_wheel_types? Can just use wheel types?
 
 ##########
 # Typevar to be used when referencing user bets in type hints throughout game
@@ -19,8 +19,6 @@ USER_BET_TYPES = TypeVar(name="USER_BET_TYPES", bound=RouletteBetUser)
 ##########
 class ColoursBetUser(RouletteBetUser, ColoursBet):
     def __init__(self,
-                 bet_type: str = "COLOURSBET",
-                 bet_type_id: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
                  stake: int = None,
@@ -28,7 +26,8 @@ class ColoursBetUser(RouletteBetUser, ColoursBet):
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: USER_WHEEL_TYPES = None):
-        super().__init__(bet_type, bet_type_id, min_bet, max_bet, stake,
+        bet_type: str = BetTypeIds.COLOURS_BET.name
+        super(ColoursBet, self).__init__(bet_type, min_bet, max_bet, stake,
                          bet_choice, win_criteria, payout, playing_wheel)
 
     def get_user_bet_choice(self) -> str:
@@ -50,8 +49,6 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
     """Class for defining win criteria and payout for a straight-up bet"""
 
     def __init__(self,
-                 bet_type: str = "STRAIGHTUPBET",
-                 bet_type_id: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
                  stake: int = None,
@@ -59,8 +56,8 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: USER_WHEEL_TYPES = None):
-
-        super().__init__(bet_type, bet_type_id, min_bet, max_bet, stake,
+        bet_type = BetTypeIds.STRAIGHTUP_BET.name
+        super(StraightUpBet, self).__init__(bet_type, min_bet, max_bet, stake,
                          bet_choice, win_criteria, payout, playing_wheel)
 
     def get_user_bet_choice(self) -> int:
@@ -86,16 +83,6 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
 # Enum for storing all the bet classes
 ##########
 class BetTypeOptionsUser(Enum):
-    COLOURSBET = ColoursBetUser()
-    STRAIGHTUPBET = StraightUpBetUser()
+    COLOURS_BET = ColoursBetUser()
+    STRAIGHTUP_BET = StraightUpBetUser()
 
-
-# Navigation parameters # todo move these to the navigation parameters UI???
-##########
-# Define the text strings to display the bet categories available on each wheel
-bet_cat_options_text = {'E': "[I]nside, [O]utside", 'A': "[I]nside, [O]utside"}
-# Define the dictionaries showing bet types available on each wheel, wihtin each category
-bet_cats_and_types = {'E': {'O': ['C'], 'I': ['S']}, 'A': {'O': ['C'], 'I': ['S']}}
-# Define the text strings to display for each wheel, once the bet category is selected
-bet_type_options_text = {'E': {'O': "[C]olours", 'I': "[S]traight up"},
-                         'A': {'O': "[C]olours", 'I': "[S]traight up"}}
