@@ -19,6 +19,14 @@ class BetTypeIds(str, Enum):
     STRAIGHTUPBET = "S"
     NEWBET = None
 
+@dataclass()
+class RouletteBetData:
+     # bet_type: str
+     # bet_type_id: str # probably don't need these here
+     min_bet: int
+     max_bet: int
+     prompt: str
+
 # default_colours_bet = RouletteBetData(XYZ) - defined using BetTypeIds
 # default_straight_up = StraightUpBetData(XYZ) - defined using BetTypeIds
 
@@ -36,13 +44,7 @@ class BetTypeIds(str, Enum):
 
 
 
-@dataclass()
-class RouletteBetData:
-     bet_type: str
-     bet_type_id: str
-     min_bet: int
-     max_bet: int
-     prompt: str
+
 
 
 class BetTypeNames(str, Enum):
