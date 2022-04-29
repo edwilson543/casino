@@ -1,7 +1,7 @@
 from games.games_base_classes import Bet
 from games.roulette.definitions.wheel_parameters_and_defns import WHEEL_TYPES
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
-from games.roulette.definitions.bet_parameters import WheelMinMaxBetParameters
+from games.roulette.definitions.bet_parameters import WheelBetParameters
 
 from math import floor
 from typing import Union
@@ -36,11 +36,11 @@ class RouletteBet(Bet):
     def set_min_max_bet(self):
         """
         Method to look up the min/max bet of the roulette bet, which is specific to the wheel, from the
-        WheelMinMaxBetParameters, and then set these as instance attributes for the min/max bet.
+        WheelBetParameters, and then set these as instance attributes for the min/max bet.
         Note this method will only work on subclasses of this class, whose name corresponds to the underlying data,
         once the wheel has already been set
         """
-        all_wheel_bet_data = getattr(WheelMinMaxBetParameters, self.playing_wheel.wheel_name)
+        all_wheel_bet_data = getattr(WheelBetParameters, self.playing_wheel.wheel_name)
         bet_data = getattr(all_wheel_bet_data, self.bet_type)
         min_bet = bet_data.min_bet
         max_bet = bet_data.max_bet

@@ -47,9 +47,13 @@ default_straight_up_bet = MinMaxBetParameters(min_bet=2, max_bet=20)
 
 default_new_bet = MinMaxBetParameters(min_bet=0, max_bet=0)
 
+# Value below determines whether a user can keep adding more bets to the current wheel spin - may end up getting rid
+# This should be greater than the min bets defined on that wheel
+default_min_pot_to_add_more_bets_to_current_spin = 10
+#  TODO include in wheel parameters or delete
 
 @dataclass(frozen=True)
-class IndividualWheelMinMaxBetParameters:
+class IndividualWheeBetParameters:
     COLOURS_BET: MinMaxBetParameters = default_colours_bet
     STRAIGHTUP_BET: MinMaxBetParameters = default_straight_up_bet
     # new bet goes here but will raise an error if included in the prompt
@@ -69,11 +73,11 @@ class IndividualWheelMinMaxBetParameters:
         return bet_type_options_prompt
 
 
-default_wheel_min_max_bet_data = IndividualWheelMinMaxBetParameters()
+default_wheel_min_max_bet_data = IndividualWheeBetParameters()
 
 
 @dataclass(frozen=True)
-class WheelMinMaxBetParameters:
+class WheelBetParameters:
     EURO_WHEEL = default_wheel_min_max_bet_data
     AMERICAN_WHEEL = default_wheel_min_max_bet_data
     NEW_WHEEL = None

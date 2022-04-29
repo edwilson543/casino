@@ -4,7 +4,7 @@ from user_interface.command_line.roulette.definitions.bet_type_defns_user import
 from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import USER_WHEEL_TYPES
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
 from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import WheelOptionsUser
-from games.roulette.definitions.bet_parameters import WheelMinMaxBetParameters
+from games.roulette.definitions.bet_parameters import WheelBetParameters
 
 
 class WheelAndBetTypeSelectorUser(WheelAndBetTypeSelector):
@@ -30,7 +30,7 @@ class WheelAndBetTypeSelectorUser(WheelAndBetTypeSelector):
         Method that navigates the user to choose their bet, by applying the choose_playing_wheel,
         choose_bet_category and then the choose_bet_type methods below.
         """
-        bet_types_text = getattr(WheelMinMaxBetParameters, wheel_name).construct_wheel_bet_options_prompt()
+        bet_types_text = getattr(WheelBetParameters, wheel_name).construct_wheel_bet_options_prompt()
         while True:
             bet_type_id = input("What type of bet would you like to place?\n"
                                 f"{bet_types_text}\n--->").upper()

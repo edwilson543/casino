@@ -1,6 +1,6 @@
 from games.roulette.definitions.bet_type_defns import ColoursBet
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
-from games.roulette.definitions.bet_parameters import WheelMinMaxBetParameters
+from games.roulette.definitions.bet_parameters import WheelBetParameters
 from games.roulette.definitions.wheel_parameters_and_defns import euro_wheel
 
 #  TODO how to structure these?
@@ -11,8 +11,8 @@ class TestRouletteBet:
     def test_set_min_max_bet(self):
         """Test to check if the look up and setting of min/max bet parameters is working"""
         test_bet_one = ColoursBet(playing_wheel=euro_wheel)
-        expected_min_bet = WheelMinMaxBetParameters.EURO_WHEEL.COLOURS_BET.min_bet
-        expected_max_bet = WheelMinMaxBetParameters.EURO_WHEEL.COLOURS_BET.max_bet
+        expected_min_bet = WheelBetParameters.EURO_WHEEL.COLOURS_BET.min_bet
+        expected_max_bet = WheelBetParameters.EURO_WHEEL.COLOURS_BET.max_bet
         test_bet_one.set_min_max_bet()
         actual_min_bet = test_bet_one.min_bet
         actual_max_bet = test_bet_one.max_bet
