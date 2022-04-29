@@ -13,15 +13,13 @@ class PlayerUser(Player):
                  last_top_up_datetime: datetime,
                  active_session_initial_pot: int = None,
                  active_session_start_time: datetime = None,
-                 active_session_top_ups: int = 0,
-                 all_in_status: bool = False):
+                 active_session_top_ups: int = 0):
         super().__init__(player_type=player_type, name=name, username=username, password=password,
                          active_pot=active_pot,
                          last_top_up_datetime=last_top_up_datetime,
                          active_session_initial_pot=active_session_initial_pot,
                          active_session_start_time=active_session_start_time,
-                         active_session_top_ups=active_session_top_ups,
-                         all_in_status=all_in_status)
+                         active_session_top_ups=active_session_top_ups)
 
     def get_active_session_report(self):
         print(f"Your current pot is £{self.active_pot}.\n"
@@ -33,6 +31,20 @@ class PlayerUser(Player):
         print(f"Thanks for playing {self.name}!\n"
               f"Your final pot is £{self.active_pot}.")
         exit()
+
+    def make_initial_deposit_or_top_up(self):
+        """Method to get the user to either set an initial deposit if they are playing as a guest or as a new player,
+        or to top up if playing as an existing player."""
+        if self.player_type in [PlayerType.GUEST_PLAYER, PlayerType.NEW_PLAYER]:  # make them deposit
+            initial_deposit = self.get_initial_deposit_amount()
+            self.set_active_pot(amount=initial_deposit)
+        elif self.player_type == PlayerType.EXISTING_PLAYER:  # use top up prompt method
+            top_up_amount = self.check_top_up_scenario()
+            if top_up_amount > 0:
+                self.add_top_up_to_pot(amount=top_up_amount)
+        else:
+            raise ValueError(
+                f"Player: {self.name} has invalid player type and was passed to initial_deposit_or_top_up")
 
         ##########
         # lower level methods called in the initial_deposit_or_top_up method above

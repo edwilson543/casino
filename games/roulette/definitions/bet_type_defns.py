@@ -2,8 +2,8 @@
 To define a new bet type complete the following steps:
 """
 from games.roulette.app.roulette_bet_base_class import RouletteBet
-from games.roulette.definitions.wheel_parameters_and_defns import WHEEL_TYPES
-from games.roulette.definitions.bet_parameters import BetTypeIds
+from games.roulette.definitions.wheel_defns import WHEEL_TYPES
+from games.roulette.constants.bet_constants import BetTypeIds
 from typing import Union, TypeVar
 from enum import Enum
 

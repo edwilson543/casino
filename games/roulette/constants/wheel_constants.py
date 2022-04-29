@@ -1,36 +1,14 @@
-"""
-To define a new wheel complete the following steps:
-"""
-from games.roulette.app.roulette_wheel_base_class import RouletteWheel
-from typing import TypeVar
-from enum import Enum
 from dataclasses import dataclass
-
-
-# TODO how to avoid having to type wheel name (EURO_WHEEL and AMERICAN_WHEEL) over and over again?
-
-##########
-# Colours
-##########
-class Colours:
-    RED = 'red'
-    # TODO finish and implement in definitions below
-
-
-##########
-# Typevar to be used when referencing wheels in type hints throughout game
-##########
-WHEEL_TYPES = TypeVar(name="WHEEL_TYPES", bound=RouletteWheel)
-
+from enum import Enum
 
 ##########
 # Global wheel parameters
 ##########
+
 class WheelIds(str, Enum):
     """Class for storing wheel name and id"""
     EURO_WHEEL = "E"
     AMERICAN_WHEEL = "A"
-
 
 ##########
 # Data class for storing wheel parameters
@@ -43,6 +21,15 @@ class RouletteWheelParameters:
     slots: dict
     bias_colour: str
 
+    def create_dict(self):
+        pass
+
+##########
+# Colours on the Roulette wheel/ board
+##########
+class Colours:
+    RED = "R"  # make sure RHS is unique
+    # TODO finish and implement in definitions below
 
 ##########
 # Wheel definitions
@@ -68,25 +55,7 @@ american_wheel_parameters = RouletteWheelParameters(
     # note -1 corresponds to 00, which is in effect the same as 0
     bias_colour='green')
 
-##########
-# Instantiation of wheel objects from the parameters
-##########
-euro_wheel = RouletteWheel(
-    wheel_name=WheelIds.EURO_WHEEL.name,
-    slots=euro_wheel_parameters.slots,
-    bias_colour=euro_wheel_parameters.bias_colour)
-
-american_wheel = RouletteWheel(
-    wheel_name=WheelIds.AMERICAN_WHEEL.AMERICAN_WHEEL,
-    slots=american_wheel_parameters.slots,
-    bias_colour=american_wheel_parameters.bias_colour)
-
-
-class WheelParameters(Enum):
+@dataclass
+class WheelParameters:
     EURO_WHEEL = euro_wheel_parameters
     AMERICAN_WHEEL = american_wheel_parameters
-
-
-class WheelOptions(Enum):
-    EURO_WHEEL = euro_wheel
-    AMERICAN_WHEEL = american_wheel

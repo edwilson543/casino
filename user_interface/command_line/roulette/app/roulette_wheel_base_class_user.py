@@ -1,5 +1,5 @@
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel, wheel_spin_return
-from games.roulette.definitions.game_parameters import pause_durations
+from games.roulette.definitions.game_parameters import AllGameParameters
 from time import sleep
 
 
@@ -47,7 +47,9 @@ class RouletteWheelUser(RouletteWheel):
                 continue
             else:
                 spin_outcome = self.spin()
+                sleep(AllGameParameters.pause_durations.short)
                 print("Wheel spinning...")
-                sleep(pause_durations['medium'])
+                sleep(AllGameParameters.pause_durations.medium)
                 print(f"Ball has landed on {spin_outcome.number_return}, ({spin_outcome.colour_return})!")
+                sleep(AllGameParameters.pause_durations.short)
                 return spin_outcome

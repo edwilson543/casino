@@ -1,10 +1,10 @@
 from games.roulette.app.roulette_mechanics_action_classes.wheel_and_bet_type_selection import WheelAndBetTypeSelector
-from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import wheel_options_text
+from user_interface.command_line.roulette.definitions.wheel_defns_user import wheel_options_text
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
-from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import USER_WHEEL_TYPES
+from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
-from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import WheelOptionsUser
-from games.roulette.definitions.bet_parameters import WheelBetParameters
+from user_interface.command_line.roulette.definitions.wheel_defns_user import WheelOptionsUser
+from games.roulette.constants.bet_constants import WheelBetParameters
 
 
 class WheelAndBetTypeSelectorUser(WheelAndBetTypeSelector):

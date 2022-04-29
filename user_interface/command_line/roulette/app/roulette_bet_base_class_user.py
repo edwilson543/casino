@@ -1,5 +1,5 @@
 from games.roulette.app.roulette_bet_base_class import RouletteBet
-from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import USER_WHEEL_TYPES
+from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
 
 from typing import Union
 from abc import abstractmethod
@@ -24,19 +24,31 @@ class RouletteBetUser(RouletteBet):
         Abstract method for getting the bet choice from the user.
         This is defined for each specific bet subclass of RouletteBetUser in bet_type_defns_user
         """
-        pass
+        raise NotImplemented("Call to get_user_bet_choice has referred abstract method in"
+                             "RouletteBetUser super class")
 
-    def choose_stake_amount(self, player_funds: int) -> (int, bool):
+    def choose_stake_amount(self, player_funds) -> int:
         """
-        Parameters: player_funds - the amount of money the current player has in their pot
-        Returns: stake_amount (integer within min/max bet), all_in_status (T/F depending on if user is all in"""
-        min_bet = self.min_bet
-        if player_funds >= min_bet:
-            stake, all_in_status = self.choose_stake_amount_funds_exceed_min_bet(player_funds=player_funds)
-            return stake, all_in_status
-        else:  # TODO Add some feature here to allow user to do a top up instead, will also need top up method somehow
-            all_in_stake, all_in_status = self.go_all_in(player_funds=player_funds)
-            return all_in_stake, all_in_status
+        Returns:
+        Stake amount, all_in_status, which by default is set to false
+        """
+        if player_funds < self.min_bet:
+            raise ValueError("Player funds have been allowed to drop below min bet")
+        while True:
+            stake = input("How much would you like to stake?\n"
+                          f"Minimum stake: £{self.min_bet}, Maximum stake: £{self.max_bet}, integer stakes only.\n"
+                          f"You have £{player_funds} left to play with.\n--->")
+            try:
+                stake = int(stake.replace("£", ""))  # get rid of the £ sign if the user types one
+                if stake > player_funds:
+                    print(f"A £{stake} stake exceeds your current funds (£{player_funds}).")
+                    continue
+                elif self.min_bet <= stake <= self.max_bet:
+                    return stake
+                else:
+                    print("Invalid stake - please try again and refer to bet criteria.")
+            except ValueError:
+                print('Invalid stake - please try again and refer to bet criteria.')
 
     def confirm_bet_choice(self) -> bool:
         """
@@ -56,47 +68,3 @@ class RouletteBetUser(RouletteBet):
         else:
             print(f"£{self.stake} placed on {self.bet_choice}!")
             return True
-
-    ##########
-    # Lower level methods called in choose_stake_amount
-    ##########
-
-    def choose_stake_amount_funds_exceed_min_bet(self, player_funds) -> (int, bool):
-        """
-        Returns:
-        Stake amount, all_in_status, which by default is set to false
-        """
-        all_in_status = False  # if this method is called, it's because the user isn't going all in
-        while True:
-            stake = input("How much would you like to stake?\n"
-                          f"Minimum stake: £{self.min_bet}, Maximum stake: £{self.max_bet}, integer stakes only.\n"
-                          f"You have £{player_funds} left to play with.\n--->")
-            try:
-                stake = int(stake.replace("£", ""))  # get rid of the £ sign if the user types one
-                if stake > player_funds:
-                    print(f"A £{stake} stake exceeds your current funds (£{player_funds}).")
-                    continue
-                elif self.min_bet <= stake <= self.max_bet:
-                    return stake, all_in_status
-                else:
-                    print("Invalid stake - please try again and refer to bet criteria.")
-            except ValueError:
-                print('Invalid stake - please try again and refer to bet criteria.')
-
-    @staticmethod
-    def go_all_in(player_funds) -> (int, bool):  # TODO sort out all in functionality...
-        """
-        If the player wants to go all in, returns the player's pot and True.
-        If the player doesn't want to go all in, returns False
-        """
-        all_in = input(f"The minimum bet exceeds your pot of £{player_funds}.\n"
-                       f"Would you like to go all in, [Y]es or [N]o?\n--->").upper()
-        while True:
-            if all_in == "Y":
-                all_in_status = True
-                return player_funds, all_in_status
-            elif all_in == "N":
-                exit("Game over.\nYou have insufficient funds to bet and have refused to go all in.")
-                #  TODO find an alternative to directly calling sys.exit here - utilise Player method
-            else:
-                print("Invalid options, please try again.")

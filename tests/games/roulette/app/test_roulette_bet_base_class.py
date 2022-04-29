@@ -1,7 +1,7 @@
 from games.roulette.definitions.bet_type_defns import ColoursBet
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
-from games.roulette.definitions.bet_parameters import WheelBetParameters
-from games.roulette.definitions.wheel_parameters_and_defns import euro_wheel
+from games.roulette.constants.bet_constants import WheelBetParameters
+from games.roulette.definitions.wheel_defns import euro_wheel
 
 #  TODO how to structure these?
 # Note that ColoursBet used throughout testing, but it's tests are for RouletteBet methods

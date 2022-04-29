@@ -17,8 +17,7 @@ Ed = PlayerUser(
     last_top_up_datetime=datetime(2022, 4, 7),
     active_session_initial_pot=None,
     active_session_start_time=None,
-    active_session_top_ups=0,
-    all_in_status=False)
+    active_session_top_ups=0)
 
 Balint = PlayerUser(
     player_type=PlayerType.EXISTING_PLAYER,  # existing player
@@ -29,8 +28,7 @@ Balint = PlayerUser(
     last_top_up_datetime=datetime(2022, 4, 7),
     active_session_initial_pot=None,
     active_session_start_time=None,
-    active_session_top_ups=0,
-    all_in_status=False)
+    active_session_top_ups=0)
 
 Guest = PlayerUser(
     player_type=PlayerType.GUEST_PLAYER,  # guest player
@@ -41,8 +39,7 @@ Guest = PlayerUser(
     last_top_up_datetime=datetime(2022, 4, 7),
     active_session_initial_pot=None,
     active_session_start_time=None,
-    active_session_top_ups=0,
-    all_in_status=False)
+    active_session_top_ups=0)
 
 
 #####################

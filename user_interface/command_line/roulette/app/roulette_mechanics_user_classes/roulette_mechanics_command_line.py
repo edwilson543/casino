@@ -1,6 +1,5 @@
 from games.roulette.app.roulette_mechanics_action_classes.roulette_mechanics import RouletteGame
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
-from games.roulette.definitions.game_parameters import min_pot_to_add_more_bets
 from games.roulette.definitions.game_parameters import AllGameParameters
 from user_interface.command_line.roulette.definitions.navigation_defns import post_spin_navigation_dict
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.wheel_and_bet_type_selection_user import \
@@ -8,10 +7,8 @@ from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.wh
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
     RouletteContinuationUser
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
-from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import USER_WHEEL_TYPES
+from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
 from user_interface.command_line.games.player_base_class_user import PlayerUser
-
-import sys
 
 
 ##########
@@ -76,18 +73,13 @@ class RouletteGameUser(RouletteGame):
             ##########
             # Establish game continuation criteria
             ##########
-            if self.active_player.all_in_status:
-                sys.exit(f"Game over. Your final pot is £{self.active_player.active_pot}.")
-
             game_continuation = RouletteContinuationUser(stake=self.active_total_stake)
             game_continuation.keep_playing(active_player=self.active_player)
             # TODO build this into roulette continuation user
-            top_up, rejected_forced_top_up = self.active_player.check_top_up_scenario()
+            top_up = self.active_player.check_top_up_scenario()
             # if player is low on funds, they'll be asked to top up. If really low, must top up to keep playing
-            if top_up > 0 and not rejected_forced_top_up:
+            if top_up > 0:
                 self.active_player.add_top_up_to_pot(amount=top_up)
-            elif rejected_forced_top_up:
-                self.active_player.end_session()
             self.navigation_id = game_continuation.choose_navigation(active_player=self.active_player)
 
     ##########
@@ -106,9 +98,7 @@ class RouletteGameUser(RouletteGame):
         while True:
             individual_bet = self.get_individual_bet(wheel_bet_selector=wheel_bet_selector)
             self.active_all_bets_list.append(individual_bet)
-            if self.active_player.all_in_status:  # i.e. if the player has gone all in, don't let them add more bets...
-                break  # TODO get rid of this shite
-            elif self.determine_if_user_wants_to_add_more_bets():
+            if self.determine_if_user_wants_to_add_more_bets():
                 continue
             else:
                 break
@@ -140,7 +130,6 @@ class RouletteGameUser(RouletteGame):
         Adds stake to active player's active_total_stake.
         Removes stake from active player's active_pot.
         Adds payout to active player's active_total_potential_winnings
-        Sets active player's all_in_status
         """
         while True:
             ##########
@@ -155,7 +144,7 @@ class RouletteGameUser(RouletteGame):
             ##########
             player_funds = self.active_player.active_pot - self.active_total_stake
             # i.e. active pot less bets they've already added to current spin
-            stake, all_in_status = potential_bet.choose_stake_amount(player_funds=player_funds)
+            stake = potential_bet.choose_stake_amount(player_funds=player_funds)
             potential_bet.set_stake_amount(amount=stake)
 
             ##########
@@ -179,17 +168,17 @@ class RouletteGameUser(RouletteGame):
             ##########
             if potential_bet.confirm_bet_choice():
                 self.active_total_stake += stake  # adds to active total stake in game
-                self.active_player.set_all_in_status(true_or_false=all_in_status)
                 return potential_bet
             else:
                 continue
 
     def determine_if_user_wants_to_add_more_bets(self):
+        remaining_player_funds = self.active_player.active_pot - self.active_total_stake
+        # since the active total stake has not yet been removed from their pot
         while True:
-            if self.active_player.active_pot - self.active_total_stake <= \
-                    AllGameParameters.top_up_parameters.low_pot_forced_top_up:
+            if remaining_player_funds <= AllGameParameters.top_up_parameters.low_pot_forced_top_up:
                 user_wants_more_bets_via_top_up = input(
-                    f"You have £{self.active_player.active_pot} left to play with,"
+                    f"You have £{remaining_player_funds} left to play with, "
                     f"and £{self.active_total_stake} on the line.\n"
                     f"To add more bets to the current spin you must top up.\n"
                     f"Would you like to top up and place more bets?\n"

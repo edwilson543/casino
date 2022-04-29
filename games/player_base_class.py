@@ -23,8 +23,7 @@ class Player:
                  last_top_up_datetime: datetime,
                  active_session_initial_pot: int = None,
                  active_session_start_time: datetime = None,
-                 active_session_top_ups: int = 0,
-                 all_in_status: bool = False):
+                 active_session_top_ups: int = 0):
         self.player_type = player_type
         self.name = name
         self.username = username
@@ -34,7 +33,6 @@ class Player:
         self.active_session_initial_pot = active_session_initial_pot
         self.active_session_start_time = active_session_start_time
         self.active_session_top_ups = active_session_top_ups
-        self.all_in_status = all_in_status
 
     ##########
     # Setter methods
@@ -68,9 +66,6 @@ class Player:
     def set_active_session_initial_pot_and_time(self):
         self.active_session_initial_pot = self.active_pot
         self.active_session_start_time = datetime.now()
-
-    def set_all_in_status(self, true_or_false: bool):
-        self.all_in_status = true_or_false
 
     ##########
     # Calculation methods

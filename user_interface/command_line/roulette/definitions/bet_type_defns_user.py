@@ -1,8 +1,8 @@
 """To define a new bet, first go to roulette->definitions->bet_type_defns"""
 from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
-from games.roulette.definitions.bet_parameters import BetTypeIds
+from games.roulette.constants.bet_constants import BetTypeIds
 from user_interface.command_line.roulette.app.roulette_bet_base_class_user import RouletteBetUser
-from user_interface.command_line.roulette.definitions.wheel_parameters_and_defns_user import USER_WHEEL_TYPES
+from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
 from typing import Union, TypeVar
 from enum import Enum
 

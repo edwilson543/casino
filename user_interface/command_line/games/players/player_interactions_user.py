@@ -52,7 +52,7 @@ class PlayerInteractionsUser:  # TODO make this a subclass of PlayerInteractions
     def all_games_set_up(self) -> PlayerUser:
         active_player = self.access_existing_or_new_player()
         active_player.set_active_session_initial_pot_and_time()
-        active_player = self.initial_deposit_or_top_up(active_player=active_player)
+        active_player.make_initial_deposit_or_top_up()
         return active_player
 
     @staticmethod
@@ -80,25 +80,3 @@ class PlayerInteractionsUser:  # TODO make this a subclass of PlayerInteractions
     def create_player_user(self) -> PlayerUser:  # TODO define this, using super class method
         # maybe also we want want the creation and the return all in one method
         pass
-
-    @staticmethod
-    def initial_deposit_or_top_up(active_player) -> PlayerUser:
-        """Method to get the user to either set an initial deposit if they are playing as a guest or as a new player,
-        or to top up if playing as an existing player."""
-        if active_player.player_type in [PlayerType.GUEST_PLAYER, PlayerType.NEW_PLAYER]:  # make them deposit
-            initial_deposit = active_player.get_initial_deposit_amount()
-            active_player.set_active_pot(amount=initial_deposit)
-            return active_player
-        elif active_player.player_type == PlayerType.EXISTING_PLAYER:  # use top up prompt method
-            top_up_amount = active_player.check_top_up_scenario()
-            if top_up_amount == 0:  # i.e. they were asked to top up but don't want to
-                return active_player  # Whilst we don't necessarily need the if/else here,
-                # add_top_up_to_pot also sets the 'last top up' attribute, which is invalid if they're not topping up
-            elif top_up_amount > 0:
-                active_player.add_top_up_to_pot(amount=top_up_amount)
-                return active_player
-            else:
-                return active_player
-        else:
-            raise ValueError(
-                f"Player: {active_player.name} has invalid player type and was passed to initial_deposit_or_top_up")

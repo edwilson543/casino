@@ -1,8 +1,8 @@
 #  TODO change the look up methods to not be from a dictionary
 from games.roulette.definitions.bet_type_defns import BET_TYPES
-from games.roulette.definitions.wheel_parameters_and_defns import WHEEL_TYPES
-from games.roulette.definitions.wheel_parameters_and_defns import WheelIds
-from games.roulette.definitions.bet_parameters import BetTypeIds
+from games.roulette.definitions.wheel_defns import WHEEL_TYPES
+from games.roulette.constants.wheel_constants import WheelIds
+from games.roulette.constants.bet_constants import BetTypeIds
 
 
 # TODO what type hint should be used for the look up? it's an enum of bet/wheel objects

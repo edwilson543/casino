@@ -1,4 +1,4 @@
-from games.roulette.definitions.wheel_parameters_and_defns import euro_wheel
+from games.roulette.definitions.wheel_defns import euro_wheel
 
 # TODO write more tests - also find out how to write tests which navigate the game, rather than having to play it
 # probably one to wait until more of a finished article
