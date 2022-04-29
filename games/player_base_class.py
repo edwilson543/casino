@@ -1,11 +1,12 @@
-"""
-Contents:
-Player (base class)
-Bet (base class)
-"""
 from datetime import datetime
 from sys import exit
+from enum import Enum
 
+
+class PlayerType(Enum):
+    EXISTING_PLAYER = "E"
+    GUEST_PLAYER = "G"
+    NEW_PLAYER = "N"
 
 class Player:
     """Class to hold the pot and define interactions with the pot.
@@ -14,7 +15,7 @@ class Player:
     # TODO add an attribute along the lines of 'last login time'
     # and when the player starts the game, update it to datetime.now()
     def __init__(self,
-                 player_type: str,  # restrict to 'E', 'G', 'N'
+                 player_type: PlayerType,
                  name: str,
                  username: str,
                  password: str,

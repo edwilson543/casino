@@ -1,6 +1,6 @@
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.roulette_mechanics_command_line import \
     RouletteGameUser
-from user_interface.command_line.all_games.player_interactions_user import PlayerInteractionsUser
+from user_interface.command_line.games.players.player_interactions_user import PlayerInteractionsUser
 
 
 if __name__ == '__main__':

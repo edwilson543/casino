@@ -5,7 +5,6 @@ from typing import Union
 from abc import abstractmethod
 
 
-# Do we want player funds as an attribute or as a parameter?
 class RouletteBetUser(RouletteBet):
     def __init__(self,
                  bet_type: str,

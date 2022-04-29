@@ -3,11 +3,14 @@ from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.definitions.bet_type_defns import BET_TYPES
 from games.roulette.definitions.wheel_parameters_and_defns import WHEEL_TYPES
 from games.roulette.definitions.bet_parameters import BetTypeIds
+from typing import TypeVar
+
+PLAYER_TYPES = TypeVar(name="PLAYER_TYPES", bound=Player)
 
 
 class RouletteGame:
     def __init__(self,
-                 active_player: Player = None,
+                 active_player: PLAYER_TYPES = None,
                  active_wheel: WHEEL_TYPES = None,
                  active_all_bets_list: list = None,
                  active_total_stake: int = 0,
