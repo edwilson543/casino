@@ -9,8 +9,6 @@ class PlayerUser(Player):
                  name: str,
                  username: str,
                  password: str,
-                 initial_pot: int,
-                 initial_pot_datetime: datetime,
                  active_pot: int,
                  last_top_up_datetime: datetime,
                  active_session_initial_pot: int = None,
@@ -18,7 +16,7 @@ class PlayerUser(Player):
                  active_session_top_ups: int = 0,
                  all_in_status: bool = False):
         super().__init__(player_type=player_type, name=name, username=username, password=password,
-                         initial_pot=initial_pot, initial_pot_datetime=initial_pot_datetime, active_pot=active_pot,
+                         active_pot=active_pot,
                          last_top_up_datetime=last_top_up_datetime,
                          active_session_initial_pot=active_session_initial_pot,
                          active_session_start_time=active_session_start_time,
@@ -40,7 +38,8 @@ class PlayerUser(Player):
         # lower level methods called in the initial_deposit_or_top_up method above
         ##########
 
-    def get_initial_deposit_amount(self) -> int:
+    @staticmethod
+    def get_initial_deposit_amount() -> int:
         """
         Method to get users to specify how much they want to initially deposit.
         Returns: An integer, which is the specified desired top up amount.
@@ -66,7 +65,7 @@ class PlayerUser(Player):
             except ValueError:
                 print(f"Invalid deposit amount - please try again and refer to deposit criteria.")
 
-    def check_top_up_scenario(self) -> (int, bool):
+    def check_top_up_scenario(self) -> int:
         """
         Method to check whether the user pot is below the threshold for a top up prompt to be worthwhile,
         and then make a top_up if it is worthwhile/ they have to to keep playing.
@@ -74,32 +73,27 @@ class PlayerUser(Player):
         playing, if their pot is below a pre-determined threshold.
         Returns:
         int - the top up amount specified by the user (by default 0)
-        bool - whether or not the user has rejected a forced top up
-        If the reject a forced top up and have active bets, they just keep playing but can't add more bets
-        If they reject a forced top up without active bets, their session will end
         """
-        rejected_forced_top_up = False  # default return
         low_pot_forced_top_up = AllGameParameters.top_up_parameters.low_pot_forced_top_up
         threshold_for_top_up_prompt = AllGameParameters.top_up_parameters.threshold_for_top_up_prompt
         if self.active_pot > threshold_for_top_up_prompt:
-            return 0, rejected_forced_top_up
+            return 0
         elif threshold_for_top_up_prompt >= self.active_pot > low_pot_forced_top_up:
             if self.see_if_user_wants_optional_top_up():
                 return self.get_top_up_amount()
             else:
-                return 0, rejected_forced_top_up
+                return 0
         elif 0 < self.active_pot <= low_pot_forced_top_up:
             if self.see_if_user_wants_forced_top_up():
                 return self.get_top_up_amount()
             else:
-                rejected_forced_top_up = True
-                return 0, rejected_forced_top_up
+                self.end_session()
 
     ##########
     # Method called during check top up worthwhile
     ##########
-
-    def get_top_up_amount(self) -> int:
+    @staticmethod
+    def get_top_up_amount() -> int:
         """
         Method to get users to specify how much they want to top up by.
         Note if this method is called, it's because the user has said they want to top up.
@@ -135,8 +129,8 @@ class PlayerUser(Player):
         threshold_for_top_up_prompt = AllGameParameters.top_up_parameters.threshold_for_top_up_prompt
         while True:
             if low_pot_forced_top_up < self.active_pot <= threshold_for_top_up_prompt:
-                print(f"Your pot only contains £{self.active_pot}.\n")
-                proceed = input("Would you like to top up?\n[Y]es, [N]o\n--->")
+                print(f"Your pot only contains £{self.active_pot}.")
+                proceed = input("Would you like to top up?\n[Y]es, [N]o\n--->").upper()
                 if proceed == "Y":
                     return True
                 elif proceed == "N":

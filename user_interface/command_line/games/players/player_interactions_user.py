@@ -87,15 +87,17 @@ class PlayerInteractionsUser:  # TODO make this a subclass of PlayerInteractions
         or to top up if playing as an existing player."""
         if active_player.player_type in [PlayerType.GUEST_PLAYER, PlayerType.NEW_PLAYER]:  # make them deposit
             initial_deposit = active_player.get_initial_deposit_amount()
-            active_player.set_initial_pot(amount=initial_deposit)
+            active_player.set_active_pot(amount=initial_deposit)
             return active_player
         elif active_player.player_type == PlayerType.EXISTING_PLAYER:  # use top up prompt method
             top_up_amount = active_player.check_top_up_scenario()
             if top_up_amount == 0:  # i.e. they were asked to top up but don't want to
                 return active_player  # Whilst we don't necessarily need the if/else here,
                 # add_top_up_to_pot also sets the 'last top up' attribute, which is invalid if they're not topping up
-            else:
+            elif top_up_amount > 0:
                 active_player.add_top_up_to_pot(amount=top_up_amount)
+                return active_player
+            else:
                 return active_player
         else:
             raise ValueError(

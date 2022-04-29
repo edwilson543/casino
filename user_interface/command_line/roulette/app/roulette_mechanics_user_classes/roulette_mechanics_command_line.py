@@ -94,9 +94,6 @@ class RouletteGameUser(RouletteGame):
     # Tier 2 Methods called in roulette_loop
     ##########
 
-    def set_playing_wheel(self):
-        pass
-
     def set_all_active_bets_list(self, wheel_bet_selector: WheelAndBetTypeSelectorUser):
         """
         Method to repeatedly allow users to define bets and add them to the current spin.
@@ -110,19 +107,7 @@ class RouletteGameUser(RouletteGame):
             individual_bet = self.get_individual_bet(wheel_bet_selector=wheel_bet_selector)
             self.active_all_bets_list.append(individual_bet)
             if self.active_player.all_in_status:  # i.e. if the player has gone all in, don't let them add more bets...
-                break
-            elif self.active_player.active_pot < min_pot_to_add_more_bets:  # i.e. user pot low so no more bets
-                #  TODO update to be on the wheel
-                break
-            elif self.active_player <= AllGameParameters.top_up_parameters.low_pot_forced_top_up:
-                top_up, rejected_forced_top_up = self.active_player.check_top_up_scenario()  # will be forced top_up
-                if top_up > 0 and not rejected_forced_top_up:
-                    self.active_player.add_top_up_to_pot(amount=top_up)
-                elif rejected_forced_top_up:
-                    if len(self.active_all_bets_list) > 0:  # don't want to top up but have active bets, so keep playing
-                        break
-                    else:
-                        self.active_player.end_session()  # no active bets and don't want to top up
+                break  # TODO get rid of this shite
             elif self.determine_if_user_wants_to_add_more_bets():
                 continue
             else:
@@ -201,14 +186,32 @@ class RouletteGameUser(RouletteGame):
 
     def determine_if_user_wants_to_add_more_bets(self):
         while True:
-            user_wants_to_add_more_bets = input(f"You currently have £{self.active_total_stake} "
-                                                f"on the line.\n"
-                                                "Would you like to add more bets to the current wheel spin?\n"
-                                                "[Y]es, [N]o\n"
-                                                "--->").upper()
-            if user_wants_to_add_more_bets == "Y":
-                return True
-            elif user_wants_to_add_more_bets == "N":
-                return False
+            if self.active_player.active_pot - self.active_total_stake <= \
+                    AllGameParameters.top_up_parameters.low_pot_forced_top_up:
+                user_wants_more_bets_via_top_up = input(
+                    f"You have £{self.active_player.active_pot} left to play with,"
+                    f"and £{self.active_total_stake} on the line.\n"
+                    f"To add more bets to the current spin you must top up.\n"
+                    f"Would you like to top up and place more bets?\n"
+                    f"[Y]es, [N]o, proceed to wheel spinning\n--->").upper()
+                if user_wants_more_bets_via_top_up == "Y":
+                    top_up_amount = self.active_player.get_top_up_amount()
+                    self.active_player.add_top_up_to_pot(amount=top_up_amount)
+                    return True  # player has been topped up and will now cycle back through bet selection
+                elif user_wants_more_bets_via_top_up == "N":
+                    return False  # proceeds to wheel spinning
+                else:
+                    print("Invalid command, please try again")
+                    continue
             else:
-                print("Invalid command, please try again")
+                user_wants_to_add_more_bets = input(
+                    f"You currently have £{self.active_total_stake} "
+                    f"on the line.\nWould you like to add more bets to the current wheel spin?\n"
+                    "[Y]es, [N]o\n--->").upper()
+                if user_wants_to_add_more_bets == "Y":
+                    return True
+                elif user_wants_to_add_more_bets == "N":
+                    return False
+                else:
+                    print("Invalid command, please try again")
+                    continue

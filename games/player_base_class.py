@@ -1,5 +1,4 @@
 from datetime import datetime
-from sys import exit
 from enum import Enum
 
 
@@ -7,6 +6,7 @@ class PlayerType(Enum):
     EXISTING_PLAYER = "E"
     GUEST_PLAYER = "G"
     NEW_PLAYER = "N"
+
 
 class Player:
     """Class to hold the pot and define interactions with the pot.
@@ -19,8 +19,6 @@ class Player:
                  name: str,
                  username: str,
                  password: str,
-                 initial_pot: int,
-                 initial_pot_datetime: datetime,
                  active_pot: int,
                  last_top_up_datetime: datetime,
                  active_session_initial_pot: int = None,
@@ -31,8 +29,6 @@ class Player:
         self.name = name
         self.username = username
         self.password = password
-        self.initial_pot = initial_pot
-        self.initial_pot_datetime = initial_pot_datetime
         self.active_pot = active_pot
         self.last_top_up_datetime = last_top_up_datetime
         self.active_session_initial_pot = active_session_initial_pot
@@ -43,10 +39,8 @@ class Player:
     ##########
     # Setter methods
     ##########
-    def set_initial_pot(self, amount: int):
-        self.initial_pot = amount
+    def set_active_pot(self, amount: int):
         self.active_pot = amount
-        self.initial_pot_datetime = datetime.now()
 
     def add_top_up_to_pot(self, amount: int):
         self.active_pot += amount
@@ -89,31 +83,8 @@ class Player:
         return int(round(duration_minutes, 0))
 
     def calculate_active_session_winnings(self) -> int:
-        if self.player_type == 'E':
+        if self.player_type == PlayerType.EXISTING_PLAYER:
             return self.active_pot - self.active_session_initial_pot - self.active_session_top_ups
-        elif self.player_type in ['G', 'N']:
+        elif self.player_type in [PlayerType.EXISTING_PLAYER, PlayerType.GUEST_PLAYER]:
             return self.active_pot - self.active_session_initial_pot - \
-                   self.active_session_top_ups - self.initial_pot
-
-    ##########
-    # more UI focused - could separate into UI at some point
-    ##########
-
-    def get_active_session_report(self):
-        print(f"Your current pot is £{self.active_pot}.\n"
-              f"You have been playing for {self.calculate_active_session_duration_minutes()} minute(s), "
-              f"during which time you have {self.won_or_lost()}: "
-              f"£{abs(self.calculate_active_session_winnings())}.")
-
-    def end_session(self):
-        print(f"Thanks for playing {self.name}!\n"
-              f"Your final pot is £{self.active_pot}.")
-        exit()
-
-    # lower level UI methods
-
-    def won_or_lost(self):
-        if self.calculate_active_session_winnings() > 0:
-            return "won"
-        else:
-            return "lost"
+                   self.active_session_top_ups
