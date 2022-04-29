@@ -15,7 +15,7 @@ USER_WHEEL_TYPES = TypeVar(name="USER_WHEEL_TYPES", bound=RouletteWheelUser)
 ##################
 # Wheel relevant UI definitions
 ##################
-
+#  TODO do from dict
 euro_wheel_user = RouletteWheelUser(
     wheel_name=WheelParametersUser.EURO_WHEEL.wheel_name,
     slots=WheelParametersUser.EURO_WHEEL.slots,

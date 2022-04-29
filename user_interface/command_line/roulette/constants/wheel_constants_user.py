@@ -15,7 +15,7 @@ euro_wheel_colour_options_text = "[R]ed, [B]lack"
 american_wheel_colour_ids = {'R': 'red', 'B': 'black'}  # TODO update to use Colours
 american_wheel_colour_options_text = "[R]ed, [B]lack"
 
-euro_wheel_user_parameters = RouletteWheelParametersUser(
+euro_wheel_user_parameters = RouletteWheelParametersUser(  # TODO do from dict
     wheel_name=WheelParameters.EURO_WHEEL.wheel_name,
     slots=WheelParameters.EURO_WHEEL.wheel_name,
     bias_colour=WheelParameters.EURO_WHEEL.bias_colour,
