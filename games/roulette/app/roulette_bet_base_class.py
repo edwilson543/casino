@@ -1,4 +1,4 @@
-from games.games_base_classes import Bet
+from games.bet_base_class import Bet
 from games.roulette.definitions.wheel_parameters_and_defns import WHEEL_TYPES
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.definitions.bet_parameters import WheelBetParameters

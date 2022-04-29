@@ -1,4 +1,4 @@
-from games.games_base_classes import Player
+from games.player_base_class import Player
 from user_interface.command_line.roulette.definitions.navigation_defns import post_spin_navigation_text, post_spin_navigation_options
 from user_interface.command_line.roulette.definitions.navigation_defns import post_spin_navigation_text_low_funds, \
     post_spin_navigation_options_low_funds

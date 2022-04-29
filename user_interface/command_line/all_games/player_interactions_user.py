@@ -1,4 +1,4 @@
-from games.games_base_classes import Player
+from games.player_base_class import Player
 from games.players.existing_players import existing_players
 from games.roulette.definitions.game_parameters import deposit_parameters
 from games.roulette.definitions.game_parameters import top_up_parameters

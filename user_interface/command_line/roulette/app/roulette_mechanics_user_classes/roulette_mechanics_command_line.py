@@ -1,4 +1,4 @@
-from games.games_base_classes import Player
+from games.player_base_class import Player
 from games.roulette.app.roulette_mechanics_action_classes.roulette_mechanics import RouletteGame
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.definitions.game_parameters import min_pot_to_add_more_bets

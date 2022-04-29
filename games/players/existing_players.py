@@ -1,4 +1,4 @@
-from games.games_base_classes import Player
+from games.player_base_class import Player
 from datetime import datetime
 
 
