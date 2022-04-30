@@ -73,18 +73,16 @@ class Player:
     # Calculation methods
     ##########
 
+    def calculate_active_session_winnings(self) -> int:
+        winnings = self.active_pot - self.active_session_initial_pot - self.active_session_top_ups
+        return winnings
+
+
     def calculate_active_session_duration_minutes(self) -> int:
         duration_timedelta = datetime.now() - self.active_session_start_time
         duration_seconds = duration_timedelta.seconds
         duration_minutes = duration_seconds / 60
         return int(round(duration_minutes, 0))
-
-    def calculate_active_session_winnings(self) -> int:
-        if self.player_type == PlayerType.EXISTING_PLAYER:
-            return self.active_pot - self.active_session_initial_pot - self.active_session_top_ups
-        elif self.player_type in [PlayerType.EXISTING_PLAYER, PlayerType.GUEST_PLAYER]:
-            return self.active_pot - self.active_session_initial_pot - \
-                   self.active_session_top_ups
 
 
 ##########

@@ -51,8 +51,8 @@ class PlayerInteractionsUser:  # TODO make this a subclass of PlayerInteractions
 
     def all_games_set_up(self) -> PlayerUser:
         active_player = self.access_existing_or_new_player()
-        active_player.set_active_session_initial_pot_and_time()
         active_player.make_initial_deposit_or_top_up()
+        active_player.set_active_session_initial_pot_and_time()
         return active_player
 
     @staticmethod
