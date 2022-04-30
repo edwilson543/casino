@@ -3,4 +3,4 @@
 
 #  These will then become an attribute of the wheels
 #  Maybe instead they could become a component of the game, on equal level to wheel
-#  Probably then have is a component of the board and the wheel, RouletteGame
+#  Probably then have is a component of the board and the wheel, SinglePlayerRouletteTable

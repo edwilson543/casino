@@ -1,12 +1,12 @@
-from games.roulette.app.roulette_mechanics_action_classes.roulette_mechanics import RouletteGame
+from games.roulette.app.single_player_roulette.single_player_table import SinglePlayerRouletteTable
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.constants.game_constants import AllGameParameters
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
-from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
+from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     NavigationOptionRank
-from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.wheel_and_bet_type_selection_user import \
+from user_interface.command_line.roulette.app.single_player_roulette_user.wheel_and_bet_type_selection_user import \
     WheelBoardBetConstructorUser
-from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
+from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     RouletteContinuationUser
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
 from user_interface.command_line.games.player_base_class_user import PlayerUser
@@ -16,12 +16,12 @@ from user_interface.command_line.games.player_base_class_user import PlayerUser
 # Class pulling together all the components of the roulette game and command line UI
 ##########
 
-class RouletteGameUser(RouletteGame):
+class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
     """
     Class to pull together all components of the roulette game, so they can be looped over
     Maybe there is a better way to do this than initialise dummy parameters, which never actually get used - looked at
     using None but apparently that is not ideal.
-    The parameters are all those necessary to instantiate the classes in the other roulette_mechanics_action_classes.
+    The parameters are all those necessary to instantiate the classes in the other single_player_roulette.
     The game loops until the user runs out of money or
     """
 

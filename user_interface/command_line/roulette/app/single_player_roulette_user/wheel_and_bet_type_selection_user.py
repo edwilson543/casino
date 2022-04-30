@@ -1,4 +1,4 @@
-from games.roulette.app.roulette_mechanics_action_classes.wheel_and_bet_type_selection import WheelBoardBetConstructor
+from games.roulette.app.single_player_roulette.wheel_and_bet_type_selection import WheelBoardBetConstructor
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.wheel_constants import WheelIds
 from games.roulette.constants.bet_constants import BetTypeIds, WheelBetParameters
