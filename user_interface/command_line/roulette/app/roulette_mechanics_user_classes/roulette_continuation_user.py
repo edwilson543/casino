@@ -1,8 +1,27 @@
 from user_interface.command_line.games.player_base_class_user import PlayerUser
-from user_interface.command_line.roulette.definitions.navigation_defns import post_spin_navigation_text, \
-    post_spin_navigation_options
-from user_interface.command_line.roulette.definitions.navigation_defns import post_spin_navigation_text_low_funds, \
-    post_spin_navigation_options_low_funds
+from enum import Enum
+
+
+##########
+# Data class to store the different navigation options
+##########
+
+class NavigationOptionIDs(Enum):
+    CHANGE_WHEEL = "W"
+    CHANGE_BETS = "B"
+    REPEAT_BETS = "R"
+
+
+class NavigationOptionsPrompt(Enum):
+    REPEAT_BETS = "[R]epeat bets"
+    CHANGE_BETS = "[B]ets change"
+    CHANGE_WHEEL = "[W]heel change"
+
+
+class NavigationOptionRank(Enum):
+    CHANGE_WHEEL = 0
+    CHANGE_BETS = 1
+    REPEAT_BETS = 2
 
 
 class RouletteContinuationUser:
@@ -27,16 +46,21 @@ class RouletteContinuationUser:
             else:
                 print(f"{proceed} not a valid command, please try again")
 
-    def choose_navigation(self, active_player: PlayerUser) -> str:
+    def choose_navigation(self, active_player: PlayerUser) -> int:
         if self.stake < active_player.active_pot:
-            nav_text = post_spin_navigation_text  # TODO get rid
-            nav_options = post_spin_navigation_options
-        else:
-            nav_text = post_spin_navigation_text_low_funds
-            nav_options = post_spin_navigation_options_low_funds
+            navigation_text = "What would you like to do?\n" + \
+                              ", ".join([prompt.value for prompt in NavigationOptionsPrompt])  # allow all options
+            navigation_options = [ID.value for ID in NavigationOptionIDs]
+        else:  # i.e. user can't afford to repeat the given bets
+            navigation_text = "What would you like to do?\n" + \
+                              NavigationOptionsPrompt.CHANGE_BETS.value + ", " + \
+                              NavigationOptionsPrompt.CHANGE_WHEEL.value
+            navigation_options = [NavigationOptionIDs.CHANGE_BETS.value, NavigationOptionIDs.CHANGE_WHEEL.value]
         while True:
-            next_step = input(f"What would you like to do?\n{nav_text}\n--->").upper()
-            if next_step in nav_options:
-                return next_step
-            else:
+            next_step = input(f"{navigation_text}\n--->").upper()
+            try:
+                next_step_name = NavigationOptionIDs(next_step).name
+                next_step_value = getattr(NavigationOptionRank, next_step_name).value
+                return next_step_value
+            except ValueError and AttributeError:
                 print(f"{next_step} not a valid command, please try again")

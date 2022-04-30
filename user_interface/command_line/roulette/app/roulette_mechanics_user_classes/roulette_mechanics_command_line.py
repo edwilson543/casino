@@ -2,7 +2,8 @@ from games.roulette.app.roulette_mechanics_action_classes.roulette_mechanics imp
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.constants.game_constants import AllGameParameters
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
-from user_interface.command_line.roulette.definitions.navigation_defns import post_spin_navigation_dict
+from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
+    NavigationOptionRank
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.wheel_and_bet_type_selection_user import \
     WheelAndBetTypeSelectorUser
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
@@ -32,13 +33,13 @@ class RouletteGameUser(RouletteGame):
                  active_spin_outcome: wheel_spin_return = None,
                  active_bet_win_count: int = 0,
                  active_total_winnings: int = 0,
-                 navigation_id: str = 'W'):
+                 next_step: int = 0):
         super().__init__(active_player, active_wheel, active_all_bets_list, active_total_stake,
                          active_spin_outcome, active_bet_win_count, active_total_winnings)
-        self.navigation_id = navigation_id
+        self.next_step = next_step
 
     def roulette_loop(self):
-        """Method to loop over all game components, based on the navigation_id re-determined at end"""
+        """Method to loop over all game components, based on the next_step re-determined at end"""
 
         while True:
 
@@ -46,14 +47,14 @@ class RouletteGameUser(RouletteGame):
             ##########
             # Wheel selection
             ##########
-            if self.navigation_id in post_spin_navigation_dict['from_wheel_selection']:
+            if self.next_step <= NavigationOptionRank.CHANGE_WHEEL.value:
                 """i.e. if user chose to change wheel after their bet, or this is the first loop."""
                 self.active_wheel = wheel_bet_selector.choose_playing_wheel()
 
             ##########
             # Individual bet selection and accumulation
             ##########
-            if self.navigation_id in post_spin_navigation_dict['from_bet_selection']:
+            if self.next_step <= NavigationOptionRank.CHANGE_BETS.value:
                 """i.e. if user has chosen to change all bets (or change wheel, need to do this too)"""
                 self.active_total_stake = 0  # so that it does not accumulate from previous bets
                 self.set_all_active_bets_list(wheel_bet_selector=wheel_bet_selector)  # creates a list of all user bets
@@ -61,7 +62,7 @@ class RouletteGameUser(RouletteGame):
             ##########
             # Bet evaluation
             ##########
-            if self.navigation_id in post_spin_navigation_dict['from_bet_evaluation']:
+            if self.next_step <= NavigationOptionRank.REPEAT_BETS.value:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
                 self.active_player.take_stake_from_pot(amount=self.active_total_stake)  # included here as otherwise
                 # gets missed by a quick repeat of all bets
@@ -80,7 +81,7 @@ class RouletteGameUser(RouletteGame):
             # if player is low on funds, they'll be asked to top up. If really low, must top up to keep playing
             if top_up > 0:
                 self.active_player.add_top_up_to_pot(amount=top_up)
-            self.navigation_id = game_continuation.choose_navigation(active_player=self.active_player)
+            self.next_step = game_continuation.choose_navigation(active_player=self.active_player)
 
     ##########
     # Tier 2 Methods called in roulette_loop

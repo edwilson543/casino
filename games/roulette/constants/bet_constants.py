@@ -53,7 +53,7 @@ class IndividualWheeBetParameters:
         """
         bet_types_tuple: Tuple[Field, ...] = fields(self.__class__)  # creates a tuple of the data class fields
         number_of_bet_options: int = len(bet_types_tuple)
-        bet_type_options_prompt: str = ""
+        bet_type_options_prompt: str = ""  # TODO use nav trick
         for n in range(number_of_bet_options):
             bet_type = bet_types_tuple[n]
             individual_bet_type_prompt = getattr(BetTypePrompts, bet_type.name).value
