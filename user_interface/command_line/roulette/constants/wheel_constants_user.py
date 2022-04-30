@@ -1,5 +1,4 @@
-from dataclasses import asdict
-from enum import Enum
+from dataclasses import dataclass, asdict
 
 from games.roulette.constants.wheel_constants import WheelParameters, WheelIds
 
@@ -12,17 +11,18 @@ american_wheel_colour_ids = {'R': 'red', 'B': 'black'}  # TODO update to use Col
 american_wheel_colour_options_text = "[R]ed, [B]lack"
 
 euro_wheel_user_parameters = RouletteWheelParametersUser(
-    **asdict(WheelParameters.EURO_WHEEL.value),
+    **asdict(WheelParameters.EURO_WHEEL),
     colour_ids=euro_wheel_colour_ids,
     colour_options=euro_wheel_colour_options_text)
 
 american_wheel_user_parameters = RouletteWheelParametersUser(
-    **asdict(WheelParameters.AMERICAN_WHEEL.value),
+    **asdict(WheelParameters.AMERICAN_WHEEL),
     colour_ids=american_wheel_colour_ids,
     colour_options=american_wheel_colour_options_text)
 
 
-class WheelParametersUser(Enum):
+@dataclass
+class WheelParametersUser:
     EURO_WHEEL = euro_wheel_user_parameters
     AMERICAN_WHEEL = american_wheel_user_parameters
 

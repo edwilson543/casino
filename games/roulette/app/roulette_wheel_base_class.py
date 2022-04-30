@@ -16,8 +16,11 @@ class RouletteWheelParameters:
     slots: dict
     bias_colour: str
 
+WHEEL_PARAMETER_TYPES = TypeVar(name="WHEEL_PARAMETER_TYPES", bound=RouletteWheelParameters)
 
+##########
 #  Return type object of a roulette wheel spin
+##########
 wheel_spin_return = namedtuple("wheel_spin_return", "number_return colour_return")
 
 
@@ -30,7 +33,7 @@ class RouletteWheel:
 
     Instance attributes:
     __________
-    wheel_name: fully capitalised name of the wheel with _WHEEL suffix
+    wheel_name: fully capitalised bet_type_name of the wheel with _WHEEL suffix
     slots: slot of the roulette wheel -
     should be passed as a dictionary, with the numbers as keys and the colours as the values
     bias_colour: the colour whose counts are ignored when calculating stake returns. e.g. if you have a 37 slot

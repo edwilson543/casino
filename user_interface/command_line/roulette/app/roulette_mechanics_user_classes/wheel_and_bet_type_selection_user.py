@@ -1,9 +1,9 @@
 from games.roulette.app.roulette_mechanics_action_classes.wheel_and_bet_type_selection import WheelAndBetTypeConstructor
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
-from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
 from games.roulette.constants.wheel_constants import WheelIds
-from games.roulette.constants.bet_constants import WheelBetParameters
+from games.roulette.constants.bet_constants import BetTypeIds, WheelBetParameters
 
+from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
 from user_interface.command_line.roulette.constants.wheel_constants_user import WheelParametersUser, wheel_options_text
 from user_interface.command_line.roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
@@ -15,8 +15,10 @@ class WheelAndBetTypeSelectorUser(WheelAndBetTypeConstructor):
 
     def __init__(self,
                  wheel_parameters_look_up: Enum = WheelParametersUser,
-                 construction_object=RouletteWheelUser):
-        super().__init__(wheel_parameters_look_up, construction_object)
+                 construction_object=RouletteWheelUser,
+                 bet_parameters_look_up=WheelBetParameters,
+                 bet_object_look_up=BetTypeOptionsUser):
+        super().__init__(wheel_parameters_look_up, construction_object, bet_parameters_look_up, bet_object_look_up)
 
     def choose_playing_wheel(self) -> WHEEL_TYPES:
         """
@@ -35,16 +37,15 @@ class WheelAndBetTypeSelectorUser(WheelAndBetTypeConstructor):
 
     def choose_bet_type(self, wheel_name: str) -> USER_BET_TYPES:
         """
-        Method that navigates the user to choose their bet, by applying the choose_playing_wheel,
-        choose_bet_category and then the choose_bet_type methods below.
+        Method that navigates the user to choose their bet type, and then calls super class method to instantiate it.
         """
         bet_types_text = getattr(WheelBetParameters, wheel_name).construct_wheel_bet_options_prompt()
         while True:
             bet_type_id = input("What type of bet would you like to place?\n"
                                 f"{bet_types_text}\n--->").upper()
             try:
-                bet_choice = self.get_bet_type_from_bet_type_id(bet_type_id=bet_type_id,
-                                                                bet_type_look_up=BetTypeOptionsUser)
-                return bet_choice
+                bet_type_name = BetTypeIds(bet_type_id).name
+                bet_type = self.get_bet_type_from_bet_type_name(wheel_name=wheel_name, bet_type_name=bet_type_name)
+                return bet_type
             except ValueError:
-                print("Invalid wheel choice, please try again")
+                print("Invalid bet choice, please try again")

@@ -18,6 +18,7 @@ USER_BET_TYPES = TypeVar(name="USER_BET_TYPES", bound=RouletteBetUser)
 ##########
 class ColoursBetUser(RouletteBetUser, ColoursBet):
     def __init__(self,
+                 bet_type_name: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
                  stake: int = None,
@@ -25,8 +26,7 @@ class ColoursBetUser(RouletteBetUser, ColoursBet):
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
-        bet_type: str = BetTypeIds.COLOURS_BET.name
-        super(ColoursBet, self).__init__(bet_type, min_bet, max_bet, stake,
+        super(ColoursBet, self).__init__(bet_type_name, min_bet, max_bet, stake,
                                          bet_choice, win_criteria, payout, playing_wheel)
 
     def get_user_bet_choice(self) -> str:
@@ -48,6 +48,7 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
     """Class for defining win criteria and payout for a straight-up bet"""
 
     def __init__(self,
+                 bet_type_name: str = None,
                  min_bet: int = None,
                  max_bet: int = None,
                  stake: int = None,
@@ -55,8 +56,7 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
-        bet_type = BetTypeIds.STRAIGHTUP_BET.name
-        super(StraightUpBet, self).__init__(bet_type, min_bet, max_bet, stake,
+        super(StraightUpBet, self).__init__(bet_type_name, min_bet, max_bet, stake,
                                             bet_choice, win_criteria, payout, playing_wheel)
 
     def get_user_bet_choice(self) -> int:
@@ -82,5 +82,5 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
 # Enum for storing all the bet classes
 ##########
 class BetTypeOptionsUser(Enum):
-    COLOURS_BET = ColoursBetUser()
-    STRAIGHTUP_BET = StraightUpBetUser()
+    COLOURS_BET = ColoursBetUser
+    STRAIGHTUP_BET = StraightUpBetUser

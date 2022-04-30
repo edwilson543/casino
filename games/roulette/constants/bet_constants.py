@@ -3,20 +3,20 @@ Module for defining the parameters of each bet
 The module is split into global parameters and wheel specific parameters.
 Flexibility is there to define wheel specific parameters, but currently only default values are used.
 """
-
+from games.roulette.app.roulette_bet_base_class import RouletteBetParameters
 from enum import Enum
 from dataclasses import dataclass, fields, Field
 from typing import Tuple
 
 
-#  todo how to avoid repeatedly writing "COLOURS_BET" in enum NAMES/ dataclass Fields?
+#  todo is there a way to avoid repeatedly writing "COLOURS_BET" in enum NAMES/ dataclass Fields?
 ##########
-# GLOBAL parameters of each bet type - name, id and command line prompts
+# GLOBAL parameters of each bet type - bet_type_name, id and command line prompts
 ##########
 class BetTypeIds(str, Enum):
     """
-    Class specifying the name and ID of each bet type
-    Note this class is used to define the name of indivudal bets (using .name)
+    Class specifying the bet_type_name and ID of each bet type
+    Note this class is used to define the bet_type_name of indivudal bets (using .bet_type_name)
     And is then used by named bets to look up their own ID.
     """
     COLOURS_BET = "C"
@@ -34,32 +34,23 @@ class BetTypePrompts(str, Enum):
     NEW_BET = None  # Dummy new bet prompt
 
 
-@dataclass(frozen=True)
-class MinMaxBetParameters:
-    """Class to specify the min/max bet parameters of a given bet.
-    To define some wheel specific parameters, define a new instance of the class for that bet"""
-    min_bet: int
-    max_bet: int
+default_colours_bet = RouletteBetParameters(bet_type_name=BetTypeIds.COLOURS_BET.name, min_bet=5, max_bet=50)
+default_straight_up_bet = RouletteBetParameters(bet_type_name=BetTypeIds.STRAIGHTUP_BET.name, min_bet=2, max_bet=20)
 
+default_new_bet = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name, min_bet=0, max_bet=0)
 
-default_colours_bet = MinMaxBetParameters(min_bet=5, max_bet=50)
-default_straight_up_bet = MinMaxBetParameters(min_bet=2, max_bet=20)
-
-default_new_bet = MinMaxBetParameters(min_bet=0, max_bet=0)
-
-# Value below determines whether a user can keep adding more bets to the current wheel spin - may end up getting rid
-# This should be greater than the min bets defined on that wheel
-default_min_pot_to_add_more_bets_to_current_spin = 10
-#  TODO include in wheel parameters or delete
 
 @dataclass(frozen=True)
 class IndividualWheeBetParameters:
-    COLOURS_BET: MinMaxBetParameters = default_colours_bet
-    STRAIGHTUP_BET: MinMaxBetParameters = default_straight_up_bet
-    # new bet goes here but will raise an error if included in the prompt
+    COLOURS_BET: RouletteBetParameters = default_colours_bet
+    STRAIGHTUP_BET: RouletteBetParameters = default_straight_up_bet
+    # new bet goes here as a class attribute
 
     def construct_wheel_bet_options_prompt(self) -> str:
-        """Method to construct a command line prompt specific to the wheel, of the bet type options on that wheel"""
+        """
+        Method to construct a command line prompt specific to the wheel, of the bet type options on that wheel
+        e.g. return: [C]olours, [S]traight up
+        """
         bet_types_tuple: Tuple[Field, ...] = fields(self.__class__)  # creates a tuple of the data class fields
         number_of_bet_options: int = len(bet_types_tuple)
         bet_type_options_prompt: str = ""
@@ -73,11 +64,10 @@ class IndividualWheeBetParameters:
         return bet_type_options_prompt
 
 
-default_wheel_min_max_bet_data = IndividualWheeBetParameters()
+default_wheel_bet_parameters = IndividualWheeBetParameters()
 
-
-@dataclass(frozen=True)
+@dataclass
 class WheelBetParameters:
-    EURO_WHEEL = default_wheel_min_max_bet_data
-    AMERICAN_WHEEL = default_wheel_min_max_bet_data
+    EURO_WHEEL = default_wheel_bet_parameters
+    AMERICAN_WHEEL = default_wheel_bet_parameters
     NEW_WHEEL = None

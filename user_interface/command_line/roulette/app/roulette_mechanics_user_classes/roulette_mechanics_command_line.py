@@ -137,7 +137,6 @@ class RouletteGameUser(RouletteGame):
             ##########
             potential_bet: USER_BET_TYPES = wheel_bet_selector.choose_bet_type(wheel_name=self.active_wheel.wheel_name)
             potential_bet.set_playing_wheel(wheel=self.active_wheel)
-            potential_bet.set_min_max_bet()
 
             ##########
             # 2 Determine stake amount

@@ -17,7 +17,7 @@ def password_protected(n_attempts):
             for k in range(n_attempts):
                 password = input(f"Please enter your password.\n--->")
                 if password == desired_player.password:
-                    print(f"Welcome back, {desired_player.name}!")
+                    print(f"Welcome back, {desired_player.bet_type}!")
                     return desired_player
                 elif k == n_attempts - 1:
                     sys.exit("Too many invalid attempts, your session has been terminated.")

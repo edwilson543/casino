@@ -1,5 +1,5 @@
 from games.roulette.app.roulette_wheel_base_class import RouletteWheelParameters
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from enum import Enum
 
 
@@ -7,17 +7,13 @@ from enum import Enum
 # Global wheel parameters
 ##########
 class WheelIds(str, Enum):
-    """Class for storing wheel name and an associatedid"""
+    """Class for storing wheel bet_type_name and an associated id"""
     EURO_WHEEL = "E"
     AMERICAN_WHEEL = "A"
 
 
 # TODO implement Colours Enum in the definitions below, and on UI side
 
-
-##########
-# Wheel definitions
-##########
 # EURO_WHEEL parameters
 euro_wheel_parameters = RouletteWheelParameters(
     wheel_name=WheelIds.EURO_WHEEL.name,
@@ -40,6 +36,7 @@ american_wheel_parameters = RouletteWheelParameters(
     bias_colour='green')
 
 
-class WheelParameters(Enum):
+@dataclass
+class WheelParameters:
     EURO_WHEEL = euro_wheel_parameters
     AMERICAN_WHEEL = american_wheel_parameters

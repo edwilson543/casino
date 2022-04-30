@@ -7,7 +7,7 @@ from abc import abstractmethod
 
 class RouletteBetUser(RouletteBet):
     def __init__(self,
-                 bet_type: str,
+                 bet_type_name: str,
                  min_bet: int,
                  max_bet: int,
                  stake: int,
@@ -15,7 +15,7 @@ class RouletteBetUser(RouletteBet):
                  win_criteria: list[int],
                  payout: int,
                  playing_wheel: WHEEL_TYPES):
-        super().__init__(bet_type, min_bet, max_bet, stake, bet_choice,
+        super().__init__(bet_type_name, min_bet, max_bet, stake, bet_choice,
                          win_criteria, payout, playing_wheel)
 
     @abstractmethod

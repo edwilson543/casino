@@ -3,7 +3,6 @@ To define a new bet type complete the following steps:
 """
 from games.roulette.app.roulette_bet_base_class import RouletteBet
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
-from games.roulette.constants.bet_constants import BetTypeIds
 from typing import Union, TypeVar
 from enum import Enum
 
@@ -20,6 +19,7 @@ class ColoursBet(RouletteBet):
     """Class for defining the win criteria of a colours bet."""
 
     def __init__(self,
+                 bet_type_name: str,
                  min_bet: int = None,
                  max_bet: int = None,
                  stake: int = None,
@@ -27,8 +27,7 @@ class ColoursBet(RouletteBet):
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
-        bet_type = BetTypeIds.COLOURS_BET.name
-        super().__init__(bet_type, min_bet, max_bet, stake,
+        super().__init__(bet_type_name, min_bet, max_bet, stake,
                          bet_choice, win_criteria, payout, playing_wheel)
 
     def determine_win_criteria(self) -> list[int]:
@@ -49,6 +48,7 @@ class StraightUpBet(RouletteBet):
     """Class for defining the win criteria for a straight up bet"""
 
     def __init__(self,
+                 bet_type_name: str,
                  min_bet: int = None,
                  max_bet: int = None,
                  stake: int = None,
@@ -56,8 +56,7 @@ class StraightUpBet(RouletteBet):
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
-        bet_type = BetTypeIds.STRAIGHTUP_BET.name
-        super().__init__(bet_type, min_bet, max_bet, stake,
+        super().__init__(bet_type_name, min_bet, max_bet, stake,
                          bet_choice, win_criteria, payout, playing_wheel)
 
     def determine_win_criteria(self) -> list[int]:
@@ -72,7 +71,8 @@ class StraightUpBet(RouletteBet):
 
 ##########
 # Add the newly defined user bet class to the BetTypeOptions Enum below
+# Parameters imported live into game so don't instantiate
 ##########
 class BetTypeOptions(Enum):
-    COLOURS_BET = ColoursBet()
-    STRAIGHTUP_BET = StraightUpBet()
+    COLOURS_BET = ColoursBet
+    STRAIGHTUP_BET = StraightUpBet
