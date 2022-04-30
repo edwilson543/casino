@@ -1,16 +1,11 @@
 """To define a new wheel, first go to roulette->definitions->wheel_parameters_and_definitions"""
 
-from games.roulette.constants.wheel_constants import WheelIds
 from user_interface.command_line.roulette.constants.wheel_constants_user import WheelParametersUser
 from user_interface.command_line.roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
 
 from enum import Enum
-from typing import TypeVar
 
-##########
-# Typevar to be used when referencing wheels in type hints throughout game
-##########
-USER_WHEEL_TYPES = TypeVar(name="USER_WHEEL_TYPES", bound=RouletteWheelUser)
+
 
 ##################
 # Wheel relevant UI definitions
@@ -40,10 +35,3 @@ class WheelOptionsUser(Enum):
     AMERICAN_WHEEL = american_wheel_user
 
 
-wheel_options_text = f"[{WheelIds.EURO_WHEEL.value}]uropean, " \
-                     f"[{WheelIds.AMERICAN_WHEEL.value}]merican"
-
-
-# euro_wheel = RouletteWheelUser(**WheelParametersUser.EURO_WHEEL)
-#
-# # print(euro_wheel.slots)

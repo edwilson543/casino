@@ -1,8 +1,10 @@
 from datetime import datetime
 from enum import Enum
+from typing import TypeVar
 
 
 class PlayerType(Enum):
+    """Existing/guest/new players are treated differently at log-in"""
     EXISTING_PLAYER = "E"
     GUEST_PLAYER = "G"
     NEW_PLAYER = "N"
@@ -83,3 +85,9 @@ class Player:
         elif self.player_type in [PlayerType.EXISTING_PLAYER, PlayerType.GUEST_PLAYER]:
             return self.active_pot - self.active_session_initial_pot - \
                    self.active_session_top_ups
+
+
+##########
+# Type hint to use whenever referencing a player object
+##########
+PLAYER_TYPES = TypeVar(name="PLAYER_TYPES", bound=Player)

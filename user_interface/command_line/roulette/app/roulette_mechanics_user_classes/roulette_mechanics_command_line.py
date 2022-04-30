@@ -1,13 +1,13 @@
 from games.roulette.app.roulette_mechanics_action_classes.roulette_mechanics import RouletteGame
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
-from games.roulette.definitions.game_parameters import AllGameParameters
+from games.roulette.constants.game_constants import AllGameParameters
+from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from user_interface.command_line.roulette.definitions.navigation_defns import post_spin_navigation_dict
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.wheel_and_bet_type_selection_user import \
     WheelAndBetTypeSelectorUser
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
     RouletteContinuationUser
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
-from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
 from user_interface.command_line.games.player_base_class_user import PlayerUser
 
 
@@ -26,7 +26,7 @@ class RouletteGameUser(RouletteGame):
 
     def __init__(self,
                  active_player: PlayerUser = None,
-                 active_wheel: USER_WHEEL_TYPES = None,
+                 active_wheel: WHEEL_TYPES = None,
                  active_all_bets_list: list = None,
                  active_total_stake: int = 0,
                  active_spin_outcome: wheel_spin_return = None,

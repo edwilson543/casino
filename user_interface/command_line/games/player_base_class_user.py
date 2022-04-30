@@ -1,5 +1,5 @@
 from games.player_base_class import Player, PlayerType
-from games.roulette.definitions.game_parameters import AllGameParameters
+from games.roulette.constants.game_constants import AllGameParameters
 from datetime import datetime
 
 

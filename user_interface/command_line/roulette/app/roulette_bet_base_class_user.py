@@ -1,5 +1,5 @@
 from games.roulette.app.roulette_bet_base_class import RouletteBet
-from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
+from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 
 from typing import Union
 from abc import abstractmethod
@@ -14,7 +14,7 @@ class RouletteBetUser(RouletteBet):
                  bet_choice: Union[int, str, list],
                  win_criteria: list[int],
                  payout: int,
-                 playing_wheel: USER_WHEEL_TYPES):
+                 playing_wheel: WHEEL_TYPES):
         super().__init__(bet_type, min_bet, max_bet, stake, bet_choice,
                          win_criteria, payout, playing_wheel)
 

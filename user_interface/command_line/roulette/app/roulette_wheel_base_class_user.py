@@ -1,7 +1,20 @@
-from games.roulette.app.roulette_wheel_base_class import RouletteWheel, wheel_spin_return
-from games.roulette.definitions.game_parameters import AllGameParameters
+from games.roulette.app.roulette_wheel_base_class import RouletteWheel, wheel_spin_return, RouletteWheelParameters
+from games.roulette.constants.game_constants import AllGameParameters
+from dataclasses import dataclass
 from time import sleep
 
+##########
+# Data class for defining the RouletteWheelUser Parameters
+# i.e. the new instance attributes added to the RouletteWheelUser class
+##########
+@dataclass
+class RouletteWheelParametersUser(RouletteWheelParameters):
+    colour_ids: dict
+    colour_options: str
+
+##########
+# Base class for defining the command line UI Roulette wheel
+##########
 
 class RouletteWheelUser(RouletteWheel):
     def __init__(self,
@@ -53,3 +66,5 @@ class RouletteWheelUser(RouletteWheel):
                 print(f"Ball has landed on {spin_outcome.number_return}, ({spin_outcome.colour_return})!")
                 sleep(AllGameParameters.pause_durations.short)
                 return spin_outcome
+
+

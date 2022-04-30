@@ -1,26 +1,46 @@
-import numpy as np
+from dataclasses import dataclass
 from collections import namedtuple
+from typing import TypeVar
+import numpy as np
 
+
+##########
+# Data class for storing wheel parameters
+##########
+@dataclass
+class RouletteWheelParameters:
+    """
+    Data class for storing the different attributes of each wheel, so they can be stored and imported separately
+    """
+    wheel_name: str
+    slots: dict
+    bias_colour: str
+
+
+#  Return type object of a roulette wheel spin
 wheel_spin_return = namedtuple("wheel_spin_return", "number_return colour_return")
 
 
-# TODO add adjacency lists (maybe implementedd with a dictionary) for the boards to the definitions
-# Then in the UI wheel, add a string rep of form "|1|2|\n-----\n|3|4|"
+##########
+# Base class defining the Roulette Wheel
+##########
 class RouletteWheel:
-    """Base class for the roulette wheel - from which we can define different wheel configurations"""
+    """
+    Base class for the roulette wheel - from which we can define different wheel configurations.
+
+    Instance attributes:
+    __________
+    wheel_name: fully capitalised name of the wheel with _WHEEL suffix
+    slots: slot of the roulette wheel -
+    should be passed as a dictionary, with the numbers as keys and the colours as the values
+    bias_colour: the colour whose counts are ignored when calculating stake returns. e.g. if you have a 37 slot
+    wheel and one slot is green, then stakes are calculated from probabilities as 1/(x/36).
+    """
 
     def __init__(self,
                  wheel_name: str,
                  slots: dict,
                  bias_colour: str):
-        """
-        Parameters
-        __________
-        slots: slot of the roulette wheel -
-        should be passed as a dictionary, with the numbers as keys and the colours as the values
-        bias_colour: the colour whose counts are ignored when calculating stake returns. e.g. if you have a 37 slot
-        wheel and one slot is green, then stakes are calculated from probabilities as 1/(x/36).
-        """
         self.wheel_name = wheel_name
         self.slots = slots
         self.bias_colour = bias_colour
@@ -48,3 +68,8 @@ class RouletteWheel:
     def wheel_size(self) -> int:
         """Returns: The number of slots on the wheel as an int, for calculating probabilities within wager defns"""
         return len(self.slots)
+
+##########
+# Type hint to be used when referencing all wheel objects
+##########
+WHEEL_TYPES = TypeVar(name="WHEEL_TYPES", bound=RouletteWheel)

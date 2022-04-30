@@ -1,11 +1,10 @@
 """To define a new bet, first go to roulette->definitions->bet_type_defns"""
 from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
 from games.roulette.constants.bet_constants import BetTypeIds
+from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from user_interface.command_line.roulette.app.roulette_bet_base_class_user import RouletteBetUser
-from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
 from typing import Union, TypeVar
 from enum import Enum
-
 
 ##########
 # Typevar to be used when referencing user bets in type hints throughout game
@@ -25,10 +24,10 @@ class ColoursBetUser(RouletteBetUser, ColoursBet):
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
-                 playing_wheel: USER_WHEEL_TYPES = None):
+                 playing_wheel: WHEEL_TYPES = None):
         bet_type: str = BetTypeIds.COLOURS_BET.name
         super(ColoursBet, self).__init__(bet_type, min_bet, max_bet, stake,
-                         bet_choice, win_criteria, payout, playing_wheel)
+                                         bet_choice, win_criteria, payout, playing_wheel)
 
     def get_user_bet_choice(self) -> str:
         """
@@ -55,10 +54,10 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
                  bet_choice: Union[int, str, list] = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
-                 playing_wheel: USER_WHEEL_TYPES = None):
+                 playing_wheel: WHEEL_TYPES = None):
         bet_type = BetTypeIds.STRAIGHTUP_BET.name
         super(StraightUpBet, self).__init__(bet_type, min_bet, max_bet, stake,
-                         bet_choice, win_criteria, payout, playing_wheel)
+                                            bet_choice, win_criteria, payout, playing_wheel)
 
     def get_user_bet_choice(self) -> int:
         """
@@ -85,4 +84,3 @@ class StraightUpBetUser(RouletteBetUser, StraightUpBet):
 class BetTypeOptionsUser(Enum):
     COLOURS_BET = ColoursBetUser()
     STRAIGHTUP_BET = StraightUpBetUser()
-

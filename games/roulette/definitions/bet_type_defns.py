@@ -2,7 +2,7 @@
 To define a new bet type complete the following steps:
 """
 from games.roulette.app.roulette_bet_base_class import RouletteBet
-from games.roulette.definitions.wheel_defns import WHEEL_TYPES
+from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.bet_constants import BetTypeIds
 from typing import Union, TypeVar
 from enum import Enum
@@ -35,7 +35,7 @@ class ColoursBet(RouletteBet):
         """
         Returns: list of the slot numbers of the same colour as the input colour.
         Requires the bet_choice attribute to have already been set.
-        """
+        """  # TODO update as for colours enum
         allowed_colours = set(self.playing_wheel.slots.values()).difference({self.playing_wheel.bias_colour})
         if self.bet_choice in allowed_colours:
             return [slot_num for slot_num in self.playing_wheel.slots if

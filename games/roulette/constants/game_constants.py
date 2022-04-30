@@ -19,7 +19,7 @@ class TopUpParameters:
 
 
 @dataclass(frozen=True)
-class PauseDurations:
+class PauseDurations:  # UI focused but bit annoying to have in its own file for now
     short = 0.5
     medium = 1
     long = 2
@@ -30,3 +30,10 @@ class AllGameParameters:
     deposit_parameters = DepositParameters
     top_up_parameters = TopUpParameters
     pause_durations = PauseDurations
+
+##########
+# Colours on the Roulette wheel/ board
+##########
+class Colours:
+    RED = "R"  # make sure RHS is unique
+    # TODO finish and implement in definitions below

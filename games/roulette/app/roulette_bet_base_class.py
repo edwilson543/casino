@@ -1,5 +1,5 @@
 from games.bet_base_class import Bet
-from games.roulette.definitions.wheel_defns import WHEEL_TYPES
+from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.constants.bet_constants import WheelBetParameters
 
@@ -27,7 +27,6 @@ class RouletteBet(Bet):
                  playing_wheel: WHEEL_TYPES = None):
         super().__init__(bet_type, min_bet, max_bet, stake, bet_choice, win_criteria, payout)
         self.playing_wheel = playing_wheel
-
 
     def set_playing_wheel(self, wheel: WHEEL_TYPES):
         """Method to set the playing_wheel attribute of the bet"""
