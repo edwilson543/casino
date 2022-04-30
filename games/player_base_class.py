@@ -1,6 +1,7 @@
 from datetime import datetime
 from enum import Enum
 from typing import TypeVar
+from dataclasses import dataclass
 
 
 class PlayerType(Enum):
@@ -8,6 +9,20 @@ class PlayerType(Enum):
     EXISTING_PLAYER = "E"
     GUEST_PLAYER = "G"
     NEW_PLAYER = "N"
+
+
+@dataclass
+class PlayerData:
+    """Data class for storing player parameters"""
+    player_type: PlayerType
+    name: str
+    username: str
+    password: str
+    active_pot: int
+    last_top_up_datetime: datetime
+    active_session_initial_pot: int
+    active_session_start_time: datetime
+    active_session_top_ups: int
 
 
 class Player:
@@ -76,7 +91,6 @@ class Player:
     def calculate_active_session_winnings(self) -> int:
         winnings = self.active_pot - self.active_session_initial_pot - self.active_session_top_ups
         return winnings
-
 
     def calculate_active_session_duration_minutes(self) -> int:
         duration_timedelta = datetime.now() - self.active_session_start_time
