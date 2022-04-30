@@ -1,8 +1,8 @@
-from games.roulette.constants.bet_constants import IndividualWheeBetParameters, default_colours_bet, \
+from games.roulette.constants.bet_constants import AllWheelDefaultBetParameters, default_colours_bet, \
     default_straight_up_bet
 
-test_wheel_parameters = IndividualWheeBetParameters(COLOURS_BET=default_colours_bet,
-                                                    STRAIGHTUP_BET=default_straight_up_bet)
+test_wheel_parameters = AllWheelDefaultBetParameters(COLOURS_BET=default_colours_bet,
+                                                     STRAIGHTUP_BET=default_straight_up_bet)
 
 
 class TestIndividualWheelMinMaxBetParameters:

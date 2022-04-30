@@ -5,7 +5,7 @@ from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
     NavigationOptionRank
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.wheel_and_bet_type_selection_user import \
-    WheelAndBetTypeSelectorUser
+    WheelBoardBetConstructorUser
 from user_interface.command_line.roulette.app.roulette_mechanics_user_classes.roulette_continuation_user import \
     RouletteContinuationUser
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
@@ -28,13 +28,14 @@ class RouletteGameUser(RouletteGame):
     def __init__(self,
                  active_player: PlayerUser = None,
                  active_wheel: WHEEL_TYPES = None,
+                 active_board=None,  # TODO implement this
+                 constructor=WheelBoardBetConstructorUser(),
                  active_all_bets_list: list = None,
-                 active_total_stake: int = 0,
                  active_spin_outcome: wheel_spin_return = None,
                  active_bet_win_count: int = 0,
                  active_total_winnings: int = 0,
                  next_step: int = 0):
-        super().__init__(active_player, active_wheel, active_all_bets_list, active_total_stake,
+        super().__init__(active_player, active_wheel, active_board, constructor, active_all_bets_list,
                          active_spin_outcome, active_bet_win_count, active_total_winnings)
         self.next_step = next_step
 
@@ -42,30 +43,28 @@ class RouletteGameUser(RouletteGame):
         """Method to loop over all game components, based on the next_step re-determined at end"""
 
         while True:
-
-            wheel_bet_selector = WheelAndBetTypeSelectorUser()
             ##########
             # Wheel selection
             ##########
             if self.next_step <= NavigationOptionRank.CHANGE_WHEEL.value:
                 """i.e. if user chose to change wheel after their bet, or this is the first loop."""
-                self.active_wheel = wheel_bet_selector.choose_playing_wheel()
+                self.active_wheel = self.constructor.choose_playing_wheel()
 
             ##########
             # Individual bet selection and accumulation
             ##########
             if self.next_step <= NavigationOptionRank.CHANGE_BETS.value:
                 """i.e. if user has chosen to change all bets (or change wheel, need to do this too)"""
-                self.active_total_stake = 0  # so that it does not accumulate from previous bets
-                self.set_all_active_bets_list(wheel_bet_selector=wheel_bet_selector)  # creates a list of all user bets
+                self.active_player.reset_total_active_stake()  # so that it does not accumulate from previous bets
+                self.set_all_active_bets_list()  # creates a list of all user bets
 
             ##########
             # Bet evaluation
             ##########
+            if self.next_step == NavigationOptionRank.REPEAT_BETS.value:  # if player repeats bets, take stake again
+                self.active_player.take_stake_from_pot(amount=self.active_player.total_active_stake)
             if self.next_step <= NavigationOptionRank.REPEAT_BETS.value:
                 """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
-                self.active_player.take_stake_from_pot(amount=self.active_total_stake)  # included here as otherwise
-                # gets missed by a quick repeat of all bets
                 self.active_spin_outcome = self.active_wheel.user_spin()  # gets user to spin wheel
                 super().evaluate_all_active_bets_list()  # accumulates the winnings of each bet in the list
                 self.give_user_bet_news()  # Tells user how many of their bets won, and winnings
@@ -74,7 +73,7 @@ class RouletteGameUser(RouletteGame):
             ##########
             # Establish game continuation criteria
             ##########
-            game_continuation = RouletteContinuationUser(stake=self.active_total_stake)
+            game_continuation = RouletteContinuationUser(stake=self.active_player.total_active_stake)
             game_continuation.keep_playing(active_player=self.active_player)
             # TODO build this into roulette continuation user
             top_up = self.active_player.check_top_up_scenario()
@@ -87,7 +86,7 @@ class RouletteGameUser(RouletteGame):
     # Tier 2 Methods called in roulette_loop
     ##########
 
-    def set_all_active_bets_list(self, wheel_bet_selector: WheelAndBetTypeSelectorUser):
+    def set_all_active_bets_list(self):
         """
         Method to repeatedly allow users to define bets and add them to the current spin.
         Calls the get_individual_bet to determine the parameters of each bet, and then accumulates them in the
@@ -97,7 +96,7 @@ class RouletteGameUser(RouletteGame):
         """
         self.active_all_bets_list = []
         while True:
-            individual_bet = self.get_individual_bet(wheel_bet_selector=wheel_bet_selector)
+            individual_bet = self.get_individual_bet()
             self.active_all_bets_list.append(individual_bet)
             if self.determine_if_user_wants_to_add_more_bets():
                 continue
@@ -116,7 +115,7 @@ class RouletteGameUser(RouletteGame):
     # Tier 3 methods called in set_all_active_bets_list
     ##########
 
-    def get_individual_bet(self, wheel_bet_selector: WheelAndBetTypeSelectorUser) -> USER_BET_TYPES:
+    def get_individual_bet(self) -> USER_BET_TYPES:
         """
         Method that takes the user through the process of specifying one individual bet.
         Parameters:
@@ -136,15 +135,13 @@ class RouletteGameUser(RouletteGame):
             ##########
             # 1 Choose bet type
             ##########
-            potential_bet: USER_BET_TYPES = wheel_bet_selector.choose_bet_type(wheel_name=self.active_wheel.wheel_name)
+            potential_bet: USER_BET_TYPES = self.constructor.choose_bet_type(wheel_name=self.active_wheel.wheel_name)
             potential_bet.set_playing_wheel(wheel=self.active_wheel)
 
             ##########
             # 2 Determine stake amount
             ##########
-            player_funds = self.active_player.active_pot - self.active_total_stake
-            # i.e. active pot less bets they've already added to current spin
-            stake = potential_bet.choose_stake_amount(player_funds=player_funds)
+            stake = potential_bet.choose_stake_amount(player_funds=self.active_player.active_pot)
             potential_bet.set_stake_amount(amount=stake)
 
             ##########
@@ -167,19 +164,18 @@ class RouletteGameUser(RouletteGame):
             # 5 Bet choice confirmation - if not confirmed, the loop restarts
             ##########
             if potential_bet.confirm_bet_choice():
-                self.active_total_stake += stake  # adds to active total stake in game
+                self.active_player.total_active_stake += stake  # adds to active total stake in game
+                self.active_player.take_stake_from_pot(amount=stake)
                 return potential_bet
             else:
                 continue
 
     def determine_if_user_wants_to_add_more_bets(self):
-        remaining_player_funds = self.active_player.active_pot - self.active_total_stake
-        # since the active total stake has not yet been removed from their pot
         while True:
-            if remaining_player_funds <= AllGameParameters.top_up_parameters.low_pot_forced_top_up:
+            if self.active_player.active_pot <= AllGameParameters.top_up_parameters.low_pot_forced_top_up:
                 user_wants_more_bets_via_top_up = input(
-                    f"You have £{remaining_player_funds} left to play with, "
-                    f"and £{self.active_total_stake} on the line.\n"
+                    f"You have £{self.active_player.active_pot} left to play with, "
+                    f"and £{self.active_player.total_active_stake} on the line.\n"
                     f"To add more bets to the current spin you must top up.\n"
                     f"Would you like to top up and place more bets?\n"
                     f"[Y]es, [N]o, proceed to wheel spinning\n--->").upper()
@@ -194,7 +190,7 @@ class RouletteGameUser(RouletteGame):
                     continue
             else:
                 user_wants_to_add_more_bets = input(
-                    f"You currently have £{self.active_total_stake} "
+                    f"You currently have £{self.active_player.total_active_stake} "
                     f"on the line.\nWould you like to add more bets to the current wheel spin?\n"
                     "[Y]es, [N]o\n--->").upper()
                 if user_wants_to_add_more_bets == "Y":

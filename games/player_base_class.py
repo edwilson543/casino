@@ -19,6 +19,7 @@ class PlayerData:
     username: str
     password: str
     active_pot: int
+    total_active_stake: int
     last_top_up_datetime: datetime
     active_session_initial_pot: int
     active_session_start_time: datetime
@@ -37,6 +38,7 @@ class Player:
                  username: str,
                  password: str,
                  active_pot: int,
+                 total_active_stake: int,
                  last_top_up_datetime: datetime,
                  active_session_initial_pot: int = None,
                  active_session_start_time: datetime = None,
@@ -46,6 +48,7 @@ class Player:
         self.username = username
         self.password = password
         self.active_pot = active_pot
+        self.total_active_stake = total_active_stake
         self.last_top_up_datetime = last_top_up_datetime
         self.active_session_initial_pot = active_session_initial_pot
         self.active_session_start_time = active_session_start_time
@@ -83,6 +86,9 @@ class Player:
     def set_active_session_initial_pot_and_time(self):
         self.active_session_initial_pot = self.active_pot
         self.active_session_start_time = datetime.now()
+
+    def reset_total_active_stake(self):
+        self.total_active_stake = 0
 
     ##########
     # Calculation methods

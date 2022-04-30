@@ -10,7 +10,7 @@ from enum import Enum
 
 
 # TODO what type hint should be used for the look up? it's an enum of bet/wheel objects
-class WheelAndBetTypeConstructor:
+class WheelBoardBetConstructor:
     """
     Class to look up wheel and bet parameters based on their names,
     and instantiate the relevant wheel/bet objects
@@ -38,7 +38,7 @@ class WheelAndBetTypeConstructor:
             wheel_parameters: WHEEL_PARAMETER_TYPES = getattr(self.wheel_parameters_look_up, wheel_name)
             wheel_parameters_dict = asdict(wheel_parameters)  # dict of parameters specific to the named wheel
             wheel = self.construction_object(**wheel_parameters_dict)
-            return wheel
+            return wheel  # TODO return wheel and board
         except ValueError:
             raise ValueError(f"Inavlid wheel bet_type_name: {wheel_name} passed to {self.wheel_parameters_look_up}, in method"
                              f"'get_wheel_from_wheel_name'")

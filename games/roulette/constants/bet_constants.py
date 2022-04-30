@@ -41,9 +41,14 @@ default_new_bet = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name, m
 
 
 @dataclass(frozen=True)
-class IndividualWheeBetParameters:
+class AllWheelDefaultBetParameters:
+    """
+    Class listing all available bets and parameters
+    To restict bets for certain wheels, create a new data class only consisting of the desired bets
+    """
     COLOURS_BET: RouletteBetParameters = default_colours_bet
     STRAIGHTUP_BET: RouletteBetParameters = default_straight_up_bet
+
     # new bet goes here as a class attribute
 
     def construct_wheel_bet_options_prompt(self) -> str:
@@ -53,7 +58,7 @@ class IndividualWheeBetParameters:
         """
         bet_types_tuple: Tuple[Field, ...] = fields(self.__class__)  # creates a tuple of the data class fields
         number_of_bet_options: int = len(bet_types_tuple)
-        bet_type_options_prompt: str = ""  # TODO use nav trick
+        bet_type_options_prompt: str = ""
         for n in range(number_of_bet_options):
             bet_type = bet_types_tuple[n]
             individual_bet_type_prompt = getattr(BetTypePrompts, bet_type.name).value
@@ -64,7 +69,8 @@ class IndividualWheeBetParameters:
         return bet_type_options_prompt
 
 
-default_wheel_bet_parameters = IndividualWheeBetParameters()
+default_wheel_bet_parameters = AllWheelDefaultBetParameters()
+
 
 @dataclass
 class WheelBetParameters:

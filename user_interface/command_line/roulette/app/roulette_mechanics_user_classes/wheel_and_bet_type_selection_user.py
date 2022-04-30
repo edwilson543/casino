@@ -1,4 +1,4 @@
-from games.roulette.app.roulette_mechanics_action_classes.wheel_and_bet_type_selection import WheelAndBetTypeConstructor
+from games.roulette.app.roulette_mechanics_action_classes.wheel_and_bet_type_selection import WheelBoardBetConstructor
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.wheel_constants import WheelIds
 from games.roulette.constants.bet_constants import BetTypeIds, WheelBetParameters
@@ -10,7 +10,7 @@ from user_interface.command_line.roulette.app.roulette_wheel_base_class_user imp
 from enum import Enum
 
 
-class WheelAndBetTypeSelectorUser(WheelAndBetTypeConstructor):
+class WheelBoardBetConstructorUser(WheelBoardBetConstructor):
     """Class to allow users to select the type of wheel they want to play on, and type of bet to place"""
 
     def __init__(self,
@@ -31,7 +31,7 @@ class WheelAndBetTypeSelectorUser(WheelAndBetTypeConstructor):
             try:
                 wheel_name = WheelIds(wheel_choice_id).name
                 wheel = self.get_wheel_from_wheel_name(wheel_name=wheel_name)
-                return wheel
+                return wheel  # TODO return wheel and board
             except ValueError:
                 print("Invalid wheel choice, please try again")
 
