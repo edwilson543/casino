@@ -1,4 +1,4 @@
-from games.player_base_class import PlayerType, PlayerData
+from games.player_base_class import PlayerType
 from games.players.player_data import AllPlayerData
 from user_interface.command_line.games.player_base_class_user import PlayerUser
 from dataclasses import asdict
@@ -14,7 +14,7 @@ def password_protected(n_attempts):
     def decorator_password_protected(func):
         @functools.wraps(func)
         def wrapper_password_protected(*args, **kwargs):
-            player: PlayerType = func(*args, **kwargs)  # this will be a call to access player
+            player: PlayerUser = func(*args, **kwargs)  # this will be a call to access player
             for k in range(n_attempts):
                 password = input(f"Please enter your password.\n--->")
                 if password == player.password:
@@ -33,7 +33,7 @@ def password_protected(n_attempts):
 
 
 @password_protected(n_attempts=5)
-def access_player(desired_player_object=PlayerUser):
+def access_player(desired_player_object=PlayerUser) -> PlayerUser:
     """Method to set the active_player within the game"""
     while True:
         username = input(f"What is your username?\n--->").lower()
@@ -75,7 +75,7 @@ class PlayerInteractionsUser:  # TODO make this a subclass of PlayerInteractions
                     guest_player = desired_player_object(**guest_player_data_dict)
                     return guest_player
                 elif player_type == PlayerType.EXISTING_PLAYER:
-                    existing_player = access_player()
+                    existing_player = access_player(desired_player_object=PlayerUser)
                     return existing_player
                 elif player_type == PlayerType.NEW_PLAYER:
                     print("New player functionality not built yet")
