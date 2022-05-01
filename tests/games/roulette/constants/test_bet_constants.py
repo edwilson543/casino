@@ -1,8 +1,8 @@
-from games.roulette.constants.bet_constants import WheelDefaultBetOptionsAndParameters, default_colours_bet, \
-    default_straight_up_bet
+from games.roulette.constants.bet_constants import WheelDefaultBetOptionsAndParameters, default_colours_bet_parameters, \
+    default_straight_up_bet_parameters
 
-test_wheel_parameters = WheelDefaultBetOptionsAndParameters(COLOURS_BET=default_colours_bet,
-                                                            STRAIGHTUP_BET=default_straight_up_bet)
+test_wheel_parameters = WheelDefaultBetOptionsAndParameters(COLOURS_BET=default_colours_bet_parameters,
+                                                            STRAIGHTUP_BET=default_straight_up_bet_parameters)
 
 
 class TestIndividualWheelMinMaxBetParameters:

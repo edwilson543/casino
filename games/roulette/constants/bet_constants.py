@@ -38,10 +38,11 @@ class BetTypePrompts(str, Enum):
 # Note that currently only 'defaults' are defined which are then used for each wheel
 ##########
 
-default_colours_bet = RouletteBetParameters(bet_type_name=BetTypeIds.COLOURS_BET.name, min_bet=5, max_bet=50)
-default_straight_up_bet = RouletteBetParameters(bet_type_name=BetTypeIds.STRAIGHTUP_BET.name, min_bet=2, max_bet=20)
+default_colours_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.COLOURS_BET.name, min_bet=5, max_bet=50)
+default_straight_up_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.STRAIGHTUP_BET.name, min_bet=2,
+                                                           max_bet=20)
 
-default_new_bet = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name, min_bet=0, max_bet=0)
+default_new_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name, min_bet=0, max_bet=0)
 
 
 @dataclass(frozen=True)
@@ -52,8 +53,9 @@ class WheelDefaultBetOptionsAndParameters:
     2) To store the bet PARAMETERS specific to each wheel
     To restrict bets options or vary parameters on certain wheels, create a new data class with different default values
     """
-    COLOURS_BET: RouletteBetParameters = default_colours_bet
-    STRAIGHTUP_BET: RouletteBetParameters = default_straight_up_bet
+    COLOURS_BET: RouletteBetParameters = default_colours_bet_parameters
+    STRAIGHTUP_BET: RouletteBetParameters = default_straight_up_bet_parameters
+
     # new bet goes here as a class attribute
 
     def construct_wheel_bet_options_prompt(self) -> str:
