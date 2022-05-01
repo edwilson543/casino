@@ -30,12 +30,8 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
                  active_wheel: WHEEL_TYPES = None,
                  constructor=WheelBoardBetConstructorUser(),
                  active_all_bets_list: list = None,
-                 active_spin_outcome: wheel_spin_return = None,
-                 active_bet_win_count: int = 0,
-                 active_total_winnings: int = 0,
                  next_step: int = 0):
-        super().__init__(active_player, active_wheel, constructor, active_all_bets_list,
-                         active_spin_outcome, active_bet_win_count, active_total_winnings)
+        super().__init__(active_player, active_wheel, constructor, active_all_bets_list)
         self.next_step = next_step
 
     def roulette_loop(self):
@@ -46,16 +42,16 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
             # Wheel selection
             ##########
             if self.next_step <= NavigationOptionRank.CHANGE_WHEEL.value:
-                """i.e. if user chose to change wheel after their bet, or this is the first loop."""
+                """If user chose to change wheel after their bet, or this is the first loop."""
                 self.active_wheel = self.constructor.choose_playing_wheel()
 
             ##########
             # Individual bet selection and accumulation
             ##########
             if self.next_step <= NavigationOptionRank.CHANGE_BETS.value:
-                """i.e. if user has chosen to change all bets (or change wheel, need to do this too)"""
+                """If user has chosen to change all bets (or change wheel, need to do this too)"""
                 self.active_player.reset_total_active_stake()  # so that it does not accumulate from previous bets
-                self.set_all_active_bets_list()  # creates a list of all user bets
+                self.set_all_active_bets_list()  # loops through individual bet selection and creates list of user bets
 
             ##########
             # Bet evaluation
@@ -63,11 +59,11 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
             if self.next_step == NavigationOptionRank.REPEAT_BETS.value:  # if player repeats bets, take stake again
                 self.active_player.take_stake_from_pot(amount=self.active_player.total_active_stake)
             if self.next_step <= NavigationOptionRank.REPEAT_BETS.value:
-                """i.e. if user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
-                self.active_spin_outcome = self.active_wheel.user_spin()  # gets user to spin wheel
-                super().evaluate_all_active_bets_list()  # accumulates the winnings of each bet in the list
-                self.give_user_bet_news()  # Tells user how many of their bets won, and winnings
-                super().reset_game_attributes()  # Clears the spin/winnings outcomes, ready for the next spin
+                """If user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
+                spin_outcome: wheel_spin_return = self.active_wheel.user_spin()  # gets user to spin wheel
+                bet_win_count, total_winnings = super().evaluate_all_active_bets_list(spin_outcome=spin_outcome)
+                self.active_player.add_winnings_to_pot(amount=self.active_total_winnings)
+                self.give_user_bet_news(bet_win_count=bet_win_count, total_winnings=total_winnings)
 
             ##########
             # Establish game continuation criteria
@@ -102,11 +98,11 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
             else:
                 break
 
-    def give_user_bet_news(self):
+    def give_user_bet_news(self, bet_win_count: int, total_winnings: int):
         """Method to tell the user the outcome of all of their bets"""
-        if self.active_bet_win_count > 0:
-            print(f"Congratulations! {self.active_bet_win_count} of your bets won!\n"
-                  f"You've received a huge payout of £{self.active_total_winnings}")
+        if bet_win_count > 0:
+            print(f"Congratulations {self.active_player.name}! {bet_win_count} of your bets won!\n"
+                  f"You've received a huge payout of £{total_winnings}")
         else:
             print("Better luck next time, none of your bets won.")
 
