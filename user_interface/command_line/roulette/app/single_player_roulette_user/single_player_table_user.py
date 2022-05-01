@@ -62,7 +62,7 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
                 """If user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
                 spin_outcome: wheel_spin_return = self.active_wheel.user_spin()  # gets user to spin wheel
                 bet_win_count, total_winnings = super().evaluate_all_active_bets_list(spin_outcome=spin_outcome)
-                self.active_player.add_winnings_to_pot(amount=self.active_total_winnings)
+                self.active_player.add_winnings_to_pot(amount=total_winnings)
                 self.give_user_bet_news(bet_win_count=bet_win_count, total_winnings=total_winnings)
 
             ##########
