@@ -3,13 +3,10 @@ To define a new bet type complete the following steps:
 """
 from games.roulette.app.roulette_bet_base_class import RouletteBet
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
-from typing import Union, TypeVar
+from games.roulette.constants.game_constants import Colour
 from enum import Enum
 
-##########
-# Typevar to be used when referencing bets in type hints throughout game
-##########
-BET_TYPES = TypeVar(name="BET_TYPES", bound=RouletteBet)
+
 
 
 ##########
@@ -23,7 +20,7 @@ class ColoursBet(RouletteBet):
                  min_bet: int = None,
                  max_bet: int = None,
                  stake: int = None,
-                 bet_choice: Union[int, str, list] = None,
+                 bet_choice: Colour = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
@@ -52,7 +49,7 @@ class StraightUpBet(RouletteBet):
                  min_bet: int = None,
                  max_bet: int = None,
                  stake: int = None,
-                 bet_choice: Union[int, str, list] = None,
+                 bet_choice: int = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):

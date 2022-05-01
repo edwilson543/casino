@@ -15,16 +15,16 @@ euro_wheel_user = RouletteWheelUser(
     wheel_name=WheelParametersUser.EURO_WHEEL.wheel_name,
     slots=WheelParametersUser.EURO_WHEEL.slots,
     bias_colour=WheelParametersUser.EURO_WHEEL.bias_colour,
-    colour_ids=WheelParametersUser.EURO_WHEEL.colour_ids,
-    colour_options=WheelParametersUser.EURO_WHEEL.colour_ids)
+    colour_options=WheelParametersUser.EURO_WHEEL.colour_options_text,
+    colour_options_text=WheelParametersUser.EURO_WHEEL.colour_options_text)
 
 
 american_wheel_user = RouletteWheelUser(
     wheel_name=WheelParametersUser.AMERICAN_WHEEL.wheel_name,
     slots=WheelParametersUser.AMERICAN_WHEEL.slots,
     bias_colour=WheelParametersUser.AMERICAN_WHEEL.bias_colour,
-    colour_ids=WheelParametersUser.AMERICAN_WHEEL.colour_ids,
-    colour_options=WheelParametersUser.AMERICAN_WHEEL.colour_options)
+    colour_options=WheelParametersUser.AMERICAN_WHEEL.colour_options_text,
+    colour_options_text=WheelParametersUser.AMERICAN_WHEEL.colour_options_text)
 
 
 ##########

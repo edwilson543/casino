@@ -2,14 +2,14 @@ from games.player_base_class import PLAYER_TYPES
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.app.single_player_roulette.wheel_and_bet_type_selection import \
-    WheelBoardBetConstructor
+    WheelAndBetConstructor
 
 
 class SinglePlayerRouletteTable:
     def __init__(self,
                  active_player: PLAYER_TYPES = None,
                  active_wheel: WHEEL_TYPES = None,
-                 constructor=WheelBoardBetConstructor(),
+                 constructor=WheelAndBetConstructor(),
                  active_all_bets_list: list = None):
         self.active_player = active_player
         self.active_wheel = active_wheel

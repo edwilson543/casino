@@ -5,10 +5,10 @@ from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     NavigationOptionRank
 from user_interface.command_line.roulette.app.single_player_roulette_user.wheel_and_bet_type_selection_user import \
-    WheelBoardBetConstructorUser
+    WheelAndBetConstructorUser
 from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     RouletteContinuationUser
-from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
+from user_interface.command_line.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
 from user_interface.command_line.games.player_base_class_user import PlayerUser
 
 
@@ -28,7 +28,7 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
     def __init__(self,
                  active_player: PlayerUser = None,
                  active_wheel: WHEEL_TYPES = None,
-                 constructor=WheelBoardBetConstructorUser(),
+                 constructor=WheelAndBetConstructorUser(),
                  active_all_bets_list: list = None,
                  next_step: int = 0):
         super().__init__(active_player, active_wheel, constructor, active_all_bets_list)
@@ -144,6 +144,8 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
             ##########
             bet_choice = potential_bet.get_user_bet_choice()
             potential_bet.set_bet_choice(bet_choice=bet_choice)
+            bet_choice_string = potential_bet.get_bet_choice_string_rep()
+            potential_bet.set_bet_choice_string_rep(bet_choice_string=bet_choice_string)
 
             ##########
             # 4 Determine the win criteria and calculate the payout of the specific bet choice

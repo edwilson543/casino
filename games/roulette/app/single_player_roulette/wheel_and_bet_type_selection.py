@@ -1,7 +1,5 @@
-#  TODO change the look up methods to not be from a dictionary
-from games.roulette.definitions.bet_type_defns import BET_TYPES
-from games.roulette.app.roulette_wheel_base_class import RouletteWheel, WHEEL_TYPES, WHEEL_PARAMETER_TYPES
-from games.roulette.app.roulette_bet_base_class import RouletteBetParameters
+from games.roulette.app.roulette_wheel_base_class import RouletteWheelParameters, RouletteWheel, WHEEL_TYPES
+from games.roulette.app.roulette_bet_base_class import RouletteBetParameters, BET_TYPES
 from games.roulette.constants.wheel_constants import WheelParameters
 from games.roulette.constants.bet_constants import WheelBetParameters
 from games.roulette.definitions.bet_type_defns import BetTypeOptions
@@ -10,7 +8,7 @@ from enum import Enum
 
 
 # TODO what type hint should be used for the look up? it's an enum of bet/wheel objects
-class WheelBoardBetConstructor:
+class WheelAndBetConstructor:
     """
     Class to look up wheel and bet parameters based on their names,
     and instantiate the relevant wheel/bet objects
@@ -35,13 +33,14 @@ class WheelBoardBetConstructor:
         which has all the instance attributes defined (e.g. Euro_wheel()).
         """
         try:
-            wheel_parameters: WHEEL_PARAMETER_TYPES = getattr(self.wheel_parameters_look_up, wheel_name)
+            wheel_parameters: RouletteWheelParameters = getattr(self.wheel_parameters_look_up, wheel_name)
             wheel_parameters_dict = asdict(wheel_parameters)  # dict of parameters specific to the named wheel
             wheel = self.construction_object(**wheel_parameters_dict)
-            return wheel  # TODO return wheel and board
+            return wheel
         except ValueError:
-            raise ValueError(f"Inavlid wheel bet_type_name: {wheel_name} passed to {self.wheel_parameters_look_up}, in method"
-                             f"'get_wheel_from_wheel_name'")
+            raise ValueError(
+                f"Inavlid wheel bet_type_name: {wheel_name} passed to {self.wheel_parameters_look_up}, in method"
+                f"'get_wheel_from_wheel_name'")
 
     def get_bet_type_from_bet_type_name(self, wheel_name: str, bet_type_name: str) -> BET_TYPES:
         """

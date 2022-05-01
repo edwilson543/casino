@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 
 
 #################
@@ -32,9 +33,19 @@ class AllGameParameters:
     pause_durations = PauseDurations
     allowed_password_attempts = 5
 
+
 ##########
 # Colours on the Roulette wheel/ board
 ##########
-class Colours:
-    RED = "R"  # make sure RHS is unique
-    # TODO finish and implement in definitions below
+class Colour(Enum):  # make sure RHS is unique
+    RED = "R"
+    BLACK = "B"
+    GREEN = "G"
+    BLUE = "BL"
+
+
+class ColourPrompts(Enum):  # make sure matches ID above
+    RED = "[R]ed"
+    BLACK = "[B]lack"
+    GREEN = "[G]reen"
+    BLUE = "[BL]ue"

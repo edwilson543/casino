@@ -1,20 +1,19 @@
-from games.roulette.app.single_player_roulette.wheel_and_bet_type_selection import WheelBoardBetConstructor
+from games.roulette.app.single_player_roulette.wheel_and_bet_type_selection import WheelAndBetConstructor
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
-from games.roulette.constants.wheel_constants import WheelIds
+from games.roulette.constants.wheel_constants import WheelIds, wheel_options_text, WheelParameters
 from games.roulette.constants.bet_constants import BetTypeIds, WheelBetParameters
 
-from user_interface.command_line.roulette.definitions.bet_type_defns_user import USER_BET_TYPES
+from user_interface.command_line.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
 from user_interface.command_line.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
-from user_interface.command_line.roulette.constants.wheel_constants_user import WheelParametersUser, wheel_options_text
 from user_interface.command_line.roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
 from enum import Enum
 
 
-class WheelBoardBetConstructorUser(WheelBoardBetConstructor):
+class WheelAndBetConstructorUser(WheelAndBetConstructor):
     """Class to allow users to select the type of wheel they want to play on, and type of bet to place"""
 
     def __init__(self,
-                 wheel_parameters_look_up: Enum = WheelParametersUser,
+                 wheel_parameters_look_up: Enum = WheelParameters,
                  construction_object=RouletteWheelUser,
                  bet_parameters_look_up=WheelBetParameters,
                  bet_object_look_up=BetTypeOptionsUser):
@@ -27,7 +26,7 @@ class WheelBoardBetConstructorUser(WheelBoardBetConstructor):
         """
         while True:
             wheel_choice_id = input("What wheel would you like to play on?\n"
-                                    f"{wheel_options_text}\n--->").upper()  # upper to allow for lower case
+                                    f"{wheel_options_text()}\n--->").upper()  # upper to allow for lower case
             try:
                 wheel_name = WheelIds(wheel_choice_id).name
                 wheel = self.get_wheel_from_wheel_name(wheel_name=wheel_name)

@@ -3,7 +3,7 @@ from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 
 from math import floor
-from typing import Union
+from typing import Union, TypeVar
 
 from dataclasses import dataclass
 
@@ -78,3 +78,8 @@ class RouletteBet(Bet):
             return self.payout
         else:
             return 0
+
+##########
+# Typevar to be used when referencing bets in type hints throughout game
+##########
+BET_TYPES = TypeVar(name="BET_TYPES", bound=RouletteBet)

@@ -1,3 +1,4 @@
+from games.roulette.constants.game_constants import Colour
 from dataclasses import dataclass
 from collections import namedtuple
 from typing import TypeVar
@@ -14,10 +15,8 @@ class RouletteWheelParameters:
     """
     wheel_name: str
     slots: dict
-    bias_colour: str
+    bias_colour: Colour
     board: array
-
-WHEEL_PARAMETER_TYPES = TypeVar(name="WHEEL_PARAMETER_TYPES", bound=RouletteWheelParameters)
 
 ##########
 #  Return type object of a roulette wheel spin
@@ -46,7 +45,7 @@ class RouletteWheel:
     def __init__(self,
                  wheel_name: str,
                  slots: dict,
-                 bias_colour: str,
+                 bias_colour: Colour,
                  board: array):
         self.wheel_name = wheel_name
         self.slots = slots
@@ -67,15 +66,23 @@ class RouletteWheel:
         Returns: The number of slots on the wheel, minus a count of the number of slots of biased colours.
         The purpose is so that when calculating the return for a bet, the bias wheel size is used to calculate the
         probability of winning so that the house always wins."""
-        return self.wheel_size() - self.colour_counts(colour=self.bias_colour)
+        return len(self.slots) - self.colour_counts(colour=self.bias_colour)
 
-    def colour_counts(self, colour: str) -> int:
+    def colour_counts(self, colour: Colour) -> int:
         """Returns: the number of slots on the wheel of the specified colour"""
         return sum(value == colour for value in self.slots.values())
 
-    def wheel_size(self) -> int:
-        """Returns: The number of slots on the wheel as an int, for calculating probabilities within wager defns"""
-        return len(self.slots)
+    def generate_colour_options(self) -> set[Colour]:
+        """Returns: a set of all the valid colours bet options (i.e. excluding bias colour)"""
+        colour_options = set(self.slots.values()).difference({self.bias_colour})
+        return colour_options
+
+    def generate_number_options_range(self):
+        """Returns a range which specifies the valid number choices"""
+        min_number = min(list(set(self.slots.keys())))
+        max_number = max(list(set(self.slots.keys())))
+        return range(min_number, max_number + 1)
+
 
 ##########
 # Type hint to be used when referencing all wheel objects
