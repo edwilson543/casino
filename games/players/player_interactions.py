@@ -1,7 +1,21 @@
+from games.player_base_class import Player, PLAYER_TYPES
+from games.players.player_data import AllPlayerData
+from dataclasses import asdict
+
 class PlayerInteractions:
-    def __init__(self):
-        #player?
-        pass
+    # def __init__(self):
+    #     pass
+
+    @staticmethod
+    def get_player_from_player_username(username:str, desired_player_object=Player) -> PLAYER_TYPES:
+        if hasattr(AllPlayerData, username):
+            player_data = getattr(AllPlayerData, username)
+            player_data_dict = asdict(player_data)
+            live_player = desired_player_object(**player_data_dict)
+            return live_player
+        else:
+            raise ValueError(f"No player with username {username} found")
+
 
     def load_player(self):
         """

@@ -30,6 +30,7 @@ class AllGameParameters:
     deposit_parameters = DepositParameters
     top_up_parameters = TopUpParameters
     pause_durations = PauseDurations
+    allowed_password_attempts = 5
 
 ##########
 # Colours on the Roulette wheel/ board
