@@ -2,7 +2,7 @@ from games.roulette.app.roulette_wheel_base_class import RouletteWheel, wheel_sp
 from games.roulette.constants.game_constants import AllGameParameters, Colour
 from dataclasses import dataclass
 from time import sleep
-from numpy import array
+from numpy import array, array2string
 
 
 ##########
@@ -49,4 +49,8 @@ class RouletteWheelUser(RouletteWheel):
 
     def generate_board_string_rep(self) -> str:
         """Method to give a human comprehensible string representation of the Roulette board"""
-        pass
+        board_string_rep = ""
+        for row in range(0, board.shape[0]):  # iterate over number of array rows
+            row_rep = array2string(board[row], separator="|")[2:][:-1].strip(" ")
+            board_string_rep += row_rep
+        return board_string_rep

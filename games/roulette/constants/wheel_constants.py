@@ -2,7 +2,7 @@ from games.roulette.app.roulette_wheel_base_class import RouletteWheelParameters
 from games.roulette.constants.game_constants import Colour
 from dataclasses import dataclass
 from enum import Enum
-from numpy import array
+from numpy import array, where
 
 
 ##########
@@ -66,3 +66,6 @@ class WheelParameters:
     """Data class storing all the parameters that define the playing wheels"""
     EURO_WHEEL = euro_wheel_parameters
     AMERICAN_WHEEL = american_wheel_parameters
+
+print(where(euro_wheel_parameters.board == 10))
+print(array([3]).item() == array([3]).item())

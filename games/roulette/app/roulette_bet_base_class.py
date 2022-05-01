@@ -50,7 +50,8 @@ class RouletteBet(Bet):
     def determine_valid_bet_choices(self, *args, **kwargs):
         """
         Abstract method for determining the valid bet choices of a given bet.
-        Defined differently for each specific roulette bet (e.g. ColoursBet) in bet_type_defns.
+        Defined differently for each specific roulette bet (e.g. ColoursBet) in bet_type_defns - note this is a very
+        dynamic method that varies significantly for each bet in both signature and return.
         """
         raise NotImplementedError("Call to determine_valid_bet_choices referred to RouletteBet super class")
 
