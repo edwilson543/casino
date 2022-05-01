@@ -75,6 +75,7 @@ class StraightUpBet(RouletteBet):
         else:
             raise ValueError(f"{self.bet_choice} is not a slot on the {self.playing_wheel.wheel_name} roulette wheel")
 
+
 class SplitBet(RouletteBet):
     """Class for defining the win criteria of a colours bet."""
 
@@ -99,25 +100,16 @@ class SplitBet(RouletteBet):
             int_one_index_row, int_one_index_col = where(self.playing_wheel.board == int_one)
             int_two_index_row, int_two_index_col = where(self.playing_wheel.board == int_two)
             if int_one_index_row.item() == int_two_index_row.item() or int_one_index_col.item() == int_two_index_col.item():
-                return True
+                return True  # Entered numbers are adjacent on the playing board
             else:
-                return False
+                return False  # Entered numbers are not adjacent on the playing board
         except ValueError:
-            pass
-
+            return False  # One or more of the input parameters is not a number on the playing board
 
     def determine_win_criteria(self) -> list[int]:
         """
-        Returns: list of the slot numbers of the same colour as the input colour.
-        Requires the bet_choice attribute to have already been set.
         """
-        colour_options = self.determine_valid_bet_choices()
-        if self.bet_choice in colour_options:
-            return [slot_num for slot_num in self.playing_wheel.slots if
-                    self.playing_wheel.slots[slot_num] == self.bet_choice]
-        else:
-            raise ValueError(f"{self.bet_choice} is not a permitted colours bet on the "
-                             f"{self.playing_wheel.wheel_name} roulette wheel")
+        pass
 
 
 ##########
