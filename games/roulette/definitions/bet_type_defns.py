@@ -107,6 +107,7 @@ class SplitBet(RouletteBet):
             return False  # One or more of the input parameters is not a number on the playing board
 
     def determine_win_criteria(self) -> list[int]:
+        #  TODO finish defining and write tests
         """
         """
         pass
