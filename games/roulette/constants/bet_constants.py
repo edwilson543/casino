@@ -43,8 +43,8 @@ default_new_bet = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name, m
 @dataclass(frozen=True)
 class AllWheelDefaultBetParameters:
     """
-    Class listing all available bets and parameters
-    To restict bets for certain wheels, create a new data class only consisting of the desired bets
+    Class listing all available bets and parameters, which is the bets used by default
+    To restrict bets for certain wheels, create a new data class only consisting of the desired bets
     """
     COLOURS_BET: RouletteBetParameters = default_colours_bet
     STRAIGHTUP_BET: RouletteBetParameters = default_straight_up_bet
