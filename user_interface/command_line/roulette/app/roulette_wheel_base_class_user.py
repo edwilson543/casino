@@ -2,6 +2,8 @@ from games.roulette.app.roulette_wheel_base_class import RouletteWheel, wheel_sp
 from games.roulette.constants.game_constants import AllGameParameters
 from dataclasses import dataclass
 from time import sleep
+from numpy import array
+
 
 ##########
 # Data class for defining the RouletteWheelUser Parameters
@@ -9,8 +11,10 @@ from time import sleep
 ##########
 @dataclass
 class RouletteWheelParametersUser(RouletteWheelParameters):
+    board_string_rep: str
     colour_ids: dict
     colour_options: str
+
 
 ##########
 # Base class for defining the command line UI Roulette wheel
@@ -21,6 +25,8 @@ class RouletteWheelUser(RouletteWheel):
                  wheel_name: str,
                  slots: dict,
                  bias_colour: str,
+                 board: array,
+                 board_string_rep: str,
                  colour_ids: dict,
                  colour_options: str):
         """
@@ -28,7 +34,8 @@ class RouletteWheelUser(RouletteWheel):
         colour_ids: a mapping of colour id (e.g. 'R') to each colour (e.g. 'red')
         colour_options: a string used to get user input on what colour they'd like to bet on
         """
-        super().__init__(wheel_name, slots, bias_colour)
+        super().__init__(wheel_name, slots, bias_colour, board)
+        self.board_string_rep = board_string_rep
         self.colour_ids = colour_ids
         self.colour_options = colour_options
 
@@ -66,5 +73,3 @@ class RouletteWheelUser(RouletteWheel):
                 print(f"Ball has landed on {spin_outcome.number_return}, ({spin_outcome.colour_return})!")
                 sleep(AllGameParameters.pause_durations.short)
                 return spin_outcome
-
-

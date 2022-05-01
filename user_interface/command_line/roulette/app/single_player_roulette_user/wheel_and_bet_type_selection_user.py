@@ -31,7 +31,7 @@ class WheelBoardBetConstructorUser(WheelBoardBetConstructor):
             try:
                 wheel_name = WheelIds(wheel_choice_id).name
                 wheel = self.get_wheel_from_wheel_name(wheel_name=wheel_name)
-                return wheel  # TODO return wheel and board
+                return wheel
             except ValueError:
                 print("Invalid wheel choice, please try again")
 

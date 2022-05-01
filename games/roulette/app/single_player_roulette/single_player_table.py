@@ -9,7 +9,6 @@ class SinglePlayerRouletteTable:
     def __init__(self,
                  active_player: PLAYER_TYPES = None,
                  active_wheel: WHEEL_TYPES = None,
-                 active_board=None,  # TODO implement this
                  constructor=WheelBoardBetConstructor(),
                  active_all_bets_list: list = None,
                  active_spin_outcome: wheel_spin_return = None,
@@ -17,7 +16,6 @@ class SinglePlayerRouletteTable:
                  active_total_winnings: int = 0):
         self.active_player = active_player
         self.active_wheel = active_wheel
-        self.active_board = active_board
         self.constructor = constructor
         self.active_all_bets_list = active_all_bets_list
         self.active_spin_outcome = active_spin_outcome

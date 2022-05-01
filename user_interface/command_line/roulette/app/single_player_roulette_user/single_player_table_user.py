@@ -28,14 +28,13 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
     def __init__(self,
                  active_player: PlayerUser = None,
                  active_wheel: WHEEL_TYPES = None,
-                 active_board=None,  # TODO implement this
                  constructor=WheelBoardBetConstructorUser(),
                  active_all_bets_list: list = None,
                  active_spin_outcome: wheel_spin_return = None,
                  active_bet_win_count: int = 0,
                  active_total_winnings: int = 0,
                  next_step: int = 0):
-        super().__init__(active_player, active_wheel, active_board, constructor, active_all_bets_list,
+        super().__init__(active_player, active_wheel, constructor, active_all_bets_list,
                          active_spin_outcome, active_bet_win_count, active_total_winnings)
         self.next_step = next_step
 

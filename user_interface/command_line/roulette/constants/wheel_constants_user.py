@@ -6,17 +6,21 @@ from user_interface.command_line.roulette.app.roulette_wheel_base_class_user imp
 
 euro_wheel_colour_ids = {'R': 'red', 'B': 'black'}  # TODO update to use Colours and an enum rather than dict
 euro_wheel_colour_options_text = "[R]ed, [B]lack"
+euro_wheel_board_string_rep = ""  # todo update to be some sort of visual thing
 
 american_wheel_colour_ids = {'R': 'red', 'B': 'black'}  # TODO update to use Colours
 american_wheel_colour_options_text = "[R]ed, [B]lack"
+american_wheel_board_string_rep = ""
 
 euro_wheel_user_parameters = RouletteWheelParametersUser(
     **asdict(WheelParameters.EURO_WHEEL),
+    board_string_rep=euro_wheel_board_string_rep,
     colour_ids=euro_wheel_colour_ids,
     colour_options=euro_wheel_colour_options_text)
 
 american_wheel_user_parameters = RouletteWheelParametersUser(
     **asdict(WheelParameters.AMERICAN_WHEEL),
+    board_string_rep=american_wheel_board_string_rep,
     colour_ids=american_wheel_colour_ids,
     colour_options=american_wheel_colour_options_text)
 
