@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Union, Any
+from typing import Any
 
 
 class Bet:
@@ -8,7 +8,7 @@ class Bet:
                  min_bet: int,
                  max_bet: int,
                  stake: int,
-                 bet_choice: Union[int, str, list],
+                 bet_choice: Any,
                  win_criteria: Any,
                  payout: int):
         self.bet_type = bet_type
@@ -63,7 +63,7 @@ class Bet:
         """Sets the stake attribute of the bet"""
         self.stake = amount
 
-    def set_bet_choice(self, bet_choice: Union[int, str, list]):
+    def set_bet_choice(self, bet_choice: Any):
         """Sets the bet choice attribute of the bet"""
         self.bet_choice = bet_choice
 

@@ -7,8 +7,6 @@ from games.roulette.constants.game_constants import Colour
 from enum import Enum
 
 
-
-
 ##########
 # Create subclass of RouletteBet base class to define each bet's 'determine_win_criteria' method
 ##########
@@ -27,7 +25,7 @@ class ColoursBet(RouletteBet):
         super().__init__(bet_type_name, min_bet, max_bet, stake,
                          bet_choice, win_criteria, payout, playing_wheel)
 
-    def determine_valid_bet_choices(self) ->set[Colour]:
+    def determine_valid_bet_choices(self) -> set[Colour]:
         """Returns: a set of all the valid colours bet options (i.e. excluding bias colour)"""
         colour_options = set(self.playing_wheel.slots.values()).difference({self.playing_wheel.bias_colour})
         return colour_options
@@ -36,7 +34,7 @@ class ColoursBet(RouletteBet):
         """
         Returns: list of the slot numbers of the same colour as the input colour.
         Requires the bet_choice attribute to have already been set.
-        """  # TODO update as for colours enum
+        """
         colour_options = self.determine_valid_bet_choices()
         if self.bet_choice in colour_options:
             return [slot_num for slot_num in self.playing_wheel.slots if

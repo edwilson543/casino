@@ -54,7 +54,7 @@ class RouletteWheel:
         self.board = board
 
     def spin(self) -> wheel_spin_return:
-        """Returns: One random spin of the wheel as a dictionary, with number and colour as the key/value pairs"""
+        """Returns: One random spin of the wheel as type wheel_spin_return (defined above)"""
         min_slot = min(self.slots.keys())
         max_slot = max(self.slots.keys())
         number_return = random.randint(low=min_slot, high=max_slot + 1)
