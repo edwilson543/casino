@@ -41,7 +41,7 @@ default_new_bet = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name, m
 
 
 @dataclass(frozen=True)
-class AllWheelDefaultBetParameters:
+class WheelDefaultBetOptionsAndParameters:
     """
     Class listing all available bets and parameters, which is the bets used by default
     To restrict bets for certain wheels, create a new data class only consisting of the desired bets
@@ -69,11 +69,8 @@ class AllWheelDefaultBetParameters:
         return bet_type_options_prompt
 
 
-default_wheel_bet_parameters = AllWheelDefaultBetParameters()
-
-
 @dataclass
 class WheelBetParameters:
-    EURO_WHEEL = default_wheel_bet_parameters
-    AMERICAN_WHEEL = default_wheel_bet_parameters
+    EURO_WHEEL = WheelDefaultBetOptionsAndParameters()
+    AMERICAN_WHEEL = WheelDefaultBetOptionsAndParameters()
     NEW_WHEEL = None

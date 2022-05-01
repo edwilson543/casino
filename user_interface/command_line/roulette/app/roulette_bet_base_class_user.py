@@ -21,12 +21,21 @@ class RouletteBetUser(RouletteBet):
         self.bet_choice_string_rep = bet_choice_string_rep
 
     @abstractmethod
+    def determine_valid_bet_choices_text(self):
+        """
+        Abstract method for showing the users the specific bet choices within a given bet
+        This is defined for each specific bet subclass of RouletteBetUser in bet_type_defns_user
+        """
+        raise NotImplemented("Call to determine_valid_bet_choices_text has referred to abstract method in"
+                             "RouletteBetUser super class")
+
+    @abstractmethod
     def get_user_bet_choice(self):
         """
         Abstract method for getting the bet choice from the user.
         This is defined for each specific bet subclass of RouletteBetUser in bet_type_defns_user
         """
-        raise NotImplemented("Call to get_user_bet_choice has referred abstract method in"
+        raise NotImplemented("Call to get_user_bet_choice has referred to abstract method in"
                              "RouletteBetUser super class")
 
     @abstractmethod
@@ -35,7 +44,7 @@ class RouletteBetUser(RouletteBet):
         Abstract method for generating a string representation of the bet the user wants to place.
         This is defined for each specific bet subclass of RouletteBetUser in bet_type_defns_user
         """
-        raise NotImplemented("Call to get_bet_choice_string_rep has referred abstract method in"
+        raise NotImplemented("Call to get_bet_choice_string_rep has referred to abstract method in"
                              "RouletteBetUser super class")
 
     def choose_stake_amount(self, player_funds) -> int:

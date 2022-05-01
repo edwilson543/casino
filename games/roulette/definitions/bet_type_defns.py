@@ -27,13 +27,18 @@ class ColoursBet(RouletteBet):
         super().__init__(bet_type_name, min_bet, max_bet, stake,
                          bet_choice, win_criteria, payout, playing_wheel)
 
+    def determine_valid_bet_choices(self) ->set[Colour]:
+        """Returns: a set of all the valid colours bet options (i.e. excluding bias colour)"""
+        colour_options = set(self.playing_wheel.slots.values()).difference({self.playing_wheel.bias_colour})
+        return colour_options
+
     def determine_win_criteria(self) -> list[int]:
         """
         Returns: list of the slot numbers of the same colour as the input colour.
         Requires the bet_choice attribute to have already been set.
         """  # TODO update as for colours enum
-        allowed_colours = set(self.playing_wheel.slots.values()).difference({self.playing_wheel.bias_colour})
-        if self.bet_choice in allowed_colours:
+        colour_options = self.determine_valid_bet_choices()
+        if self.bet_choice in colour_options:
             return [slot_num for slot_num in self.playing_wheel.slots if
                     self.playing_wheel.slots[slot_num] == self.bet_choice]
         else:
@@ -56,11 +61,17 @@ class StraightUpBet(RouletteBet):
         super().__init__(bet_type_name, min_bet, max_bet, stake,
                          bet_choice, win_criteria, payout, playing_wheel)
 
+    def determine_valid_bet_choices(self):
+        """Returns a range which specifies the valid number choices"""
+        min_number = min(list(set(self.playing_wheel.slots.keys())))
+        max_number = max(list(set(self.playing_wheel.slots.keys())))
+        return range(min_number, max_number + 1)  # + 1 to capture highest numbered slot
+
     def determine_win_criteria(self) -> list[int]:
         """Returns: the bet_choice as a list (which for a colours bet will be an int).
         Requires the bet_choice attribute to have already been set."""
         bet_choice = self.bet_choice
-        if bet_choice in self.playing_wheel.slots:
+        if bet_choice in self.determine_valid_bet_choices():
             return [bet_choice]
         else:
             raise ValueError(f"{self.bet_choice} is not a slot on the {self.playing_wheel.wheel_name} roulette wheel")

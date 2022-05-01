@@ -23,13 +23,13 @@ class Bet:
     # Abstract methods
     ##########
 
-    # this is an abstract method but not being implemented until 2 subclasses' time throws an error
+    @abstractmethod
     def determine_win_criteria(self, *args, **kwargs):
         """
         Abstract method for calculating the win criteria of a given bet.
         Defined differently for each specific roulette bet (e.g. ColoursBet) in bet_type_defns.
         """
-        pass
+        raise NotImplementedError("Call to determine_win_criteria has referred to Bet super class")
 
     @abstractmethod
     def calculate_payout(self, *args, **kwargs):

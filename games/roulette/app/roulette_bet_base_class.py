@@ -4,7 +4,7 @@ from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 
 from math import floor
 from typing import Union, TypeVar
-
+from abc import abstractmethod
 from dataclasses import dataclass
 
 
@@ -46,6 +46,22 @@ class RouletteBet(Bet):
         super().__init__(bet_type_name, min_bet, max_bet, stake, bet_choice, win_criteria, payout)
         self.playing_wheel = playing_wheel
 
+    @abstractmethod
+    def determine_valid_bet_choices(self, *args, **kwargs):
+        """
+        Abstract method for determining the valid bet choices of a given bet.
+        Defined differently for each specific roulette bet (e.g. ColoursBet) in bet_type_defns.
+        """
+        raise NotImplementedError("Call to determine_valid_bet_choices referred to RouletteBet super class")
+
+    @abstractmethod
+    def determine_win_criteria(self, *args, **kwargs):
+        """
+        Abstract method for calculating the win criteria of a given bet.
+        Defined differently for each specific roulette bet (e.g. ColoursBet) in bet_type_defns.
+        """
+        raise NotImplementedError("Call to determine_win_criteria referred to RouletteBet super class")
+
     def set_playing_wheel(self, wheel: WHEEL_TYPES):
         """Method to set the playing_wheel attribute of the bet"""
         self.playing_wheel = wheel
@@ -78,6 +94,7 @@ class RouletteBet(Bet):
             return self.payout
         else:
             return 0
+
 
 ##########
 # Typevar to be used when referencing bets in type hints throughout game
