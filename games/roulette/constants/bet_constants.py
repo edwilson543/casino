@@ -9,15 +9,13 @@ from dataclasses import dataclass, fields, Field
 from typing import Tuple
 
 
-#  todo is there a way to avoid repeatedly writing "COLOURS_BET" in enum NAMES/ dataclass Fields?
 ##########
 # GLOBAL parameters of each bet type - bet_type_name, id and command line prompts
 ##########
 class BetTypeIds(str, Enum):
     """
-    Class specifying the bet_type_name and ID of each bet type
-    Note this class is used to define the bet_type_name of indivudal bets (using .bet_type_name)
-    And is then used by named bets to look up their own ID.
+    Class specifying the bet_type_name (the key) and ID of each bet type.
+    Class is used to 1) store all bet names, and 2) look up a bet name from the ID
     """
     COLOURS_BET = "C"
     STRAIGHTUP_BET = "S"
@@ -26,13 +24,19 @@ class BetTypeIds(str, Enum):
 
 class BetTypePrompts(str, Enum):
     """
-    Class specifying the user prompt (that corresponds to the ID) of each bet type (UI focused)
-    Note this class is used so that the globally defined ID always corresponds to an appropriate command line prompt
+    Class specifying the user prompt (that corresponds to the ID) of each bet type.
+    Used so that the globally defined ID always corresponds to an appropriate command line prompt
     """
     COLOURS_BET = "[C]olours"
     STRAIGHTUP_BET = "[S]traight up"
     NEW_BET = None  # Dummy new bet prompt
 
+
+#  In the future may also want a mapping of each bet to inside/outside to allow navigational hierarchy
+##########
+# WHEEL SPECIFIC parameters of each bet
+# Note that currently only 'defaults' are defined which are then used for each wheel
+##########
 
 default_colours_bet = RouletteBetParameters(bet_type_name=BetTypeIds.COLOURS_BET.name, min_bet=5, max_bet=50)
 default_straight_up_bet = RouletteBetParameters(bet_type_name=BetTypeIds.STRAIGHTUP_BET.name, min_bet=2, max_bet=20)
@@ -43,12 +47,13 @@ default_new_bet = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name, m
 @dataclass(frozen=True)
 class WheelDefaultBetOptionsAndParameters:
     """
-    Class listing all available bets and parameters, which is the bets used by default
-    To restrict bets for certain wheels, create a new data class only consisting of the desired bets
+    Data class has 2 functions:
+    1) To list the bet OPTIONS on each specific wheel
+    2) To store the bet PARAMETERS specific to each wheel
+    To restrict bets options or vary parameters on certain wheels, create a new data class with different default values
     """
     COLOURS_BET: RouletteBetParameters = default_colours_bet
     STRAIGHTUP_BET: RouletteBetParameters = default_straight_up_bet
-
     # new bet goes here as a class attribute
 
     def construct_wheel_bet_options_prompt(self) -> str:
