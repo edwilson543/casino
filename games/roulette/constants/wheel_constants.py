@@ -1,8 +1,16 @@
+"""
+To define a new wheel complete the following steps:
+1) Add an ID, prompt for that wheel
+2) Add all necessary parameters for that wheel, as is done for the existing wheel
+3) Add the new wheel to the WheelParameters Enum at the bottom
+4) Add all relevant bets (can just use the default bets) to that wheel, in the WheelBetParameters Enum found in
+bet_constants
+"""
 from games.roulette.app.roulette_wheel_base_class import RouletteWheelParameters
 from games.roulette.constants.game_constants import Colour
 from dataclasses import dataclass
 from enum import Enum
-from numpy import array, where
+from numpy import array
 
 
 ##########
@@ -66,6 +74,3 @@ class WheelParameters:
     """Data class storing all the parameters that define the playing wheels"""
     EURO_WHEEL = euro_wheel_parameters
     AMERICAN_WHEEL = american_wheel_parameters
-
-print(where(euro_wheel_parameters.board == 10))
-print(array([3]).item() == array([3]).item())
