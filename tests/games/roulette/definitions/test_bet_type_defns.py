@@ -6,6 +6,9 @@ from games.roulette.constants.bet_constants import WheelBetParameters
 from dataclasses import asdict
 import pytest
 
+
+#  TODO include testing of payout calculation of specific bets
+#  Also, how to reject error when intentionally testing an error is thrown for an invalid type?
 ##########
 # Objects to be used to test the relevant methods
 ##########

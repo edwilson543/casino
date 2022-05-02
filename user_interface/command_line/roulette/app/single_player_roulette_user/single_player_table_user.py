@@ -70,7 +70,6 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
             ##########
             game_continuation = RouletteContinuationUser(stake=self.active_player.total_active_stake)
             game_continuation.keep_playing(active_player=self.active_player)
-            # TODO build this into roulette continuation user
             top_up = self.active_player.check_top_up_scenario()
             # if player is low on funds, they'll be asked to top up. If really low, must top up to keep playing
             if top_up > 0:

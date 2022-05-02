@@ -32,8 +32,6 @@ class Player:
     """Class to hold the pot and define interactions with the pot.
     Player has money taken from the pot, and added to the pot"""
 
-    # TODO add an attribute along the lines of 'last login time'
-    # and when the player starts the game, update it to datetime.now()
     def __init__(self,
                  player_type: PlayerType,
                  name: str,

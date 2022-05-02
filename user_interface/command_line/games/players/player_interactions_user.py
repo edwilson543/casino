@@ -19,14 +19,12 @@ def password_protected(func):
         for k in range(n_attempts):
             password = input(f"Please enter your password.\n--->")
             if password == player.password:
-                print(f"Welcome back, {player.name}!")
                 return player
             elif k == n_attempts - 1:
                 sys.exit("Too many invalid attempts, your session has been terminated.")
             else:
                 attempts_remaining = n_attempts - k - 1
-                print(
-                    f"Incorrect password - please try again.\nYou have {attempts_remaining} attempts remaining")
+                print(f"Incorrect password - please try again.\nYou have {attempts_remaining} attempts remaining")
         return player
 
     return wrapper_password_protected
@@ -57,12 +55,11 @@ class PlayerInteractionsUser(PlayerInteractions):
                 if player_type == PlayerType.GUEST_PLAYER:
                     guest_player = super().get_player_from_player_username(username=AllPlayerData.guest.username,
                                                                            desired_player_object=desired_player_object)
-                    # guest_player_data = AllPlayerData.guest  # todo will come from parent level class
-                    # guest_player_data_dict = asdict(guest_player_data)
-                    # guest_player = desired_player_object(**guest_player_data_dict)
                     return guest_player
                 elif player_type == PlayerType.EXISTING_PLAYER:
                     existing_player = self.access_player(desired_player_object=PlayerUser)
+                    existing_player.login_message()
+                    existing_player.set_session_end_time_to_now()
                     return existing_player
                 elif player_type == PlayerType.NEW_PLAYER:
                     print("New player functionality not built yet")
@@ -72,7 +69,9 @@ class PlayerInteractionsUser(PlayerInteractions):
 
     @staticmethod
     def create_player_user(self) -> PlayerUser:  # TODO define this, using super class method
-        # maybe also we want want the creation and the return all in one method
+        # if player calls this method, we'll be able to get rid of player type -
+        # just let the player create the player, at this point the player is existing
+        # just need the added step of forcing the player to top up within player creation
         pass
 
     ##########
@@ -86,9 +85,6 @@ class PlayerInteractionsUser(PlayerInteractions):
             try:
                 existing_player = super().get_player_from_player_username(username=username,
                                                                           desired_player_object=desired_player_object)
-                # existing_player_data = getattr(AllPlayerData, username)  # TODO this processing should go in UI
-                # existing_player_data_dict = asdict(existing_player_data)
-                # live_player = desired_player_object(**existing_player_data_dict)  # instantiate
                 return existing_player
             except AttributeError or ValueError:
                 print(f"No user with username: {username} found. Please try again.")

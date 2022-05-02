@@ -7,7 +7,6 @@ from dataclasses import asdict
 from enum import Enum
 
 
-# TODO what type hint should be used for the look up? it's an enum of bet/wheel objects
 class WheelAndBetConstructor:
     """
     Class to look up wheel and bet parameters based on their names,

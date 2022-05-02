@@ -40,7 +40,7 @@ class RouletteContinuationUser:
             active_player.get_active_session_report()
             proceed = input(f"Would you like to continue playing?\n[Y]es, [N]o\n--->").upper()
             if proceed == "N":
-                active_player.end_session()
+                active_player.end_session_user()
             elif proceed == 'Y':
                 break
             else:

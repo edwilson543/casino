@@ -22,7 +22,6 @@ class RouletteBetParameters:
     max_bet: int
 
 
-# TODO update all type hints to use Typevars - bet_choice probably one to do
 ##########
 # Base class defining a generic roulette bet
 ##########
