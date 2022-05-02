@@ -1,5 +1,5 @@
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel
-from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
+from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet
 from games.roulette.constants.game_constants import Colour
 from games.roulette.constants.wheel_constants import WheelParameters
 from games.roulette.constants.bet_constants import WheelBetParameters
@@ -16,6 +16,10 @@ colours_bet.set_playing_wheel(wheel=euro_wheel)
 
 straight_up_bet = StraightUpBet(**asdict(WheelBetParameters.EURO_WHEEL.STRAIGHTUP_BET))
 straight_up_bet.set_playing_wheel(wheel=euro_wheel)
+
+split_bet = SplitBet(**asdict(WheelBetParameters.EURO_WHEEL.SPLIT_BET))
+split_bet.set_playing_wheel(wheel=euro_wheel)
+
 
 class TestBetPlacementColours:
     def test_determine_valid_bet_choices(self):
@@ -47,7 +51,7 @@ class TestBetPlacementStraightUp:
     def test_determine_valid_bet_choices(self):
         expcted_range = range(0, 37)
         actual_range = straight_up_bet.determine_valid_bet_choices()
-        assert  expcted_range == actual_range
+        assert expcted_range == actual_range
 
     def test_determine_win_criteria_valid_slot(self):
         """Test whether determine_win_criteria is working for a valid slot number."""
@@ -61,3 +65,31 @@ class TestBetPlacementStraightUp:
         straight_up_bet.set_bet_choice(bet_choice=1000)
         with pytest.raises(ValueError):
             straight_up_bet.determine_win_criteria()
+
+
+class TestBetPlacementSplitBet:
+    def test_determine_valid_bet_choices_same_row(self):
+        int_one = 10
+        int_two = 13  # numbers are adjacent to each other on the euro board
+        assert split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)
+
+    def test_determine_valid_bet_choices_same_col(self):
+        int_one = 10
+        int_two = 11  # numbers are adjacent to each other on the euro board
+        assert split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)
+
+    def test_determine_valid_bet_choices_on_board_not_adjacent(self):
+        int_one = 10
+        int_two = 12  # numbers are adjacent to each other on the euro board
+        assert not split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)
+
+    def test_determine_valid_bet_choices_int_not_on_board(self):
+        int_one = 100
+        int_two = 12  # numbers are adjacent to each other on the euro board
+        assert not split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)
+
+    def test_determine_valid_bet_choices_invalid_type(self):
+        int_one = "string"
+        int_two = 12  # numbers are adjacent to each other on the euro board
+        with pytest.raises(ValueError):
+            split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)

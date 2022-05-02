@@ -112,7 +112,9 @@ class SplitBet(RouletteBet):
             else:
                 return False  # Entered numbers are not adjacent on the playing board
         except ValueError:
-            return False  # One or more of the input numbers is not a number on the playing board
+            # At least one input parameter not a number on the playing board
+            raise ValueError(f"({int_one}, {int_two}) was passed to determine_valid_bet_choices in SplitBet class")
+
 
     def determine_win_criteria(self) -> list[int]:
         """
