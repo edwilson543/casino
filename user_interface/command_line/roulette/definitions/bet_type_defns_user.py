@@ -1,5 +1,5 @@
 """To define a new bet, first go to roulette->definitions->bet_type_defns"""
-from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet
+from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.game_constants import Colour, ColourPrompts
 from user_interface.command_line.roulette.app.roulette_bet_base_class_user import RouletteBetUser
@@ -11,6 +11,8 @@ from enum import Enum
 # Use MRO SpecificBetClass, RouletteBetUser (shouldn't be needed for now anyway)
 ##########
 class ColoursBetUser(ColoursBet, RouletteBetUser):
+    """Class for navigating the user to place a colours bet"""
+
     def __init__(self,
                  bet_type_name: str = None,
                  min_bet: int = None,
@@ -39,8 +41,7 @@ class ColoursBetUser(ColoursBet, RouletteBetUser):
         colour_options: set[Colour] = super().determine_valid_bet_choices()
         colour_options_text: str = self.determine_valid_bet_choices_text()
         while True:
-            colour_choice = input(
-                f"What colour would you like to bet on?\n{colour_options_text}\n--->").upper()
+            colour_choice = input(f"What colour would you like to bet on?\n{colour_options_text}\n--->").upper()
             try:
                 colour_choice = Colour(colour_choice)
                 if colour_choice in colour_options:
@@ -49,7 +50,7 @@ class ColoursBetUser(ColoursBet, RouletteBetUser):
                     print(f"{colour_choice} not a valid choice, please try again")
                     continue
             except ValueError or AttributeError:
-                print(f"{colour_choice} not a valid choice, please try again")
+                print(f"{colour_choice} not a valid choice, please try again!")
 
     def get_bet_choice_string_rep(self) -> str:
         """String representation of the bet choice that has been made for feeding back to the user"""
@@ -58,7 +59,7 @@ class ColoursBetUser(ColoursBet, RouletteBetUser):
 
 
 class StraightUpBetUser(StraightUpBet, RouletteBetUser):
-    """Class for defining win criteria and payout for a straight-up bet"""
+    """Class for navigating the user to place a straight up bet"""
 
     def __init__(self,
                  bet_type_name: str = None,
@@ -86,7 +87,7 @@ class StraightUpBetUser(StraightUpBet, RouletteBetUser):
 
     def get_user_bet_choice(self) -> int:
         """
-        Method to define the user's bet choice - they are required to enter a valid slot number on the given wheel.
+        Method to define the user's bet choice - they must enter an adjacent pair of numbers on the given board.
         Returns: user slots choice (as an int, example: 15).
         """
         number_options_range = super().determine_valid_bet_choices()
@@ -107,9 +108,57 @@ class StraightUpBetUser(StraightUpBet, RouletteBetUser):
         return "straight up bet on " + str(self.bet_choice)  # on a ...
 
 
+class SplitBetUser(SplitBet, RouletteBetUser):
+    """Class for defining win criteria and payout for a split bet"""
+
+    def __init__(self,
+                 bet_type_name: str = None,
+                 min_bet: int = None,
+                 max_bet: int = None,
+                 stake: int = None,
+                 bet_choice: int = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: WHEEL_TYPES = None,
+                 bet_choice_string_rep: str = None):
+        super(RouletteBetUser, self).__init__(bet_type_name, min_bet, max_bet, stake, bet_choice, win_criteria, payout,
+                                              playing_wheel)
+        self.bet_choice_string_rep = bet_choice_string_rep
+
+    def determine_valid_bet_choices_text(self):
+        """This method is a bit superfluous for a split bet so putting a pass in to use the abstract method"""
+        raise NotImplementedError("SplitBetUser's determine_valid_bet_choices_text method called unintentionally")
+
+    def get_user_bet_choice(self) -> (int, int):
+        """
+        Method to define the user's bet choice - they are required to enter a valid slot number on the given wheel.
+        Returns: user slots choice (as an int, example: 15).
+        """
+        while True:
+            print(self.playing_wheel.generate_board_string_rep())
+            int_one_str = input("Please enter the first number for the split bet\n--->")
+            int_two_str = input("Please enter the second number for the split bet\n--->")
+            try:
+                int_one = int(int_one_str)
+                int_two = int(int_two_str)
+                if super().determine_valid_bet_choices(int_one=int_one, int_two=int_two):
+                    return (int_one, int_two)
+                else:
+                    print(f"({int_one_str}, {int_two_str}) is not a valid split bet, please try again")
+            except ValueError:
+                print(f"({int_one_str}, {int_two_str}) is not a valid split bet, please try again")
+
+    def get_bet_choice_string_rep(self) -> str:
+        """String representation of the bet choice that has been made for feeding back to the user"""
+        int_one = self.bet_choice[0]  # bet_choice is of type (int, int)
+        int_two = self.bet_choice[1]
+        return "split bet on the edge between: " + str(int_one) + " and " + str(int_two)  # on a ...
+
+
 ##########
 # Enum for storing all the bet classes
 ##########
 class BetTypeOptionsUser(Enum):
     COLOURS_BET = ColoursBetUser
     STRAIGHTUP_BET = StraightUpBetUser
+    SPLIT_BET = SplitBetUser

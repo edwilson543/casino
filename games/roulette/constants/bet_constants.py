@@ -19,6 +19,7 @@ class BetTypeIds(str, Enum):
     """
     COLOURS_BET = "C"
     STRAIGHTUP_BET = "S"
+    SPLIT_BET = "P"
     NEW_BET = None
 
 
@@ -27,8 +28,9 @@ class BetTypePrompts(str, Enum):
     Class specifying the user prompt (that corresponds to the ID) of each bet type.
     Used so that the globally defined ID always corresponds to an appropriate command line prompt
     """
-    COLOURS_BET = "[C]olours"
-    STRAIGHTUP_BET = "[S]traight up"
+    COLOURS_BET = "[C]-Colours"
+    STRAIGHTUP_BET = "[S]-Straight Up"
+    SPLIT_BET = "[P]-Split bet"
     NEW_BET = None  # Dummy new bet prompt
 
 
@@ -38,11 +40,19 @@ class BetTypePrompts(str, Enum):
 # Note that currently only 'defaults' are defined which are then used for each wheel
 ##########
 
-default_colours_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.COLOURS_BET.name, min_bet=5, max_bet=50)
-default_straight_up_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.STRAIGHTUP_BET.name, min_bet=2,
+default_colours_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.COLOURS_BET.name,
+                                                       min_bet=5,
+                                                       max_bet=50)
+default_straight_up_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.STRAIGHTUP_BET.name,
+                                                           min_bet=2,
                                                            max_bet=20)
+default_split_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.SPLIT_BET.name,
+                                                     min_bet=4,
+                                                     max_bet=40)
 
-default_new_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name, min_bet=0, max_bet=0)
+default_new_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name,
+                                                   min_bet=0,
+                                                   max_bet=1)
 
 
 @dataclass(frozen=True)
@@ -55,7 +65,7 @@ class WheelDefaultBetOptionsAndParameters:
     """
     COLOURS_BET: RouletteBetParameters = default_colours_bet_parameters
     STRAIGHTUP_BET: RouletteBetParameters = default_straight_up_bet_parameters
-
+    SPLIT_BET: RouletteBetParameters = default_split_bet_parameters
     # new bet goes here as a class attribute
 
     def construct_wheel_bet_options_prompt(self) -> str:

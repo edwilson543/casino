@@ -49,8 +49,8 @@ class RouletteWheelUser(RouletteWheel):
 
     def generate_board_string_rep(self) -> str:
         """Method to give a human comprehensible string representation of the Roulette board"""
-        board_string_rep = ""
-        for row in range(0, board.shape[0]):  # iterate over number of array rows
-            row_rep = array2string(board[row], separator="|")[2:][:-1].strip(" ")
+        board_string_rep = "The board shape is as follows:\n"
+        for row in range(0, self.board.shape[0]):  # iterate over number of array rows
+            row_rep = array2string(self.board[row], separator="|")[2:][:-1].strip(" ") + "\n"
             board_string_rep += row_rep
-        return board_string_rep
+        return board_string_rep[:-1]  # Remove the final extra line of the board representation

@@ -1,5 +1,11 @@
 """
 To define a new bet type complete the following steps:
+1) Define a class for that bet as a subclass of RouletteBet, adding the methods as shown for the
+existing bets below
+2) Add the bet to the BetTypeOptions Enum at the bottom
+3) Define parameters for that bet in bet_constants, as is done for the existing bets.
+4) To add to command line UI, define a user class for that bet in bet_type_defns_user,
+in the same way as is done for the existing bets.
 """
 from games.roulette.app.roulette_bet_base_class import RouletteBet
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
@@ -84,7 +90,7 @@ class SplitBet(RouletteBet):
                  min_bet: int = None,
                  max_bet: int = None,
                  stake: int = None,
-                 bet_choice: Colour = None,
+                 bet_choice: (int, int) = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
@@ -99,18 +105,28 @@ class SplitBet(RouletteBet):
         try:
             int_one_index_row, int_one_index_col = where(self.playing_wheel.board == int_one)
             int_two_index_row, int_two_index_col = where(self.playing_wheel.board == int_two)
-            if int_one_index_row.item() == int_two_index_row.item() or int_one_index_col.item() == int_two_index_col.item():
+            row_offset = abs(int_one_index_row - int_two_index_row)
+            col_offset = abs(int_one_index_col - int_two_index_col)
+            if (row_offset == 0 and col_offset == 1) or (col_offset == 0 and row_offset == 1):
                 return True  # Entered numbers are adjacent on the playing board
             else:
                 return False  # Entered numbers are not adjacent on the playing board
         except ValueError:
-            return False  # One or more of the input parameters is not a number on the playing board
+            return False  # One or more of the input numbers is not a number on the playing board
 
     def determine_win_criteria(self) -> list[int]:
-        #  TODO finish defining and write tests
         """
+        Method that takes an input tuple representing an edge bet, and determines the win criteria of that bet
+        in wheel terms. Seems a bit superfluous but it's a translation board -> wheel.
         """
-        pass
+        split_bet: (int, int) = self.bet_choice
+        int_one = split_bet[0]
+        int_two = split_bet[1]
+        if self.determine_valid_bet_choices(int_one=int_one, int_two=int_two):
+            return [int_one, int_two]
+        else:
+            raise ValueError(f"({int_one}, {int_two}) is not a valid split bet on the "
+                             f"{self.playing_wheel.wheel_name} board")
 
 
 ##########
@@ -120,3 +136,4 @@ class SplitBet(RouletteBet):
 class BetTypeOptions(Enum):
     COLOURS_BET = ColoursBet
     STRAIGHTUP_BET = StraightUpBet
+    SPLIT_BET = SplitBet
