@@ -58,9 +58,9 @@ class RouletteContinuationUser:
             navigation_options = [NavigationOptionIDs.CHANGE_BETS.value, NavigationOptionIDs.CHANGE_WHEEL.value]
         while True:
             next_step = input(f"{navigation_text}\n--->").upper()
-            try:
+            if next_step in navigation_options:
                 next_step_name = NavigationOptionIDs(next_step).name
                 next_step_value = getattr(NavigationOptionRank, next_step_name).value
                 return next_step_value
-            except ValueError and AttributeError:
+            else:
                 print(f"{next_step} not a valid command, please try again")
