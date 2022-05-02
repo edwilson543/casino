@@ -1,12 +1,30 @@
-from games.games_base_classes import Bet
-from games.roulette.definitions.wheel_defns import WHEEL_TYPES
+from games.bet_base_class import Bet
+from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 
 from math import floor
-from typing import Union
+from typing import Any, TypeVar
+from abc import abstractmethod
+from dataclasses import dataclass
 
 
-# TODO update all type hints to use Typevars - bet_choice probably one to do
+##########
+# Data class for storing all the known roulette bet parameters
+##########
+@dataclass(frozen=True)
+class RouletteBetParameters:
+    """
+    Class to specify all roulette bet parameters that are independent of choice i.e. known upfront.
+    Note these can be wheel specific - to do so, define a new instance of this data class specific to a given wheel.
+    """
+    bet_type_name: str
+    min_bet: int
+    max_bet: int
+
+
+##########
+# Base class defining a generic roulette bet
+##########
 class RouletteBet(Bet):
     """
     Each bet on the roulette wheel will be defined as a subclass of this class.
@@ -16,25 +34,37 @@ class RouletteBet(Bet):
     """
 
     def __init__(self,
-                 min_bet: int,
-                 max_bet: int,
-                 bet_type_id: str,
-                 stake: int,
-                 bet_choice: Union[int, str, list],
-                 win_criteria: list[int],
-                 payout: int,
-                 playing_wheel: WHEEL_TYPES):
-        super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice, win_criteria, payout)
+                 bet_type_name: str = None,
+                 min_bet: int = None,
+                 max_bet: int = None,
+                 stake: int = None,
+                 bet_choice: Any = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: WHEEL_TYPES = None):
+        super().__init__(bet_type_name, min_bet, max_bet, stake, bet_choice, win_criteria, payout)
         self.playing_wheel = playing_wheel
 
-    def set_playing_wheel(self, wheel):
+    @abstractmethod
+    def determine_valid_bet_choices(self, *args, **kwargs):
+        """
+        Abstract method for determining the valid bet choices of a given bet.
+        Defined differently for each specific roulette bet (e.g. ColoursBet) in bet_type_defns - note this is a very
+        dynamic method that varies significantly for each bet in both signature and return.
+        """
+        raise NotImplementedError("Call to determine_valid_bet_choices referred to RouletteBet super class")
+
+    @abstractmethod
+    def determine_win_criteria(self, *args, **kwargs):
+        """
+        Abstract method for calculating the win criteria of a given bet.
+        Defined differently for each specific roulette bet (e.g. ColoursBet) in bet_type_defns.
+        """
+        raise NotImplementedError("Call to determine_win_criteria referred to RouletteBet super class")
+
+    def set_playing_wheel(self, wheel: WHEEL_TYPES):
         """Method to set the playing_wheel attribute of the bet"""
         self.playing_wheel = wheel
-
-    def set_min_max_bet(self):
-        """Method to look up and set the min/max bet of the roulette bet, (which is specific to the wheel)"""
-        # TODO use property decorator and look up what it does
-        pass
 
     def calculate_payout(self):
         """
@@ -44,9 +74,19 @@ class RouletteBet(Bet):
 
         Requires the win_criteria (and thus bet_choice) attribute to have already been set
         """
-        win_probability_over_estimate = len(self.win_criteria) / self.playing_wheel.bias_wheel_size()
-        unit_payout = floor(1 / win_probability_over_estimate)
-        return unit_payout * self.stake
+        if self.playing_wheel is None:
+            raise AttributeError("Call to calculate_payout in RouletteBet was made\n"
+                                 " before setting the playing_wheel of the bet")
+        if self.win_criteria is None:
+            raise AttributeError("Call to calculate_payout in RouletteBet was made\n"
+                                 " before setting the win_criteria of the bet")
+        if self.stake is None:
+            raise AttributeError("Call to calculate_payout in RouletteBet was made\n"
+                                 " before setting the stake of the bet")
+        else:
+            win_probability_over_estimate = len(self.win_criteria) / self.playing_wheel.bias_wheel_size()
+            unit_payout = floor(1 / win_probability_over_estimate)
+            return unit_payout * self.stake
 
     def evaluate_bet(self, spin_outcome: wheel_spin_return) -> int:
         """
@@ -60,7 +100,18 @@ class RouletteBet(Bet):
 
         Requires all attributes to have been set
         """
-        if spin_outcome.number_return in self.win_criteria:
-            return self.payout
+        if self.payout is None:
+            raise AttributeError("Call to evaluate_bet was made before setting bet's payout")
+        if self.win_criteria is None:
+            raise AttributeError("Call to evaluate_bet was made before setting bet's win criteria")
         else:
-            return 0
+            if spin_outcome.number_return in self.win_criteria:
+                return self.payout
+            else:
+                return 0
+
+
+##########
+# TypeVar to be used when referencing bets in type hints throughout game
+##########
+BET_TYPES = TypeVar(name="BET_TYPES", bound=RouletteBet)

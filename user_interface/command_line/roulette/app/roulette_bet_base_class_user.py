@@ -1,23 +1,33 @@
 from games.roulette.app.roulette_bet_base_class import RouletteBet
-from user_interface.command_line.roulette.definitions.wheel_defns_user import USER_WHEEL_TYPES
+from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 
-from typing import Union
+from typing import TypeVar, Any
 from abc import abstractmethod
 
 
-# Do we want player funds as an attribute or as a parameter?
 class RouletteBetUser(RouletteBet):
     def __init__(self,
+                 bet_type_name: str,
                  min_bet: int,
                  max_bet: int,
-                 bet_type_id: str,
                  stake: int,
-                 bet_choice: Union[int, str, list],
+                 bet_choice: Any,  # Varies a lot by bet type
                  win_criteria: list[int],
                  payout: int,
-                 playing_wheel: USER_WHEEL_TYPES):
-        super().__init__(min_bet, max_bet, bet_type_id, stake, bet_choice,
+                 playing_wheel: WHEEL_TYPES,
+                 bet_choice_string_rep: str):
+        super().__init__(bet_type_name, min_bet, max_bet, stake, bet_choice,
                          win_criteria, payout, playing_wheel)
+        self.bet_choice_string_rep = bet_choice_string_rep
+
+    @abstractmethod
+    def determine_valid_bet_choices_text(self):
+        """
+        Abstract method for showing the users the specific bet choices within a given bet
+        This is defined for each specific bet subclass of RouletteBetUser in bet_type_defns_user
+        """
+        raise NotImplemented("Call to determine_valid_bet_choices_text has referred to abstract method in"
+                             "RouletteBetUser super class")
 
     @abstractmethod
     def get_user_bet_choice(self):
@@ -25,49 +35,25 @@ class RouletteBetUser(RouletteBet):
         Abstract method for getting the bet choice from the user.
         This is defined for each specific bet subclass of RouletteBetUser in bet_type_defns_user
         """
-        pass
+        raise NotImplemented("Call to get_user_bet_choice has referred to abstract method in"
+                             "RouletteBetUser super class")
 
-    def choose_stake_amount(self, player_funds: int) -> (int, bool):
+    @abstractmethod
+    def get_bet_choice_string_rep(self):
         """
-        Parameters: player_funds - the amount of money the current player has in their pot
-        Returns: stake_amount (integer within min/max bet), all_in_status (T/F depending on if user is all in"""
-        min_bet = self.min_bet
-        if player_funds >= min_bet:
-            stake, all_in_status = self.choose_stake_amount_funds_exceed_min_bet(player_funds=player_funds)
-            return stake, all_in_status
-        else:  # TODO Add some feature here to allow user to do a top up instead, will also need top up method somehow
-            all_in_stake, all_in_status = self.go_all_in(player_funds=player_funds)
-            return all_in_stake, all_in_status
-
-    def confirm_bet_choice(self) -> bool:
+        Abstract method for generating a string representation of the bet the user wants to place.
+        This is defined for each specific bet subclass of RouletteBetUser in bet_type_defns_user
         """
-        Method to allow the user to see the payout and stake of an individual bet before confirming their choice.
-        Note that this method can only be called after all the attributes called within it have been set, note in
-        particular that it's called after temporarily setting the bet_choice.
-        Returns:
-        bool - True if they have confirmed their bet choice, in which case necessary action is taken, otherwise False,
-        in which case the bet is discarded.
-        """
-        confirmation = input(f"Confirm £{self.stake} stake on {self.bet_choice}?\n"
-                             f"Winning this bet would return: "
-                             f"£{self.payout}\n"
-                             f"[Y]es or [N]o\n--->").upper()
-        if confirmation != 'Y':
-            return False  # maybe add here an extra loop before they discard their bet
-        else:
-            print(f"£{self.stake} placed on {self.bet_choice}!")
-            return True
+        raise NotImplemented("Call to get_bet_choice_string_rep has referred to abstract method in"
+                             "RouletteBetUser super class")
 
-    ##########
-    # Lower level methods called in choose_stake_amount
-    ##########
-
-    def choose_stake_amount_funds_exceed_min_bet(self, player_funds) -> (int, bool):
+    def choose_stake_amount(self, player_funds) -> int:
         """
         Returns:
         Stake amount, all_in_status, which by default is set to false
         """
-        all_in_status = False  # if this method is called, it's because the user isn't going all in
+        if player_funds < self.min_bet:
+            raise ValueError("Player funds have been allowed to drop below min bet")
         while True:
             stake = input("How much would you like to stake?\n"
                           f"Minimum stake: £{self.min_bet}, Maximum stake: £{self.max_bet}, integer stakes only.\n"
@@ -78,26 +64,39 @@ class RouletteBetUser(RouletteBet):
                     print(f"A £{stake} stake exceeds your current funds (£{player_funds}).")
                     continue
                 elif self.min_bet <= stake <= self.max_bet:
-                    return stake, all_in_status
+                    return stake
                 else:
                     print("Invalid stake - please try again and refer to bet criteria.")
             except ValueError:
                 print('Invalid stake - please try again and refer to bet criteria.')
 
-    @staticmethod
-    def go_all_in(player_funds) -> (int, bool):  # TODO sort out all in functionality...
+    def confirm_bet_choice(self) -> bool:
         """
-        If the player wants to go all in, returns the player's pot and True.
-        If the player doesn't want to go all in, returns False
+        Method to allow the user to see the payout and stake of an individual bet before confirming their choice.
+        Note that this method can only be called after all the attributes called within it have been set, note in
+        particular that it's called after temporarily setting the bet_choice.
+        Returns:
+        bool - True if they have confirmed their bet choice, in which case necessary action is taken, otherwise False,
+        in which case the bet is discarded.
         """
-        all_in = input(f"The minimum bet exceeds your pot of £{player_funds}.\n"
-                       f"Would you like to go all in, [Y]es or [N]o?\n--->").upper()
-        while True:
-            if all_in == "Y":
-                all_in_status = True
-                return player_funds, all_in_status
-            elif all_in == "N":
-                exit("Game over.\nYou have insufficient funds to bet and have refused to go all in.")
-                #  TODO find an alternative to directly calling sys.exit here - utilise Player method
-            else:
-                print("Invalid options, please try again.")
+        confirmation = input(f"Confirm £{self.stake} stake on a {self.bet_choice_string_rep}?\n"
+                             f"Winning this bet would return: "
+                             f"£{self.payout}\n"
+                             f"[Y]es or [N]o\n--->").upper()
+        if confirmation != 'Y':
+            return False  # maybe add here an extra loop before they discard their bet
+        else:
+            print(f"£{self.stake} placed on a {self.bet_choice_string_rep}!")
+            return True
+
+    ##########
+    # Setter methods for added instance attributes
+    ##########
+    def set_bet_choice_string_rep(self, bet_choice_string: str):
+        self.bet_choice_string_rep = bet_choice_string
+
+
+##########
+# Typevar to be used when referencing user bets in type hints throughout game
+##########
+USER_BET_TYPES = TypeVar(name="USER_BET_TYPES", bound=RouletteBetUser)
