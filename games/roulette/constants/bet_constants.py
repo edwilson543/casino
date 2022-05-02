@@ -30,7 +30,7 @@ class BetTypePrompts(str, Enum):
     """
     COLOURS_BET = "[C]-Colours"
     STRAIGHTUP_BET = "[S]-Straight Up"
-    SPLIT_BET = "[P]-Split bet"
+    SPLIT_BET = "[P]-Split"
     NEW_BET = None  # Dummy new bet prompt
 
 
