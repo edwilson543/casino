@@ -12,7 +12,8 @@ ed_data = PlayerData(
     last_top_up_datetime=datetime(2022, 4, 7),
     active_session_initial_pot=0,
     active_session_start_time=datetime.now(),
-    active_session_top_ups=0)
+    active_session_top_ups=0,
+    last_session_end_time=datetime(year=2022, month=5, day=2, hour=8, minute=23))
 
 balint_data = PlayerData(
     player_type=PlayerType.EXISTING_PLAYER,  # existing player
@@ -24,7 +25,8 @@ balint_data = PlayerData(
     last_top_up_datetime=datetime(2022, 4, 7),
     active_session_initial_pot=0,
     active_session_start_time=datetime.now(),
-    active_session_top_ups=0)
+    active_session_top_ups=0,
+    last_session_end_time=datetime(2022, 5, 1))
 
 guest_data = PlayerData(
     player_type=PlayerType.GUEST_PLAYER,  # guest player
@@ -36,7 +38,8 @@ guest_data = PlayerData(
     last_top_up_datetime=datetime(2022, 4, 7),
     active_session_initial_pot=0,
     active_session_start_time=datetime.now(),
-    active_session_top_ups=0)
+    active_session_top_ups=0,
+    last_session_end_time=datetime.now())  # Note this never gets called
 
 
 @dataclass

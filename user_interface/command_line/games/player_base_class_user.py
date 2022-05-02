@@ -14,13 +14,30 @@ class PlayerUser(Player):
                  last_top_up_datetime: datetime,
                  active_session_initial_pot: int = None,
                  active_session_start_time: datetime = None,
-                 active_session_top_ups: int = 0):
+                 active_session_top_ups: int = 0,
+                 last_session_end_time: datetime = None):
         super().__init__(player_type=player_type, name=name, username=username, password=password,
                          active_pot=active_pot, total_active_stake=total_active_stake,
                          last_top_up_datetime=last_top_up_datetime,
                          active_session_initial_pot=active_session_initial_pot,
                          active_session_start_time=active_session_start_time,
-                         active_session_top_ups=active_session_top_ups)
+                         active_session_top_ups=active_session_top_ups,
+                         last_session_end_time=last_session_end_time)
+
+    def login_message(self):  # This could just specify the time and date...
+        last_login_minutes = self.calculate_last_login_time_minutes()
+        if last_login_minutes < 60:
+            last_login = f"You last logged in {last_login_minutes} minute(s) ago."
+        elif 60 <= last_login_minutes < 1440:  # last logged in within 24 hours
+            last_login_hours = int(round(last_login_minutes / 60, 0))
+            last_login = f"You last logged in {last_login_hours} hour(s) ago."
+        elif 1440 <= last_login_minutes < 10080:  # last logged in within a week
+            last_login_days = int(round(last_login_minutes / 1440, 0))
+            last_login = f"You last logged in {last_login_days} day(s) ago."
+        else:
+            last_login_weeks = int(round(last_login_minutes / 10080, 0))
+            last_login = f"You last logged in {last_login_weeks} week(s) ago."
+        print(f"Welcome back, {self.name}!\n{last_login}")
 
     def get_active_session_report(self):
         print(f"Your current pot is £{self.active_pot}.\n"
@@ -28,7 +45,8 @@ class PlayerUser(Player):
               f"during which time you have {self.won_or_lost()}: "
               f"£{abs(self.calculate_active_session_winnings())}.")
 
-    def end_session(self):
+    def end_session_user(self):
+        self.set_session_end_time_to_now()
         print(f"Thanks for playing {self.name}!\n"
               f"Your final pot is £{self.active_pot}.")
         exit()
@@ -100,7 +118,7 @@ class PlayerUser(Player):
             if self.see_if_user_wants_forced_top_up():
                 return self.get_top_up_amount()
             else:
-                self.end_session()
+                self.end_session_user()
 
     ##########
     # Method called during check top up worthwhile

@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 class PlayerType(Enum):
     """Existing/guest/new players are treated differently at log-in"""
+    #  TODO - should be able to get rid of this once new json storage in place
     EXISTING_PLAYER = "E"
     GUEST_PLAYER = "G"
     NEW_PLAYER = "N"
@@ -24,6 +25,7 @@ class PlayerData:
     active_session_initial_pot: int
     active_session_start_time: datetime
     active_session_top_ups: int
+    last_session_end_time: datetime
 
 
 class Player:
@@ -42,7 +44,8 @@ class Player:
                  last_top_up_datetime: datetime,
                  active_session_initial_pot: int = None,
                  active_session_start_time: datetime = None,
-                 active_session_top_ups: int = 0):
+                 active_session_top_ups: int = 0,
+                 last_session_end_time: datetime = None):
         self.player_type = player_type
         self.name = name
         self.username = username
@@ -53,6 +56,7 @@ class Player:
         self.active_session_initial_pot = active_session_initial_pot
         self.active_session_start_time = active_session_start_time
         self.active_session_top_ups = active_session_top_ups
+        self.last_session_end_time = last_session_end_time
 
     ##########
     # Setter methods
@@ -90,6 +94,9 @@ class Player:
     def reset_total_active_stake(self):
         self.total_active_stake = 0
 
+    def set_session_end_time_to_now(self):
+        self.last_session_end_time = datetime.now()  # Called when a player logs out
+
     ##########
     # Calculation methods
     ##########
@@ -100,6 +107,12 @@ class Player:
 
     def calculate_active_session_duration_minutes(self) -> int:
         duration_timedelta = datetime.now() - self.active_session_start_time
+        duration_seconds = duration_timedelta.seconds
+        duration_minutes = duration_seconds / 60
+        return int(round(duration_minutes, 0))
+
+    def calculate_last_login_time_minutes(self):
+        duration_timedelta = datetime.now() - self.last_session_end_time
         duration_seconds = duration_timedelta.seconds
         duration_minutes = duration_seconds / 60
         return int(round(duration_minutes, 0))
