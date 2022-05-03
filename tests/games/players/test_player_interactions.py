@@ -12,7 +12,7 @@ test_player = Player(name="test", username="test", password="tst123", active_pot
 class TestEncodeDecode:
     def test_encoded_then_decoded_player_unchanged(self):
         encoded_player = loader.encode_player(player=test_player)
-        decoded_player = loader.decode_player(deserialised_attributes_dict=encoded_player)
+        decoded_player = loader.decode_player(serialised_attributes_dict=encoded_player)
         assert test_player == decoded_player
 
     def test_encoded_then_decoded_player_unchanged_with_json(self):

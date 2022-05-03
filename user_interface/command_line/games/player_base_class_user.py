@@ -25,7 +25,9 @@ class PlayerUser(Player):
 
     def login_message(self):  # This could just specify the time and date...
         last_login_minutes = self.calculate_last_login_time_minutes()
-        if last_login_minutes < 60:
+        if last_login_minutes == 0:
+            last_login = "You last logged in less than a minute ago."
+        elif last_login_minutes < 60:
             last_login = f"You last logged in {last_login_minutes} minute(s) ago."
         elif 60 <= last_login_minutes < 1440:  # last logged in within 24 hours
             last_login_hours = int(round(last_login_minutes / 60, 0))

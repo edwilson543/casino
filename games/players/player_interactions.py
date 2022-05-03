@@ -2,7 +2,7 @@ from games.player_base_class import Player, PLAYER_TYPES
 from games.players.player_data import AllPlayerData
 from dataclasses import asdict
 from datetime import datetime
-
+import json
 
 class PlayerInteractions:
     def __init__(self,
@@ -25,18 +25,38 @@ class PlayerInteractions:
         else:
             raise ValueError(f"No player with username {username} found")
 
-    def load_player(self):
+    def load_player(self, player_username) -> PLAYER_TYPES:
         """
-        Reading JSON file to instantiate player
-        JSON -> dict -> instantiate player as Player(**dict)
+        Method to reading the JSON file storing all player data, retrieve the relevant player's data and then
+        instantiate a player as an instance of self.player_object (using decode_player)
+        JSON database -> player's JSON dict -> python dict (self.decode_player) -> instantiate player as a Player object
+        Parameters: player_username: the username of the player to be retrieved
+        Returns: live_player: an instance of the desired Player subclass
         """
-        pass
+        with open("player_data.json", "r") as all_player_data:  #TODO update this path to be dynamic
+            try:
+                all_player_data_dict: dict = json.load(all_player_data)
+                encoded_player_data = all_player_data_dict[player_username]
+                live_player = self.decode_player(serialised_attributes_dict=encoded_player_data)
+                return live_player
+            except KeyError:
+                raise KeyError("load_player method attempted to load a player not found in player database.")
+
+    def upload_player(self, player: PLAYER_TYPES) -> None:
+        """
+        Method to upload a player's progress to the JSON data storage.
+        Player object -> python dict (self.encode_player) -> JSON dict -> insert into JSON database
+        Parameters: player - the player being stored
+        """
+        with open("player_data.json", "r") as all_player_data:
+            all_player_data_dict: dict = json.load(all_player_data)
+        all_player_data_dict[player.username] = self.encode_player(player=player)
+        with open("player_data.json", "w") as all_player_data:
+            json.dump(all_player_data_dict, all_player_data)
+
 
     def create_player(self):
         """Encoding to JSON method"""
-        pass
-
-    def upload_player_progress(self):
         pass
 
     def player_search(self):
@@ -65,13 +85,13 @@ class PlayerInteractions:
                 serialisable_dict[key] = value
         return serialisable_dict
 
-    def decode_player(self, deserialised_attributes_dict: dict) -> PLAYER_TYPES:
+    def decode_player(self, serialised_attributes_dict: dict) -> PLAYER_TYPES:
         """
         Method to take a dictionary of a player's attributes, that has been loaded using json.loads(), and then
         instantiate a player based on this dictionary.
         """
         attributes_dict = {}  # i.e. attributes in the type that player_object takes
-        for key, value in deserialised_attributes_dict.items():
+        for key, value in serialised_attributes_dict.items():
             if isinstance(value, str):
                 try:
                     attributes_dict[key] = datetime.fromisoformat(value)
