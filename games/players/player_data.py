@@ -1,9 +1,8 @@
-from games.player_base_class import PlayerData, PlayerType
+from games.player_base_class import PlayerData
 from datetime import datetime
 from dataclasses import dataclass
 
 ed_data = PlayerData(
-    player_type=PlayerType.EXISTING_PLAYER,
     name='Ed',
     username='edwilson543',
     password='roulette1',
@@ -16,7 +15,6 @@ ed_data = PlayerData(
     last_session_end_time=datetime(year=2022, month=5, day=2, hour=8, minute=23))
 
 balint_data = PlayerData(
-    player_type=PlayerType.EXISTING_PLAYER,  # existing player
     name='Balint',
     username='balint1',
     password='roulette2',
@@ -29,7 +27,6 @@ balint_data = PlayerData(
     last_session_end_time=datetime(2022, 5, 1))
 
 guest_data = PlayerData(
-    player_type=PlayerType.GUEST_PLAYER,  # guest player
     name='guest',
     username='guest',
     password='guest',

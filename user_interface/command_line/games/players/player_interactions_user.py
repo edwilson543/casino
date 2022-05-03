@@ -37,12 +37,12 @@ class PlayerInteractionsUser(PlayerInteractions):
     """
 
     def all_games_set_up(self) -> PlayerUser:
-        active_player = self.access_existing_or_new_player()
-        active_player.make_initial_deposit_or_top_up()
+        active_player, player_type = self.access_existing_or_new_player()
+        active_player.make_initial_deposit_or_top_up(player_type=player_type)
         active_player.set_active_session_initial_pot_and_time()
         return active_player
 
-    def access_existing_or_new_player(self, desired_player_object=PlayerUser) -> PlayerUser:
+    def access_existing_or_new_player(self, desired_player_object=PlayerUser) -> (PlayerUser, PlayerType):
         """Method to determine whether the user wants to access an existing player, or create a new player"""
         print("Welcome to Balint and Ed's online casino!")
         # and allow functionality choose what game they'd like to play
@@ -55,14 +55,14 @@ class PlayerInteractionsUser(PlayerInteractions):
                 if player_type == PlayerType.GUEST_PLAYER:
                     guest_player = super().get_player_from_player_username(username=AllPlayerData.guest.username,
                                                                            desired_player_object=desired_player_object)
-                    return guest_player
+                    return guest_player, player_type
                 elif player_type == PlayerType.EXISTING_PLAYER:
                     existing_player = self.access_player(desired_player_object=PlayerUser)
                     existing_player.login_message()
                     existing_player.set_session_end_time_to_now()
-                    return existing_player
+                    return existing_player, player_type
                 elif player_type == PlayerType.NEW_PLAYER:
-                    print("New player functionality not built yet")
+                    print("New player functionality not built yet")  # TODO update when ready
                     continue
             except ValueError and AttributeError:
                 print(f"{player_type_id} not a valid option, please try again")

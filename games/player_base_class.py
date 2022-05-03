@@ -15,7 +15,6 @@ class PlayerType(Enum):
 @dataclass
 class PlayerData:
     """Data class for storing player parameters"""
-    player_type: PlayerType
     name: str
     username: str
     password: str
@@ -33,7 +32,6 @@ class Player:
     Player has money taken from the pot, and added to the pot"""
 
     def __init__(self,
-                 player_type: PlayerType,
                  name: str,
                  username: str,
                  password: str,
@@ -44,7 +42,6 @@ class Player:
                  active_session_start_time: datetime = None,
                  active_session_top_ups: int = 0,
                  last_session_end_time: datetime = None):
-        self.player_type = player_type
         self.name = name
         self.username = username
         self.password = password

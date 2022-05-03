@@ -5,7 +5,6 @@ from datetime import datetime
 
 class PlayerUser(Player):
     def __init__(self,
-                 player_type: PlayerType,
                  name: str,
                  username: str,
                  password: str,
@@ -16,7 +15,7 @@ class PlayerUser(Player):
                  active_session_start_time: datetime = None,
                  active_session_top_ups: int = 0,
                  last_session_end_time: datetime = None):
-        super().__init__(player_type=player_type, name=name, username=username, password=password,
+        super().__init__(name=name, username=username, password=password,
                          active_pot=active_pot, total_active_stake=total_active_stake,
                          last_top_up_datetime=last_top_up_datetime,
                          active_session_initial_pot=active_session_initial_pot,
@@ -51,13 +50,13 @@ class PlayerUser(Player):
               f"Your final pot is £{self.active_pot}.")
         exit()
 
-    def make_initial_deposit_or_top_up(self):
+    def make_initial_deposit_or_top_up(self, player_type: PlayerType):
         """Method to get the user to either set an initial deposit if they are playing as a guest or as a new player,
         or to top up if playing as an existing player."""
-        if self.player_type in [PlayerType.GUEST_PLAYER, PlayerType.NEW_PLAYER]:  # make them deposit
+        if player_type in [PlayerType.GUEST_PLAYER, PlayerType.NEW_PLAYER]:  # make them deposit
             initial_deposit = self.get_initial_deposit_amount()
             self.set_active_pot(amount=initial_deposit)
-        elif self.player_type == PlayerType.EXISTING_PLAYER:  # use top up prompt method
+        elif player_type == PlayerType.EXISTING_PLAYER:  # use top up prompt method
             top_up_amount = self.check_top_up_scenario()
             if top_up_amount > 0:
                 self.add_top_up_to_pot(amount=top_up_amount)
