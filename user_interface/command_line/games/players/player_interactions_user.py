@@ -1,5 +1,5 @@
 from games.players.player_interactions import PlayerInteractions
-from games.player_base_class import PlayerType
+from games.player_base_class import PlayerType, PLAYER_TYPES
 from games.players.player_data import AllPlayerData
 from games.roulette.constants.game_constants import AllGameParameters
 from user_interface.command_line.games.player_base_class_user import PlayerUser
@@ -35,6 +35,9 @@ class PlayerInteractionsUser(PlayerInteractions):
     Class to initiate the roulette game.
     Methods to get the user to initiate the game, set their initial deposit, and choose the wheel they want to play on
     """
+    def __init__(self,
+                 player_object: PLAYER_TYPES):
+        super().__init__(player_object)  # TODO link up below
 
     def all_games_set_up(self) -> PlayerUser:
         active_player, player_type = self.access_existing_or_new_player()

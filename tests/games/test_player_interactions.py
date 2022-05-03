@@ -1,0 +1,18 @@
+from games.players.player_interactions import PlayerInteractions
+from games.player_base_class import Player
+from datetime import datetime
+
+
+loader = PlayerInteractions(player_object=Player)
+test_player = Player(name="test", username="test", password="tst123", active_pot=1000, total_active_stake=0,
+                     last_top_up_datetime=datetime(2022, 4, 7, 2, 1),
+                     active_session_initial_pot=1000, active_session_start_time=datetime(2022, 5, 1, 3, 4),
+                     active_session_top_ups=0, last_session_end_time=datetime(2022, 4, 7, 2, 1))
+
+class TestEncodeDecode:
+    def test_encoded_then_decoded_player_unchanged(self):
+        initial_player = test_player
+        encoded_player = loader.encode_player(player=initial_player)
+        decoded_player = loader.decode_player(deserialised_attributes_dict=encoded_player)
+        assert initial_player == decoded_player
+

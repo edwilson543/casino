@@ -54,6 +54,21 @@ class Player:
         self.last_session_end_time = last_session_end_time
 
     ##########
+    # Special methods
+    ##########
+    def __eq__(self, other):
+        if isinstance(other, type(self)):
+            validity = True
+            self_dict = self.__dict__
+            other_dict = other.__dict__
+            for key, attribute_value in self_dict.items():
+                attribute_comparison = attribute_value == other_dict[key]
+                validity *= attribute_comparison
+                return validity
+        else:
+            raise TypeError(f"{other} is not of tpye {type(self)}")
+
+    ##########
     # Setter methods
     ##########
     def set_active_pot(self, amount: int):
