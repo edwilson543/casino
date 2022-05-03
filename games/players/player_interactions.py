@@ -48,7 +48,7 @@ class PlayerInteractions:
         Player object -> python dict (self.encode_player) -> JSON dict -> insert into JSON database
         Parameters: player - the player being stored
         """
-        with open("player_data.json", "r") as all_player_data:
+        with open("player_data.json", "r") as all_player_data:  # TODO updated path to be dynamic
             all_player_data_dict: dict = json.load(all_player_data)
         all_player_data_dict[player.username] = self.encode_player(player=player)
         with open("player_data.json", "w") as all_player_data:
