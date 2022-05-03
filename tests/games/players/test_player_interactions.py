@@ -11,14 +11,11 @@ test_player = Player(name="test", username="test", password="tst123", active_pot
 
 class TestEncodeDecode:
     def test_encoded_then_decoded_player_unchanged(self):
-        initial_player = test_player
-        encoded_player = loader.encode_player(player=initial_player)
+        encoded_player = loader.encode_player(player=test_player)
         decoded_player = loader.decode_player(deserialised_attributes_dict=encoded_player)
-        assert initial_player == decoded_player
+        assert test_player == decoded_player
 
     def test_encoded_then_decoded_player_unchanged_with_json(self):
-        initial_player = test_player
-        encoded_player = loader.encode_player(player=initial_player)
-        encoded_player_json = json.dumps(encoded_player)
+        encoded_player_json = json.dumps(test_player, default=loader.encode_player)
         decoded_player = json.loads(encoded_player_json, object_hook=loader.decode_player)
-        assert initial_player == decoded_player
+        assert test_player == decoded_player
