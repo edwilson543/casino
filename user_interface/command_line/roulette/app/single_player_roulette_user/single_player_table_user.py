@@ -10,7 +10,7 @@ from user_interface.command_line.roulette.app.single_player_roulette_user.roulet
     RouletteContinuationUser
 from user_interface.command_line.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
 from user_interface.command_line.games.player_base_class_user import PlayerUser
-
+from user_interface.command_line.games.players.player_interactions_user import PlayerInteractionsUser
 
 ##########
 # Class pulling together all the components of the roulette game and command line UI
@@ -29,9 +29,10 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
                  active_player: PlayerUser = None,
                  active_wheel: WHEEL_TYPES = None,
                  constructor=WheelAndBetConstructorUser(),
+                 player_database_interactor=PlayerInteractionsUser(),
                  active_all_bets_list: list = None,
                  next_step: int = 0):
-        super().__init__(active_player, active_wheel, constructor, active_all_bets_list)
+        super().__init__(active_player, active_wheel, constructor, player_database_interactor, active_all_bets_list)
         self.next_step = next_step
 
     def roulette_loop(self):
@@ -79,6 +80,14 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
     ##########
     # Tier 2 Methods called in roulette_loop
     ##########
+    def terminate_player_session_user(self) -> None:
+        """
+        Method to control the end of the game - chiefly to upload player progress to database
+        """
+        self.terminate_player_session()  # Uploads player's progress to database
+        self.active_player.end_session_user_message()
+        exit()
+
 
     def set_all_active_bets_list(self):
         """

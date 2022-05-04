@@ -4,9 +4,11 @@ from dataclasses import asdict
 from datetime import datetime
 import json
 
+
 class PlayerInteractions:
     def __init__(self,
-                 player_object: PLAYER_TYPES):
+                 player_object: PLAYER_TYPES=Player,
+                 player_datafile: str = "player_data.json"):
         """
         Parameters:
         ----------
@@ -14,8 +16,9 @@ class PlayerInteractions:
         This will currently either be just Player or PlayerUser.
         """
         self.player_object = player_object
+        self.player_datafile = player_datafile
 
-    @staticmethod
+    @staticmethod  # TODO delete this method
     def get_player_from_player_username(username: str, desired_player_object=Player) -> PLAYER_TYPES:
         if hasattr(AllPlayerData, username):
             player_data = getattr(AllPlayerData, username)
@@ -33,7 +36,7 @@ class PlayerInteractions:
         Parameters: player_username: the username of the player to be retrieved
         Returns: live_player: an instance of the desired Player subclass
         """
-        with open("player_data.json", "r") as all_player_data:  #TODO update this path to be dynamic
+        with open(self.player_datafile, "r") as all_player_data:  # TODO update this path to be dynamic
             try:
                 all_player_data_dict: dict = json.load(all_player_data)
                 encoded_player_data = all_player_data_dict[player_username]
@@ -44,27 +47,50 @@ class PlayerInteractions:
 
     def upload_player(self, player: PLAYER_TYPES) -> None:
         """
-        Method to upload a player's progress to the JSON data storage.
+        Method to upload a player to the JSON data storage.
+        For new player's this represents creation, for existing player's this just updates their data.
         Player object -> python dict (self.encode_player) -> JSON dict -> insert into JSON database
         Parameters: player - the player being stored
         """
-        with open("player_data.json", "r") as all_player_data:  # TODO updated path to be dynamic
+        with open(self.player_datafile, "r") as all_player_data:  # TODO updated path to be dynamic
             all_player_data_dict: dict = json.load(all_player_data)
         all_player_data_dict[player.username] = self.encode_player(player=player)
         with open("player_data.json", "w") as all_player_data:
             json.dump(all_player_data_dict, all_player_data)
 
-
-    def create_player(self):
-        """Encoding to JSON method"""
-        pass
-
-    def player_search(self):
+    def create_player(self, name, username, password) -> None:
         """
-        Method to read all the individual player files to search for a username
-        Do not open all of them! Use glob - it is a bit nicer version of os.listdir
+        Method to check whether or not a given username already exists,
+        and then upload them to the database if not.
         """
-        pass
+        if self.username_existence_check(username=username):
+            raise ValueError(f"create_player called with username: {username} which is already in use.")
+        else:
+            player = self.player_object(name=name, username=username, password=password)  # All other parameters default
+            self.upload_player(player=player)
+
+    def delete_player(self, username) -> None:
+        """
+        Method to delete the player with the given username from the database.
+        Opens the JSON database, converts to python dict, pops out the given player, writes back the database.
+        """
+        if not self.username_existence_check(username=username):
+            raise ValueError(f"delete_player called with username: {username} which is already in use.")
+        else:
+            with open(self.player_datafile, "r") as all_player_data:  # TODO updated path to be dynamic
+                all_player_data_dict: dict = json.load(all_player_data)
+            all_player_data_dict.pop(username)
+            with open("player_data.json", "w") as all_player_data:
+                json.dump(all_player_data_dict, all_player_data)
+
+    def username_existence_check(self, username: str) -> bool:
+        """
+        Method to check whether or not there is already a player in the database with the given username.
+        Returns: True if the username exists, False if not
+        """
+        with open(self.player_datafile, "r") as all_player_data:  # TODO updated path to be dynamic
+            all_player_data_dict: dict = json.load(all_player_data)
+        return username in all_player_data_dict.keys()
 
     @staticmethod
     def encode_player(player: PLAYER_TYPES) -> dict:
@@ -102,7 +128,5 @@ class PlayerInteractions:
         live_player = self.player_object(**attributes_dict)
         return live_player
 
-#  TODO write the load/ create methods into individual files
 # TODO create a file in the head folder using pathlib that determines the location of a file
 # works a bit like the import path structure - relative path from there to this file
-# Git ignore all files except for the guest file

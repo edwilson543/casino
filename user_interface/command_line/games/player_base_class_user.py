@@ -46,11 +46,9 @@ class PlayerUser(Player):
               f"during which time you have {self.won_or_lost()}: "
               f"£{abs(self.calculate_active_session_winnings())}.")
 
-    def end_session_user(self):
-        self.set_session_end_time_to_now()
+    def end_session_user_message(self):
         print(f"Thanks for playing {self.name}!\n"
               f"Your final pot is £{self.active_pot}.")
-        exit()
 
     def make_initial_deposit_or_top_up(self, player_type: PlayerType):
         """Method to get the user to either set an initial deposit if they are playing as a guest or as a new player,
@@ -119,7 +117,7 @@ class PlayerUser(Player):
             if self.see_if_user_wants_forced_top_up():
                 return self.get_top_up_amount()
             else:
-                self.end_session_user()
+                self.end_session_user()  # Could return a false here?
 
     ##########
     # Method called during check top up worthwhile
