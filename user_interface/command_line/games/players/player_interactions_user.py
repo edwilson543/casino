@@ -37,8 +37,8 @@ class PlayerInteractionsUser(PlayerInteractions):
 
     def __init__(self,
                  player_object=PlayerUser,
-                 player_datafile: str = "player_data.json"):  # TODO find a better way of doing this
-        super().__init__(player_object, player_datafile)
+                 player_data_directory_path: str = "player_data.json"):  # TODO find a better way of doing this
+        super().__init__(player_object, player_data_directory_path)
 
     def all_games_set_up(self) -> PlayerUser:
         active_player, player_type = self.access_existing_or_new_player()
