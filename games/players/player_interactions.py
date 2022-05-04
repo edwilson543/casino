@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 from games.player_base_class import Player, PLAYER_TYPES
 
-
+#  TODO add player data file to the gitignore
 class PlayerInteractions:
     def __init__(self,
                  player_object: PLAYER_TYPES = Player,
