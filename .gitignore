@@ -6,7 +6,7 @@ data/
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # Project specific stuff:
-/player_data.json
+/games/players/player_data/player_data.json
 
 # User-specific stuff:
 .idea/workspace.xml
