@@ -6,7 +6,7 @@ from games.roulette.definitions.bet_type_defns import BetTypeOptions
 from dataclasses import asdict
 from enum import Enum
 
-
+#  TODO update the docstrings in here, they are very out of date
 class WheelAndBetConstructor:
     """
     Class to look up wheel and bet parameters based on their names,

@@ -2,6 +2,7 @@ from root_directory import ROOT_DIRECTORY
 from pathlib import Path
 from datetime import datetime
 import json
+from games.all_game_constants.player_constants import PlayerParameterRestrictions
 from games.player_base_class import Player, PLAYER_TYPES
 
 
@@ -77,7 +78,8 @@ class PlayerDatabaseManager:
         """
         data_path = self.get_data_path(player_username=player_username)
         if not self.username_exists_check(player_username=player_username):
-            raise ValueError(f"delete_player called with player_username: {player_username} which is already in use.")
+            raise ValueError(f"delete_player called with player_username: {player_username} but no player "
+                             f"with this username exists.")
         else:
             with open(data_path, "r") as player_data_file:
                 all_player_data_dict: dict = json.load(player_data_file)
@@ -137,6 +139,7 @@ class PlayerDatabaseManager:
         Note that if in the future player attributes are introduced of different types that are not immediately
         serialisable, then the encoding function below must be updated.
         """
+        #  TODO add some form of encryption for player password encoding
         unserialisable_dict = player.__dict__
         serialisable_dict = {}
         for key, value in unserialisable_dict.items():
@@ -183,11 +186,27 @@ class PlayerDatabaseManager:
             all_player_data_dict: dict = json.load(all_player_data)
         return player_username in all_player_data_dict.keys()
 
-    def username_meets_criteria_check(self, proposed_username: str) ->bool:
-        pass
+    @staticmethod
+    def username_meets_criteria_check(proposed_username: str) -> bool:
+        """Method to check that a player's desired username meets the desired criteria"""
+        disallowed_username_characters: list = PlayerParameterRestrictions.username_parameters.disallowed_characters
+        username_allowed = True
+        for char in disallowed_username_characters:
+            username_allowed *= char not in proposed_username
+        return username_allowed
 
-    def password_meets_criteria_check(self, proposed_password: str) -> bool:
-        pass
+    @staticmethod
+    def password_meets_criteria_check(proposed_password: str) -> bool:
+        minimum_length: int = PlayerParameterRestrictions.password_parameters.minimum_length
+        if len(proposed_password) >= minimum_length:
+            return True
+        else:
+            return False
 
-    def name_meets_criteria_check(self, proposed_name: str) -> bool:
-        pass
+    @staticmethod
+    def name_meets_criteria_check(proposed_name: str) -> bool:
+        disallowed_name_characters: list = PlayerParameterRestrictions.name_parameters.disallowed_characters
+        username_allowed = True
+        for char in disallowed_name_characters:
+            username_allowed *= char not in proposed_name
+        return username_allowed

@@ -1,6 +1,6 @@
 from games.players.player_database_manager import PlayerDatabaseManager
 from games.player_base_class import PlayerType, PLAYER_TYPES
-from games.roulette.constants.game_constants import AllGameParameters
+from games.all_game_constants.player_constants import PasswordParameters
 from user_interface.command_line.games.player_base_class_user import PlayerUser
 import sys
 import functools
@@ -12,7 +12,7 @@ from pathlib import Path
 # Password protection decorator to be called when accessing players
 ##########
 def password_protected(access_player_func):
-    n_attempts = AllGameParameters.allowed_password_attempts
+    n_attempts: int = PasswordParameters.allowed_password_attempts
 
     @functools.wraps(access_player_func)
     def wrapper_password_protected(*args, **kwargs):

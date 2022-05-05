@@ -1,5 +1,5 @@
 from games.player_base_class import Player, PlayerType
-from games.roulette.constants.game_constants import AllGameParameters
+from games.roulette.constants.game_constants import RouletteGameParameters
 from datetime import datetime
 
 
@@ -73,8 +73,8 @@ class PlayerUser(Player):
         Method to get users to specify how much they want to initially deposit.
         Returns: An integer, which is the specified desired top up amount.
         """
-        min_deposit = AllGameParameters.deposit_parameters.min_deposit
-        deposit_multiples = AllGameParameters.deposit_parameters.deposit_multiples
+        min_deposit = RouletteGameParameters.deposit_parameters.min_deposit
+        deposit_multiples = RouletteGameParameters.deposit_parameters.deposit_multiples
         while True:
             amount = input(
                 f"How much would you like to deposit?\nDeposits are allowed as multiples of £"
@@ -104,8 +104,8 @@ class PlayerUser(Player):
         int - the top up amount specified by the user (by default 0)
         bool - whether or not the game continues. If the user rejects the forced top up, the game will end
         """
-        low_pot_forced_top_up = AllGameParameters.top_up_parameters.low_pot_forced_top_up
-        threshold_for_top_up_prompt = AllGameParameters.top_up_parameters.threshold_for_top_up_prompt
+        low_pot_forced_top_up = RouletteGameParameters.top_up_parameters.low_pot_forced_top_up
+        threshold_for_top_up_prompt = RouletteGameParameters.top_up_parameters.threshold_for_top_up_prompt
         game_continues = True  # By default the game will continue
         if self.active_pot > threshold_for_top_up_prompt:
             return 0, game_continues
@@ -131,8 +131,8 @@ class PlayerUser(Player):
         Note if this method is called, it's because the user has said they want to top up.
         Returns: An integer, which is the specified desired top up amount.
         """
-        min_top_up = AllGameParameters.top_up_parameters.min_top_up
-        top_up_multiples = AllGameParameters.top_up_parameters.top_up_multiples
+        min_top_up = RouletteGameParameters.top_up_parameters.min_top_up
+        top_up_multiples = RouletteGameParameters.top_up_parameters.top_up_multiples
         while True:
             amount = input(
                 f"How much would you like to top up by?\nTop ups are allowed as multiples of £"
@@ -157,8 +157,8 @@ class PlayerUser(Player):
         Method to get the user to specify if they want to top up, HAVING BEEN GIVEN the top up prompt
         If they have £0 in their pot, they don't have a choice and must top up to continue playing.
         """
-        low_pot_forced_top_up = AllGameParameters.top_up_parameters.low_pot_forced_top_up
-        threshold_for_top_up_prompt = AllGameParameters.top_up_parameters.threshold_for_top_up_prompt
+        low_pot_forced_top_up = RouletteGameParameters.top_up_parameters.low_pot_forced_top_up
+        threshold_for_top_up_prompt = RouletteGameParameters.top_up_parameters.threshold_for_top_up_prompt
         while True:
             if low_pot_forced_top_up < self.active_pot <= threshold_for_top_up_prompt:
                 print(f"Your pot only contains £{self.active_pot}.")
@@ -180,7 +180,7 @@ class PlayerUser(Player):
         If it returns F and the user has active bets, they just won't be allowed to add any more bets to current spin.
         """
         while True:
-            if 0 < self.active_pot <= AllGameParameters.top_up_parameters.low_pot_forced_top_up:
+            if 0 < self.active_pot <= RouletteGameParameters.top_up_parameters.low_pot_forced_top_up:
                 proceed = input(f"You only have £{self.active_pot} left in your pot, "
                                 "to continue playing you must top up.\nWould you like to top up?\n"
                                 "[Y]es, [N]o, (game session will end if you have no active bets)\n--->").upper()

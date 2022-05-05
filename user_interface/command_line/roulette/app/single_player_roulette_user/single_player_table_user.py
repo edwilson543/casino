@@ -1,6 +1,6 @@
 from games.roulette.app.single_player_roulette.single_player_table import SinglePlayerRouletteTable
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
-from games.roulette.constants.game_constants import AllGameParameters
+from games.roulette.constants.game_constants import RouletteGameParameters
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     NavigationOptionRank
@@ -184,7 +184,7 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
 
     def determine_if_user_wants_to_add_more_bets(self):
         while True:
-            if self.active_player.active_pot <= AllGameParameters.top_up_parameters.low_pot_forced_top_up:
+            if self.active_player.active_pot <= RouletteGameParameters.top_up_parameters.low_pot_forced_top_up:
                 user_wants_more_bets_via_top_up = input(
                     f"You have £{self.active_player.active_pot} left to play with, "
                     f"and £{self.active_player.total_active_stake} on the line.\n"
