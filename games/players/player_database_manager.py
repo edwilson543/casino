@@ -64,7 +64,7 @@ class PlayerDatabaseManager:
         Method to check whether or not a given player_username already exists,
         and then upload them to the database if not.
         """
-        if self.username_existence_check(username=player_username):
+        if self.username_exists_check(player_username=player_username):
             raise ValueError(f"create_player called with player_username: {player_username} which is already in use.")
         else:
             player = self.player_object(name=name, username=player_username, password=password)  # Other params default
@@ -76,7 +76,7 @@ class PlayerDatabaseManager:
         Opens the JSON database, converts to python dict, pops out the given player, writes back the database.
         """
         data_path = self.get_data_path(player_username=player_username)
-        if not self.username_existence_check(username=player_username):
+        if not self.username_exists_check(player_username=player_username):
             raise ValueError(f"delete_player called with player_username: {player_username} which is already in use.")
         else:
             with open(data_path, "r") as player_data_file:
@@ -84,6 +84,24 @@ class PlayerDatabaseManager:
             all_player_data_dict.pop(player_username)
             with open(data_path, "w") as player_data_file:
                 json.dump(all_player_data_dict, player_data_file)
+
+    ##########
+    # Methods relating to the storage location of players
+    ##########
+    def create_player_data_file(self) -> None:
+        """
+        Method to create an empty json data file that player data will be uploaded to - this will only be done if the
+        file does not already exist, otherwise an error will be raised
+        """
+        player_data_path = self.player_data_directory_path / self.player_datafile_name  # Where non-guest data goes
+        if player_data_path.is_file():  # i.e. if the file has already been created
+            raise FileExistsError(
+                f"create_player_data_file method of PlayerDatabaseManager "
+                f"was called although the player data file already exists")
+        else:  # if the file hasn't been created
+            with open(player_data_path, "x") as new_data_file:
+                empty_dict: dict = {}  # This is the dict that will get written to JSON and filled with player data
+                json.dump(empty_dict, new_data_file)
 
     def get_data_path(self, player_username: str) -> Path:
         """
@@ -104,23 +122,8 @@ class PlayerDatabaseManager:
                 return player_data_path
 
     ##########
-    # Methods relating to the storage location of players
+    # Methods to serialise/deserialise the Player object
     ##########
-    def create_player_data_file(self) -> None:
-        """
-        Method to create an empty json data file that player data will be uploaded to - this will only be done if the
-        file does not already exist, otherwise an error will be raised
-        """
-        player_data_path = self.player_data_directory_path / self.player_datafile_name  # Where non-guest data goes
-        if player_data_path.is_file():  # i.e. if the file has already been created
-            raise FileExistsError(
-                f"create_player_data_file method of {self.__name__} "
-                f"was called although the player data file already exists")
-        else:  # if the file hasn't been created
-            with open(player_data_path, "x") as new_data_file:
-                empty_dict: dict = {}  # This is the dict that will get written to JSON and filled with player data
-                json.dump(empty_dict, new_data_file)
-
     @staticmethod
     def encode_player(player: PLAYER_TYPES) -> dict:
         """
@@ -143,9 +146,6 @@ class PlayerDatabaseManager:
                 serialisable_dict[key] = value
         return serialisable_dict
 
-    ##########
-    # Methods to serialise/deserialise the Player object
-    ##########
     def decode_player(self, serialised_attributes_dict: dict) -> PLAYER_TYPES:
         """
         Method to take a dictionary of a player's attributes, that has been loaded using json.loads(), and then
@@ -173,15 +173,18 @@ class PlayerDatabaseManager:
     # Lower level player interaction methods
     ##########
 
-    def username_existence_check(self, username: str) -> bool:
+    def username_exists_check(self, player_username: str) -> bool:
         """
         Method to check whether or not there is already a player in the database with the given player_username.
         Returns: True if the player_username exists, False if not
         """
-        data_path = self.get_data_path(player_username=username)
+        data_path = self.get_data_path(player_username=player_username)
         with open(data_path, "r") as all_player_data:
             all_player_data_dict: dict = json.load(all_player_data)
-        return username in all_player_data_dict.keys()
+        return player_username in all_player_data_dict.keys()
+
+    def username_meets_criteria_check(self, proposed_username: str) ->bool:
+        pass
 
     def password_meets_criteria_check(self, proposed_password: str) -> bool:
         pass
