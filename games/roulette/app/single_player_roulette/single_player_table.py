@@ -11,14 +11,13 @@ class SinglePlayerRouletteTable:
                  active_player: PLAYER_TYPES = None,
                  active_wheel: WHEEL_TYPES = None,
                  constructor=WheelAndBetConstructor(),
-                 player_database_interactor=PlayerDatabaseManager(),
+                 player_database_manager=PlayerDatabaseManager(),
                  active_all_bets_list: list = None):
         self.active_player = active_player
         self.active_wheel = active_wheel
         self.constructor = constructor
-        self.player_database_interactor = player_database_interactor
+        self.player_database_manager = player_database_manager
         self.active_all_bets_list = active_all_bets_list
-
 
     def evaluate_all_active_bets_list(self, spin_outcome: wheel_spin_return):
         """
@@ -40,5 +39,6 @@ class SinglePlayerRouletteTable:
         """
         Method to upload a player's data to the database at the end of their session
         """
+        self.active_player.reset_total_active_stake()
         self.active_player.set_session_end_time_to_now()
-        self.player_database_interactor.upload_player(self.active_player)
+        self.player_database_manager.upload_player(self.active_player)

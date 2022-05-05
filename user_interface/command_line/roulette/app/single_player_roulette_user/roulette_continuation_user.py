@@ -35,14 +35,14 @@ class RouletteContinuationUser:
         self.stake = stake
 
     @staticmethod
-    def keep_playing(active_player: PlayerUser):
+    def see_if_user_wants_to_keep_playing(active_player: PlayerUser) -> bool:
         while True:
             active_player.get_active_session_report()
             proceed = input(f"Would you like to continue playing?\n[Y]es, [N]o\n--->").upper()
             if proceed == "N":
-                active_player.end_session_user()
-            elif proceed == 'Y':
-                break
+                return False
+            elif proceed == "Y":
+                return True
             else:
                 print(f"{proceed} not a valid command, please try again")
 

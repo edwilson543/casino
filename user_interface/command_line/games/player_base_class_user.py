@@ -56,18 +56,17 @@ class PlayerUser(Player):
         if player_type in [PlayerType.GUEST_PLAYER, PlayerType.NEW_PLAYER]:  # make them deposit
             initial_deposit = self.get_initial_deposit_amount()
             self.set_active_pot(amount=initial_deposit)
-        elif player_type == PlayerType.EXISTING_PLAYER:  # use top up prompt method
-            top_up_amount = self.check_top_up_scenario()
+        elif player_type == PlayerType.EXISTING_PLAYER:  # see if they want/need to top up
+            top_up_amount, _ = self.check_top_up_scenario()  # underscore as don't need the game_continues initially
             if top_up_amount > 0:
                 self.add_top_up_to_pot(amount=top_up_amount)
         else:
             raise ValueError(
                 f"Player: {self.name} has invalid player type and was passed to initial_deposit_or_top_up")
 
-        ##########
-        # lower level methods called in the initial_deposit_or_top_up method above
-        ##########
-
+    ##########
+    # lower level methods called in the initial_deposit_or_top_up method above
+    ##########
     @staticmethod
     def get_initial_deposit_amount() -> int:
         """
@@ -95,7 +94,7 @@ class PlayerUser(Player):
             except ValueError:
                 print(f"Invalid deposit amount - please try again and refer to deposit criteria.")
 
-    def check_top_up_scenario(self) -> int:
+    def check_top_up_scenario(self) -> (int, bool):
         """
         Method to check whether the user pot is below the threshold for a top up prompt to be worthwhile,
         and then make a top_up if it is worthwhile/ they have to to keep playing.
@@ -103,21 +102,24 @@ class PlayerUser(Player):
         playing, if their pot is below a pre-determined threshold.
         Returns:
         int - the top up amount specified by the user (by default 0)
+        bool - whether or not the game continues. If the user rejects the forced top up, the game will end
         """
         low_pot_forced_top_up = AllGameParameters.top_up_parameters.low_pot_forced_top_up
         threshold_for_top_up_prompt = AllGameParameters.top_up_parameters.threshold_for_top_up_prompt
+        game_continues = True  # By default the game will continue
         if self.active_pot > threshold_for_top_up_prompt:
-            return 0
+            return 0, game_continues
         elif threshold_for_top_up_prompt >= self.active_pot > low_pot_forced_top_up:
             if self.see_if_user_wants_optional_top_up():
-                return self.get_top_up_amount()
+                return self.get_top_up_amount(), game_continues
             else:
-                return 0
+                return 0, game_continues
         elif 0 < self.active_pot <= low_pot_forced_top_up:
             if self.see_if_user_wants_forced_top_up():
-                return self.get_top_up_amount()
+                return self.get_top_up_amount(), game_continues
             else:
-                self.end_session_user()  # Could return a false here?
+                game_continues = False
+                return 0, game_continues
 
     ##########
     # Method called during check top up worthwhile

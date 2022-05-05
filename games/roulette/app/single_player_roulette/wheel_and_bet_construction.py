@@ -15,11 +15,11 @@ class WheelAndBetConstructor:
 
     def __init__(self,
                  wheel_parameters_look_up=WheelParameters,
-                 construction_object=RouletteWheel,
+                 wheel_construction_object=RouletteWheel,
                  bet_parameters_look_up=WheelBetParameters,
                  bet_object_look_up: Enum = BetTypeOptions):
         self.wheel_parameters_look_up = wheel_parameters_look_up
-        self.construction_object = construction_object
+        self.wheel_construction_object = wheel_construction_object
         self.bet_parameters_look_up = bet_parameters_look_up
         self.bet_object_look_up = bet_object_look_up
 
@@ -34,7 +34,7 @@ class WheelAndBetConstructor:
         try:
             wheel_parameters: RouletteWheelParameters = getattr(self.wheel_parameters_look_up, wheel_name)
             wheel_parameters_dict = asdict(wheel_parameters)  # dict of parameters specific to the named wheel
-            wheel = self.construction_object(**wheel_parameters_dict)
+            wheel = self.wheel_construction_object(**wheel_parameters_dict)
             return wheel
         except ValueError:
             raise ValueError(

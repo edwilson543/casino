@@ -14,10 +14,10 @@ class WheelAndBetConstructorUser(WheelAndBetConstructor):
 
     def __init__(self,
                  wheel_parameters_look_up: Enum = WheelParameters,
-                 construction_object=RouletteWheelUser,
+                 wheel_construction_object=RouletteWheelUser,
                  bet_parameters_look_up=WheelBetParameters,
                  bet_object_look_up=BetTypeOptionsUser):
-        super().__init__(wheel_parameters_look_up, construction_object, bet_parameters_look_up, bet_object_look_up)
+        super().__init__(wheel_parameters_look_up, wheel_construction_object, bet_parameters_look_up, bet_object_look_up)
 
     def choose_playing_wheel(self) -> WHEEL_TYPES:
         """

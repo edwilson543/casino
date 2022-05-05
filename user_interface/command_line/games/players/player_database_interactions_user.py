@@ -1,9 +1,11 @@
-from games.players.player_interactions import PlayerInteractions
-from games.player_base_class import PlayerType
+from games.players.player_database_manager import PlayerDatabaseManager
+from games.player_base_class import PlayerType, PLAYER_TYPES
 from games.roulette.constants.game_constants import AllGameParameters
 from user_interface.command_line.games.player_base_class_user import PlayerUser
 import sys
 import functools
+from root_directory import ROOT_DIRECTORY
+from pathlib import Path
 
 
 ##########
@@ -29,16 +31,21 @@ def password_protected(access_player_func):
     return wrapper_password_protected
 
 
-class PlayerInteractionsUser(PlayerInteractions):
+class PlayerDatabaseInteractionsUser(PlayerDatabaseManager):
     """
     Class to initiate the roulette game.
     Methods to get the user to initiate the game, set their initial deposit, and choose the wheel they want to play on
     """
 
     def __init__(self,
-                 player_object=PlayerUser,
-                 player_data_directory_path: str = "player_data.json"):  # TODO find a better way of doing this
-        super().__init__(player_object, player_data_directory_path)
+                 player_object: PLAYER_TYPES = PlayerUser,
+                 player_data_directory_path: Path = ROOT_DIRECTORY / "games" / "players" / "player_data",
+                 player_datafile_name: str = "player_data.json",
+                 guest_datafile_name: str = "guest_data.json"):
+        super().__init__(player_object,
+                         player_data_directory_path,
+                         player_datafile_name,
+                         guest_datafile_name)
 
     def all_games_set_up(self) -> PlayerUser:
         active_player, player_type = self.access_existing_or_new_player()
@@ -63,26 +70,22 @@ class PlayerInteractionsUser(PlayerInteractions):
             try:
                 player_type = PlayerType(player_type_id)
                 if player_type == PlayerType.GUEST_PLAYER:
-                    guest_player = super().load_player(player_username="guest")
-                    return guest_player, player_type
+                    guest_player = super().load_player(player_username="guest")  # TODO maybe replace super() with self
+                    return guest_player, PlayerType.GUEST_PLAYER
                 elif player_type == PlayerType.EXISTING_PLAYER:
-                    existing_player = self.access_player(desired_player_object=PlayerUser)
+                    existing_player = self.access_player()
                     existing_player.login_message()
                     existing_player.set_session_end_time_to_now()
-                    return existing_player, player_type
+                    return existing_player, PlayerType.EXISTING_PLAYER
                 elif player_type == PlayerType.NEW_PLAYER:
                     print("New player functionality not built yet")  # TODO update when ready
+                    # call create_player, and then return player, PlayerType.NEW_PLAYER
                     continue
             except ValueError and AttributeError:
                 print(f"{player_type_id} not a valid option, please try again")
 
-    @staticmethod
-    def create_player_user(self) -> PlayerUser:  # TODO define this, using super class method
-        # need to keep the step of forcing the player to top up within player creation
-        pass
-
     ##########
-    # Lower level method called during the access existing or new player
+    # Lower level method called during the access_existing_or_new_player method
     ##########
     @password_protected
     def access_player(self) -> PlayerUser:
@@ -90,7 +93,24 @@ class PlayerInteractionsUser(PlayerInteractions):
         while True:
             username = input(f"What is your username?\n--->").lower()
             try:
-                existing_player = super().load_player(player_username=username)
+                existing_player = super().load_player(player_username=username)  # TODO maybe replace super() with self
                 return existing_player
             except KeyError:
                 print(f"No user with username: {username} found. Please try again.")
+
+    @staticmethod
+    def create_player_user(self) -> PlayerUser:  # TODO define this, using super class method
+        # need to keep the step of forcing the player to top up within player creation
+        pass
+
+    ##########
+    # Lower level method called during the create_player_user method
+    ##########
+    def enter_name(self):
+        pass
+
+    def create_username(self):
+        pass
+
+    def create_password(self):
+        pass

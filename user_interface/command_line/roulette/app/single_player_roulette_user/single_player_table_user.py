@@ -10,7 +10,8 @@ from user_interface.command_line.roulette.app.single_player_roulette_user.roulet
     RouletteContinuationUser
 from user_interface.command_line.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
 from user_interface.command_line.games.player_base_class_user import PlayerUser
-from user_interface.command_line.games.players.player_database_interactions_user import PlayerInteractionsUser
+from user_interface.command_line.games.players.player_database_interactions_user import PlayerDatabaseInteractionsUser
+
 
 ##########
 # Class pulling together all the components of the roulette game and command line UI
@@ -29,10 +30,10 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
                  active_player: PlayerUser = None,
                  active_wheel: WHEEL_TYPES = None,
                  constructor=WheelAndBetConstructorUser(),
-                 player_database_interactor=PlayerInteractionsUser(),
+                 player_database_manager=PlayerDatabaseInteractionsUser(),
                  active_all_bets_list: list = None,
                  next_step: int = 0):
-        super().__init__(active_player, active_wheel, constructor, player_database_interactor, active_all_bets_list)
+        super().__init__(active_player, active_wheel, constructor, player_database_manager, active_all_bets_list)
         self.next_step = next_step
 
     def roulette_loop(self):
@@ -70,12 +71,14 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
             # Establish game continuation criteria
             ##########
             game_continuation = RouletteContinuationUser(stake=self.active_player.total_active_stake)
-            game_continuation.keep_playing(active_player=self.active_player)
-            top_up = self.active_player.check_top_up_scenario()
-            # top_up, game_continues = self.active_player.check_top_up_scenario()
-            # if not game_continues:
-            #     self.terminate_player_session()
+            user_wants_to_keep_playing = game_continuation.see_if_user_wants_to_keep_playing(
+                active_player=self.active_player)
+            if not user_wants_to_keep_playing:
+                self.terminate_player_session_user()
+            top_up, game_continues = self.active_player.check_top_up_scenario()
             # if player is low on funds, they'll be asked to top up. If really low, must top up to keep playing
+            if not game_continues:
+                self.terminate_player_session_user()
             if top_up > 0:
                 self.active_player.add_top_up_to_pot(amount=top_up)
             self.next_step = game_continuation.choose_navigation(active_player=self.active_player)
@@ -85,12 +88,13 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
     ##########
     def terminate_player_session_user(self) -> None:
         """
-        Method to control the end of the game - chiefly to upload player progress to database
+        Method to control the end of the game:
+        1) Uploads player's progress to database
+        2) Displays a log out message to the user
         """
-        self.terminate_player_session()  # Uploads player's progress to database
+        self.terminate_player_session()
         self.active_player.end_session_user_message()
         exit()
-
 
     def set_all_active_bets_list(self):
         """

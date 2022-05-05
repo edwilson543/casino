@@ -1,8 +1,9 @@
-from base_path import ROOT_DIRECTORY
+from root_directory import ROOT_DIRECTORY
 from pathlib import Path
 from datetime import datetime
 import json
 from games.player_base_class import Player, PLAYER_TYPES
+
 
 class PlayerDatabaseManager:
     def __init__(self,
@@ -27,8 +28,8 @@ class PlayerDatabaseManager:
         Method to read the JSON file storing player data, retrieve the relevant player's data and then
         instantiate a player as an instance of self.player_object (using decode_player).
         JSON database -> player's JSON dict -> python dict (self.decode_player) -> instantiate player as a Player object
-        Parameters: player_username: the player_username of the player to be retrieved. Note that if the guest player_username
-        is passed, then the data_path will just point to the guest_data.json
+        Parameters: player_username: the player_username of the player to be retrieved. Note that if the
+        guest player_username is passed, then the data_path will just point to the guest_data.json
         Returns: live_player: an instance of the desired Player subclass
         """
         data_path = self.get_data_path(player_username=player_username)
@@ -48,12 +49,15 @@ class PlayerDatabaseManager:
         Player object -> python dict (self.encode_player) -> JSON dict -> insert into JSON database
         Parameters: player - the player being stored
         """
-        data_path = self.get_data_path(player_username=player.username)
-        with open(data_path, "r") as player_data_file:
-            all_player_data_dict: dict = json.load(player_data_file)
-        all_player_data_dict[player.username] = self.encode_player(player=player)
-        with open(data_path, "w") as player_data_file:
-            json.dump(all_player_data_dict, player_data_file)
+        if player.username == "guest":
+            pass
+        else:
+            data_path = self.get_data_path(player_username=player.username)
+            with open(data_path, "r") as player_data_file:
+                all_player_data_dict: dict = json.load(player_data_file)
+            all_player_data_dict[player.username] = self.encode_player(player=player)
+            with open(data_path, "w") as player_data_file:
+                json.dump(all_player_data_dict, player_data_file)
 
     def create_player(self, name, player_username, password) -> None:
         """
@@ -178,3 +182,9 @@ class PlayerDatabaseManager:
         with open(data_path, "r") as all_player_data:
             all_player_data_dict: dict = json.load(all_player_data)
         return username in all_player_data_dict.keys()
+
+    def password_meets_criteria_check(self, proposed_password: str) -> bool:
+        pass
+
+    def name_meets_criteria_check(self, proposed_name: str) -> bool:
+        pass
