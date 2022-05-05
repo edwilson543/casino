@@ -23,7 +23,7 @@ class PlayerUser(Player):
                          active_session_top_ups=active_session_top_ups,
                          last_session_end_time=last_session_end_time)
 
-    def login_message(self):  # This could just specify the time and date...
+    def login_message(self):
         last_login_minutes = self.calculate_last_login_time_minutes()
         if last_login_minutes == 0:
             last_login = "You last logged in less than a minute ago."
