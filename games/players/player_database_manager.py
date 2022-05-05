@@ -4,11 +4,10 @@ from datetime import datetime
 import json
 from games.player_base_class import Player, PLAYER_TYPES
 
-#  TODO add player data file to the gitignore
-class PlayerInteractions:
+class PlayerDatabaseManager:
     def __init__(self,
                  player_object: PLAYER_TYPES = Player,
-                 player_data_directory_path: Path = ROOT_DIRECTORY / "games" / "players",
+                 player_data_directory_path: Path = ROOT_DIRECTORY / "games" / "players" / "player_data",
                  player_datafile_name: str = "player_data.json",
                  guest_datafile_name: str = "guest_data.json"):
         """
@@ -108,7 +107,7 @@ class PlayerInteractions:
         Method to create an empty json data file that player data will be uploaded to - this will only be done if the
         file does not already exist, otherwise an error will be raised
         """
-        player_data_path = self.player_data_directory_path / self.player_datafile_name
+        player_data_path = self.player_data_directory_path / self.player_datafile_name  # Where non-guest data goes
         if player_data_path.is_file():  # i.e. if the file has already been created
             raise FileExistsError(
                 f"create_player_data_file method of {self.__name__} "
@@ -175,6 +174,7 @@ class PlayerInteractions:
         Method to check whether or not there is already a player in the database with the given player_username.
         Returns: True if the player_username exists, False if not
         """
-        with open(self.player_data_directory_path, "r") as all_player_data:  # TODO updated path to be dynamic
+        data_path = self.get_data_path(player_username=username)
+        with open(data_path, "r") as all_player_data:
             all_player_data_dict: dict = json.load(all_player_data)
         return username in all_player_data_dict.keys()

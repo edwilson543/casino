@@ -1,6 +1,6 @@
 from user_interface.command_line.roulette.app.single_player_roulette_user.single_player_table_user import \
     SinglePlayerRouletteTableUser
-from user_interface.command_line.games.players.player_interactions_user import PlayerInteractionsUser
+from user_interface.command_line.games.players.player_database_interactions_user import PlayerInteractionsUser
 
 
 if __name__ == '__main__':

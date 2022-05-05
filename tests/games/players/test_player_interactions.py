@@ -1,9 +1,9 @@
-from games.players.player_interactions import PlayerInteractions
+from games.players.player_database_manager import PlayerDatabaseManager
 from games.player_base_class import Player
 from datetime import datetime
 import json
 
-loader = PlayerInteractions(player_object=Player)
+loader = PlayerDatabaseManager(player_object=Player)
 test_player = Player(name="test", username="test", password="tst123", active_pot=1000, total_active_stake=0,
                      last_top_up_datetime=datetime(2022, 4, 7, 2, 1),
                      active_session_initial_pot=1000, active_session_start_time=datetime(2022, 5, 1, 3, 4),

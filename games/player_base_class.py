@@ -1,7 +1,6 @@
 from datetime import datetime
 from enum import Enum
 from typing import TypeVar
-from dataclasses import dataclass
 
 
 class PlayerType(Enum):
@@ -10,21 +9,6 @@ class PlayerType(Enum):
     EXISTING_PLAYER = "E"
     GUEST_PLAYER = "G"
     NEW_PLAYER = "N"
-
-
-@dataclass
-class PlayerData:
-    """Data class for storing player parameters"""
-    name: str
-    username: str
-    password: str
-    active_pot: int
-    total_active_stake: int
-    last_top_up_datetime: datetime
-    active_session_initial_pot: int
-    active_session_start_time: datetime
-    active_session_top_ups: int
-    last_session_end_time: datetime
 
 
 class Player:
@@ -66,7 +50,7 @@ class Player:
                 validity *= attribute_comparison
                 return validity
         else:
-            raise TypeError(f"{other} is not of tpye {type(self)}")
+            raise TypeError(f"{other} is not of type {type(self)}")
 
     ##########
     # Setter methods

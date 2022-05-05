@@ -3,7 +3,7 @@ from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.app.single_player_roulette.wheel_and_bet_construction import \
     WheelAndBetConstructor
-from games.players.player_interactions import PlayerInteractions
+from games.players.player_database_manager import PlayerDatabaseManager
 
 
 class SinglePlayerRouletteTable:
@@ -11,7 +11,7 @@ class SinglePlayerRouletteTable:
                  active_player: PLAYER_TYPES = None,
                  active_wheel: WHEEL_TYPES = None,
                  constructor=WheelAndBetConstructor(),
-                 player_database_interactor=PlayerInteractions(),
+                 player_database_interactor=PlayerDatabaseManager(),
                  active_all_bets_list: list = None):
         self.active_player = active_player
         self.active_wheel = active_wheel
