@@ -4,7 +4,7 @@ from games.roulette.constants.game_constants import AllGameParameters
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     NavigationOptionRank
-from user_interface.command_line.roulette.app.single_player_roulette_user.wheel_and_bet_type_selection_user import \
+from user_interface.command_line.roulette.app.single_player_roulette_user.wheel_and_bet_construction_user import \
     WheelAndBetConstructorUser
 from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     RouletteContinuationUser

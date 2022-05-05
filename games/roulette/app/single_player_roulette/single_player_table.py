@@ -1,7 +1,7 @@
 from games.player_base_class import PLAYER_TYPES
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
-from games.roulette.app.single_player_roulette.wheel_and_bet_type_selection import \
+from games.roulette.app.single_player_roulette.wheel_and_bet_construction import \
     WheelAndBetConstructor
 from games.players.player_interactions import PlayerInteractions
 
