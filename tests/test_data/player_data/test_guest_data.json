@@ -2,7 +2,7 @@
   "guest": {
     "name": "As a guest",
     "username": "guest",
-    "password": "guest",
+    "password": "guest123",
     "active_pot": 0,
     "total_active_stake": 0,
     "last_top_up_datetime": "2022-04-07T02:01:00",

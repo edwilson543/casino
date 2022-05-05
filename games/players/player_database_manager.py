@@ -10,7 +10,7 @@ class PlayerDatabaseManager:
                  player_object: PLAYER_TYPES = Player,
                  player_data_directory_path: Path = ROOT_DIRECTORY / "games" / "players" / "player_data",
                  player_datafile_name: str = "player_data.json",
-                 guest_datafile_name: str = "guest_data.json"):
+                 guest_datafile_name: str = "test_guest_data.json"):
         """
         Parameters:
         ----------
@@ -29,7 +29,7 @@ class PlayerDatabaseManager:
         instantiate a player as an instance of self.player_object (using decode_player).
         JSON database -> player's JSON dict -> python dict (self.decode_player) -> instantiate player as a Player object
         Parameters: player_username: the player_username of the player to be retrieved. Note that if the
-        guest player_username is passed, then the data_path will just point to the guest_data.json
+        guest player_username is passed, then the data_path will just point to the test_guest_data.json
         Returns: live_player: an instance of the desired Player subclass
         """
         data_path = self.get_data_path(player_username=player_username)

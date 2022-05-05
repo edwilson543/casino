@@ -41,7 +41,7 @@ class PlayerDatabaseInteractionsUser(PlayerDatabaseManager):
                  player_object: PLAYER_TYPES = PlayerUser,
                  player_data_directory_path: Path = ROOT_DIRECTORY / "games" / "players" / "player_data",
                  player_datafile_name: str = "player_data.json",
-                 guest_datafile_name: str = "guest_data.json"):
+                 guest_datafile_name: str = "test_guest_data.json"):
         super().__init__(player_object,
                          player_data_directory_path,
                          player_datafile_name,
