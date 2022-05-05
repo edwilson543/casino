@@ -144,9 +144,11 @@ class SplitBetUser(SplitBet, RouletteBetUser):
                 if super().determine_valid_bet_choices(int_one=int_one, int_two=int_two):
                     return (int_one, int_two)
                 else:
-                    print(f"({int_one_str}, {int_two_str}) is not a valid split bet, please try again")
+                    print(f"({int_one_str}, {int_two_str}) is not a valid split bet, please try again.\n"
+                          f"Split bets must be placed on neighbouring tiles on the board")
             except ValueError:
-                print(f"({int_one_str}, {int_two_str}) is not a valid split bet, please try again")
+                print(f"({int_one_str}, {int_two_str}) is not a valid split bet, please try again"
+                      f"Split bets must be placed on neighbouring tiles on the board")
 
     def get_bet_choice_string_rep(self) -> str:
         """String representation of the bet choice that has been made for feeding back to the user"""
