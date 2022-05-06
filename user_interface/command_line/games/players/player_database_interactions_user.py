@@ -1,6 +1,6 @@
 from games.players.player_database_manager import PlayerDatabaseManager
 from games.player_base_class import PlayerType, PLAYER_TYPES
-from games.all_game_constants.player_constants import PasswordParameters
+from games.all_game_constants.player_constants import PlayerParameterRestrictions
 from user_interface.command_line.games.player_base_class_user import PlayerUser
 import sys
 import functools
@@ -12,7 +12,7 @@ from pathlib import Path
 # Password protection decorator to be called when accessing players
 ##########
 def password_protected(access_player_func):
-    n_attempts: int = PasswordParameters.allowed_password_attempts
+    n_attempts: int = PlayerParameterRestrictions.password_parameters.allowed_password_attempts
 
     @functools.wraps(access_player_func)
     def wrapper_password_protected(*args, **kwargs):
@@ -70,17 +70,16 @@ class PlayerDatabaseInteractionsUser(PlayerDatabaseManager):
             try:
                 player_type = PlayerType(player_type_id)
                 if player_type == PlayerType.GUEST_PLAYER:
-                    guest_player = super().load_player(player_username="guest")  # TODO maybe replace super() with self
+                    guest_player: PlayerUser = super().load_player(player_username="guest")  # TODO use self not super()
                     return guest_player, PlayerType.GUEST_PLAYER
                 elif player_type == PlayerType.EXISTING_PLAYER:
-                    existing_player = self.access_player()
+                    existing_player: PlayerUser = self.access_player()
                     existing_player.login_message()
                     existing_player.set_session_end_time_to_now()
                     return existing_player, PlayerType.EXISTING_PLAYER
                 elif player_type == PlayerType.NEW_PLAYER:
-                    print("New player functionality not built yet")  # TODO update when ready
-                    # call create_player, and then return player, PlayerType.NEW_PLAYER
-                    continue
+                    new_player: PlayerUser = self.create_player_user()
+                    return new_player, PlayerType.NEW_PLAYER
             except ValueError and AttributeError:
                 print(f"{player_type_id} not a valid option, please try again")
 
@@ -98,19 +97,67 @@ class PlayerDatabaseInteractionsUser(PlayerDatabaseManager):
             except KeyError:
                 print(f"No user with username: {username} found. Please try again.")
 
-    @staticmethod
-    def create_player_user(self) -> PlayerUser:  # TODO define this, using super class method
-        # need to keep the step of forcing the player to top up within player creation
-        pass
+    def create_player_user(self) -> PlayerUser:
+        name = self.create_name()
+        username = self.create_username()
+        password = self.create_password()
+        print(f"Welcome, {name}! Your account has been created!")
+        self.create_player(name=name, player_username=username, password=password)
+        created_player = self.load_player(player_username=username)
+        return created_player
 
     ##########
     # Lower level method called during the create_player_user method
     ##########
-    def enter_name(self):
-        pass
+    def create_name(self) -> str:
+        """
+        Method to get the user to enter their name and check that it meets the criteria.
+        Returns: The player's name, as long as it's legit
+        """
+        while True:
+            proposed_name = input(f"Please enter your name\n--->")
+            if self.name_meets_criteria_check(proposed_name=proposed_name):
+                return proposed_name
+            else:
+                print(f"{proposed_name} name not a valid name choice, please try again.\n"
+                      f"Names may not contain the following characters: "
+                      f"{PlayerParameterRestrictions.name_parameters.disallowed_characters}")
 
-    def create_username(self):
-        pass
+    def create_username(self) -> str:
+        """
+        Method to get the user to enter a desired username and check that it meets the criteria.
+        Returns: the player's desired username, as long as it's legit.
+        """
+        while True:
+            proposed_username = input("Please enter a new username\n--->")
+            if self.username_exists_check(player_username=proposed_username):
+                print(f"{proposed_username} already taken! Please enter a new username")
+                continue
+            elif not self.username_meets_criteria_check(proposed_username=proposed_username):
+                print(f"{proposed_username} is not a valid username! "
+                      f"Usernames may not contain the following characters: "
+                      f"{PlayerParameterRestrictions.username_parameters.disallowed_characters}, and "
+                      f"must be at least: {PlayerParameterRestrictions.username_parameters.minimum_length} characters")
+                continue
+            else:
+                return proposed_username
 
-    def create_password(self):
-        pass
+    def create_password(self) -> str:
+        """
+        Method to get the user to enter and then re-enter a valid password
+        Returns: the player's desired password, as long as it's legit
+        """
+        min_password_length = PlayerParameterRestrictions.password_parameters.minimum_length
+        while True:
+            proposed_password = input(f"Please enter a password. Passwords must have at least:"
+                                      f" {min_password_length} characters.\n--->")
+            if not self.password_meets_criteria_check(proposed_password=proposed_password):
+                print(f"Password does not meet minimum length criteria of {min_password_length} characters")
+                continue
+            else:
+                re_entered_password = input("Please re-enter password.\n--->")
+                if proposed_password == re_entered_password:
+                    return proposed_password
+                else:
+                    print("Passwords do not match, please try again")
+                    continue

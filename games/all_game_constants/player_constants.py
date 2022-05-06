@@ -11,6 +11,7 @@ class PasswordParameters:
 @dataclass(frozen=True)
 class UsernameParameters:
     disallowed_characters = [" ", "!", ".", "/"]
+    minimum_length = 5
 
 @dataclass(frozen=True)
 class NameParameters:
