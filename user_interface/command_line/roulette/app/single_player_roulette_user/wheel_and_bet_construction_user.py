@@ -1,4 +1,4 @@
-from games.roulette.app.single_player_roulette.wheel_and_bet_type_selection import WheelAndBetConstructor
+from games.roulette.app.single_player_roulette.wheel_and_bet_construction import WheelAndBetConstructor
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.wheel_constants import WheelIds, wheel_options_text, WheelParameters
 from games.roulette.constants.bet_constants import BetTypeIds, WheelBetParameters
@@ -14,10 +14,10 @@ class WheelAndBetConstructorUser(WheelAndBetConstructor):
 
     def __init__(self,
                  wheel_parameters_look_up: Enum = WheelParameters,
-                 construction_object=RouletteWheelUser,
+                 wheel_construction_object=RouletteWheelUser,
                  bet_parameters_look_up=WheelBetParameters,
                  bet_object_look_up=BetTypeOptionsUser):
-        super().__init__(wheel_parameters_look_up, construction_object, bet_parameters_look_up, bet_object_look_up)
+        super().__init__(wheel_parameters_look_up, wheel_construction_object, bet_parameters_look_up, bet_object_look_up)
 
     def choose_playing_wheel(self) -> WHEEL_TYPES:
         """

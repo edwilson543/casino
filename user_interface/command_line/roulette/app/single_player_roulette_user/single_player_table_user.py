@@ -1,15 +1,16 @@
 from games.roulette.app.single_player_roulette.single_player_table import SinglePlayerRouletteTable
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
-from games.roulette.constants.game_constants import AllGameParameters
+from games.roulette.constants.game_constants import RouletteGameParameters
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     NavigationOptionRank
-from user_interface.command_line.roulette.app.single_player_roulette_user.wheel_and_bet_type_selection_user import \
+from user_interface.command_line.roulette.app.single_player_roulette_user.wheel_and_bet_construction_user import \
     WheelAndBetConstructorUser
 from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     RouletteContinuationUser
 from user_interface.command_line.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
 from user_interface.command_line.games.player_base_class_user import PlayerUser
+from user_interface.command_line.games.players.player_database_interactions_user import PlayerDatabaseInteractionsUser
 
 
 ##########
@@ -29,9 +30,10 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
                  active_player: PlayerUser = None,
                  active_wheel: WHEEL_TYPES = None,
                  constructor=WheelAndBetConstructorUser(),
+                 player_database_manager=PlayerDatabaseInteractionsUser(),
                  active_all_bets_list: list = None,
                  next_step: int = 0):
-        super().__init__(active_player, active_wheel, constructor, active_all_bets_list)
+        super().__init__(active_player, active_wheel, constructor, player_database_manager, active_all_bets_list)
         self.next_step = next_step
 
     def roulette_loop(self):
@@ -69,9 +71,14 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
             # Establish game continuation criteria
             ##########
             game_continuation = RouletteContinuationUser(stake=self.active_player.total_active_stake)
-            game_continuation.keep_playing(active_player=self.active_player)
-            top_up = self.active_player.check_top_up_scenario()
+            user_wants_to_keep_playing = game_continuation.see_if_user_wants_to_keep_playing(
+                active_player=self.active_player)
+            if not user_wants_to_keep_playing:
+                self.terminate_player_session_user()
+            top_up, game_continues = self.active_player.check_top_up_scenario()
             # if player is low on funds, they'll be asked to top up. If really low, must top up to keep playing
+            if not game_continues:
+                self.terminate_player_session_user()
             if top_up > 0:
                 self.active_player.add_top_up_to_pot(amount=top_up)
             self.next_step = game_continuation.choose_navigation(active_player=self.active_player)
@@ -79,6 +86,15 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
     ##########
     # Tier 2 Methods called in roulette_loop
     ##########
+    def terminate_player_session_user(self) -> None:
+        """
+        Method to control the end of the game:
+        1) Uploads player's progress to database
+        2) Displays a log out message to the user
+        """
+        self.terminate_player_session()
+        self.active_player.end_session_user_message()
+        exit()
 
     def set_all_active_bets_list(self):
         """
@@ -168,7 +184,7 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
 
     def determine_if_user_wants_to_add_more_bets(self):
         while True:
-            if self.active_player.active_pot <= AllGameParameters.top_up_parameters.low_pot_forced_top_up:
+            if self.active_player.active_pot <= RouletteGameParameters.top_up_parameters.low_pot_forced_top_up:
                 user_wants_more_bets_via_top_up = input(
                     f"You have £{self.active_player.active_pot} left to play with, "
                     f"and £{self.active_player.total_active_stake} on the line.\n"

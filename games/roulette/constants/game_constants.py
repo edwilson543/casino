@@ -27,11 +27,10 @@ class PauseDurations:  # UI focused but bit annoying to have in its own file for
 
 
 @dataclass(frozen=True)
-class AllGameParameters:
+class RouletteGameParameters:
     deposit_parameters = DepositParameters
     top_up_parameters = TopUpParameters
     pause_durations = PauseDurations
-    allowed_password_attempts = 5
 
 
 ##########

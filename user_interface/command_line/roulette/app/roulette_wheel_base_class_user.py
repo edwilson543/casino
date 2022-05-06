@@ -1,5 +1,5 @@
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel, wheel_spin_return, RouletteWheelParameters
-from games.roulette.constants.game_constants import AllGameParameters, Colour
+from games.roulette.constants.game_constants import RouletteGameParameters, Colour
 from dataclasses import dataclass
 from time import sleep
 from numpy import array, array2string
@@ -40,11 +40,11 @@ class RouletteWheelUser(RouletteWheel):
                 continue
             else:
                 spin_outcome = self.spin()
-                sleep(AllGameParameters.pause_durations.short)
+                sleep(RouletteGameParameters.pause_durations.short)
                 print("Wheel spinning...")
-                sleep(AllGameParameters.pause_durations.medium)
+                sleep(RouletteGameParameters.pause_durations.medium)
                 print(f"Ball has landed on {spin_outcome.number_return}, ({spin_outcome.colour_return.name})!")
-                sleep(AllGameParameters.pause_durations.short)
+                sleep(RouletteGameParameters.pause_durations.short)
                 return spin_outcome
 
     def generate_board_string_rep(self) -> str:

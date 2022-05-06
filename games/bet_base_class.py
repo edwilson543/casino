@@ -37,7 +37,7 @@ class Bet:
         Abstract method for calculating the payout for the bet
         Defined in the RouletteBet class for all roulette bets.
         """
-        pass
+        raise NotImplementedError("Call to calculate_payout has referred to Bet super class")
 
     @abstractmethod
     def evaluate_bet(self, *args, **kwargs):
@@ -45,7 +45,7 @@ class Bet:
         Abstract method for evaluating the outcome of the bet
         Defined in the RouletteBet class for all roulette bets.
         """
-        pass
+        raise NotImplementedError("Call to evaluate_bet has referred to Bet super class")
 
     ##########
     # Setter methods for the bet attributes attributes

@@ -1,7 +1,6 @@
 from datetime import datetime
 from enum import Enum
 from typing import TypeVar
-from dataclasses import dataclass
 
 
 class PlayerType(Enum):
@@ -12,39 +11,21 @@ class PlayerType(Enum):
     NEW_PLAYER = "N"
 
 
-@dataclass
-class PlayerData:
-    """Data class for storing player parameters"""
-    player_type: PlayerType
-    name: str
-    username: str
-    password: str
-    active_pot: int
-    total_active_stake: int
-    last_top_up_datetime: datetime
-    active_session_initial_pot: int
-    active_session_start_time: datetime
-    active_session_top_ups: int
-    last_session_end_time: datetime
-
-
 class Player:
     """Class to hold the pot and define interactions with the pot.
     Player has money taken from the pot, and added to the pot"""
 
     def __init__(self,
-                 player_type: PlayerType,
                  name: str,
                  username: str,
                  password: str,
-                 active_pot: int,
-                 total_active_stake: int,
-                 last_top_up_datetime: datetime,
+                 active_pot: int = 0,
+                 total_active_stake: int = 0,
+                 last_top_up_datetime: datetime = None,
                  active_session_initial_pot: int = None,
                  active_session_start_time: datetime = None,
                  active_session_top_ups: int = 0,
                  last_session_end_time: datetime = None):
-        self.player_type = player_type
         self.name = name
         self.username = username
         self.password = password
@@ -55,6 +36,21 @@ class Player:
         self.active_session_start_time = active_session_start_time
         self.active_session_top_ups = active_session_top_ups
         self.last_session_end_time = last_session_end_time
+
+    ##########
+    # Special methods
+    ##########
+    def __eq__(self, other):
+        if isinstance(other, type(self)):
+            validity = True
+            self_dict = self.__dict__
+            other_dict = other.__dict__
+            for key, attribute_value in self_dict.items():
+                attribute_comparison = attribute_value == other_dict[key]
+                validity *= attribute_comparison
+                return validity
+        else:
+            raise TypeError(f"{other} is not of type {type(self)}")
 
     ##########
     # Setter methods

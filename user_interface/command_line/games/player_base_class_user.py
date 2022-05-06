@@ -1,11 +1,10 @@
 from games.player_base_class import Player, PlayerType
-from games.roulette.constants.game_constants import AllGameParameters
+from games.roulette.constants.game_constants import RouletteGameParameters
 from datetime import datetime
 
 
 class PlayerUser(Player):
     def __init__(self,
-                 player_type: PlayerType,
                  name: str,
                  username: str,
                  password: str,
@@ -16,7 +15,7 @@ class PlayerUser(Player):
                  active_session_start_time: datetime = None,
                  active_session_top_ups: int = 0,
                  last_session_end_time: datetime = None):
-        super().__init__(player_type=player_type, name=name, username=username, password=password,
+        super().__init__(name=name, username=username, password=password,
                          active_pot=active_pot, total_active_stake=total_active_stake,
                          last_top_up_datetime=last_top_up_datetime,
                          active_session_initial_pot=active_session_initial_pot,
@@ -24,9 +23,11 @@ class PlayerUser(Player):
                          active_session_top_ups=active_session_top_ups,
                          last_session_end_time=last_session_end_time)
 
-    def login_message(self):  # This could just specify the time and date...
+    def login_message(self):
         last_login_minutes = self.calculate_last_login_time_minutes()
-        if last_login_minutes < 60:
+        if last_login_minutes == 0:
+            last_login = "You last logged in less than a minute ago."
+        elif last_login_minutes < 60:
             last_login = f"You last logged in {last_login_minutes} minute(s) ago."
         elif 60 <= last_login_minutes < 1440:  # last logged in within 24 hours
             last_login_hours = int(round(last_login_minutes / 60, 0))
@@ -45,38 +46,35 @@ class PlayerUser(Player):
               f"during which time you have {self.won_or_lost()}: "
               f"£{abs(self.calculate_active_session_winnings())}.")
 
-    def end_session_user(self):
-        self.set_session_end_time_to_now()
+    def end_session_user_message(self):
         print(f"Thanks for playing {self.name}!\n"
               f"Your final pot is £{self.active_pot}.")
-        exit()
 
-    def make_initial_deposit_or_top_up(self):
+    def make_initial_deposit_or_top_up(self, player_type: PlayerType):
         """Method to get the user to either set an initial deposit if they are playing as a guest or as a new player,
         or to top up if playing as an existing player."""
-        if self.player_type in [PlayerType.GUEST_PLAYER, PlayerType.NEW_PLAYER]:  # make them deposit
+        if player_type in [PlayerType.GUEST_PLAYER, PlayerType.NEW_PLAYER]:  # make them deposit
             initial_deposit = self.get_initial_deposit_amount()
             self.set_active_pot(amount=initial_deposit)
-        elif self.player_type == PlayerType.EXISTING_PLAYER:  # use top up prompt method
-            top_up_amount = self.check_top_up_scenario()
+        elif player_type == PlayerType.EXISTING_PLAYER:  # see if they want/need to top up
+            top_up_amount, _ = self.check_top_up_scenario()  # underscore as don't need the game_continues initially
             if top_up_amount > 0:
                 self.add_top_up_to_pot(amount=top_up_amount)
         else:
             raise ValueError(
                 f"Player: {self.name} has invalid player type and was passed to initial_deposit_or_top_up")
 
-        ##########
-        # lower level methods called in the initial_deposit_or_top_up method above
-        ##########
-
+    ##########
+    # lower level methods called in the initial_deposit_or_top_up method above
+    ##########
     @staticmethod
     def get_initial_deposit_amount() -> int:
         """
         Method to get users to specify how much they want to initially deposit.
         Returns: An integer, which is the specified desired top up amount.
         """
-        min_deposit = AllGameParameters.deposit_parameters.min_deposit
-        deposit_multiples = AllGameParameters.deposit_parameters.deposit_multiples
+        min_deposit = RouletteGameParameters.deposit_parameters.min_deposit
+        deposit_multiples = RouletteGameParameters.deposit_parameters.deposit_multiples
         while True:
             amount = input(
                 f"How much would you like to deposit?\nDeposits are allowed as multiples of £"
@@ -96,7 +94,7 @@ class PlayerUser(Player):
             except ValueError:
                 print(f"Invalid deposit amount - please try again and refer to deposit criteria.")
 
-    def check_top_up_scenario(self) -> int:
+    def check_top_up_scenario(self) -> (int, bool):
         """
         Method to check whether the user pot is below the threshold for a top up prompt to be worthwhile,
         and then make a top_up if it is worthwhile/ they have to to keep playing.
@@ -104,21 +102,24 @@ class PlayerUser(Player):
         playing, if their pot is below a pre-determined threshold.
         Returns:
         int - the top up amount specified by the user (by default 0)
+        bool - whether or not the game continues. If the user rejects the forced top up, the game will end
         """
-        low_pot_forced_top_up = AllGameParameters.top_up_parameters.low_pot_forced_top_up
-        threshold_for_top_up_prompt = AllGameParameters.top_up_parameters.threshold_for_top_up_prompt
+        low_pot_forced_top_up = RouletteGameParameters.top_up_parameters.low_pot_forced_top_up
+        threshold_for_top_up_prompt = RouletteGameParameters.top_up_parameters.threshold_for_top_up_prompt
+        game_continues = True  # By default the game will continue
         if self.active_pot > threshold_for_top_up_prompt:
-            return 0
+            return 0, game_continues
         elif threshold_for_top_up_prompt >= self.active_pot > low_pot_forced_top_up:
             if self.see_if_user_wants_optional_top_up():
-                return self.get_top_up_amount()
+                return self.get_top_up_amount(), game_continues
             else:
-                return 0
+                return 0, game_continues
         elif 0 < self.active_pot <= low_pot_forced_top_up:
             if self.see_if_user_wants_forced_top_up():
-                return self.get_top_up_amount()
+                return self.get_top_up_amount(), game_continues
             else:
-                self.end_session_user()
+                game_continues = False
+                return 0, game_continues
 
     ##########
     # Method called during check top up worthwhile
@@ -130,8 +131,8 @@ class PlayerUser(Player):
         Note if this method is called, it's because the user has said they want to top up.
         Returns: An integer, which is the specified desired top up amount.
         """
-        min_top_up = AllGameParameters.top_up_parameters.min_top_up
-        top_up_multiples = AllGameParameters.top_up_parameters.top_up_multiples
+        min_top_up = RouletteGameParameters.top_up_parameters.min_top_up
+        top_up_multiples = RouletteGameParameters.top_up_parameters.top_up_multiples
         while True:
             amount = input(
                 f"How much would you like to top up by?\nTop ups are allowed as multiples of £"
@@ -156,8 +157,8 @@ class PlayerUser(Player):
         Method to get the user to specify if they want to top up, HAVING BEEN GIVEN the top up prompt
         If they have £0 in their pot, they don't have a choice and must top up to continue playing.
         """
-        low_pot_forced_top_up = AllGameParameters.top_up_parameters.low_pot_forced_top_up
-        threshold_for_top_up_prompt = AllGameParameters.top_up_parameters.threshold_for_top_up_prompt
+        low_pot_forced_top_up = RouletteGameParameters.top_up_parameters.low_pot_forced_top_up
+        threshold_for_top_up_prompt = RouletteGameParameters.top_up_parameters.threshold_for_top_up_prompt
         while True:
             if low_pot_forced_top_up < self.active_pot <= threshold_for_top_up_prompt:
                 print(f"Your pot only contains £{self.active_pot}.")
@@ -179,7 +180,7 @@ class PlayerUser(Player):
         If it returns F and the user has active bets, they just won't be allowed to add any more bets to current spin.
         """
         while True:
-            if 0 < self.active_pot <= AllGameParameters.top_up_parameters.low_pot_forced_top_up:
+            if 0 < self.active_pot <= RouletteGameParameters.top_up_parameters.low_pot_forced_top_up:
                 proceed = input(f"You only have £{self.active_pot} left in your pot, "
                                 "to continue playing you must top up.\nWould you like to top up?\n"
                                 "[Y]es, [N]o, (game session will end if you have no active bets)\n--->").upper()

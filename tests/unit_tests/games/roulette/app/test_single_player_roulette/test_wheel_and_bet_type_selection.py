@@ -1,4 +1,4 @@
-from games.roulette.app.single_player_roulette.wheel_and_bet_type_selection import WheelAndBetConstructor
+from games.roulette.app.single_player_roulette.wheel_and_bet_construction import WheelAndBetConstructor
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel
 from games.roulette.definitions.bet_type_defns import ColoursBet
 from games.roulette.constants.bet_constants import BetTypeIds, default_colours_bet_parameters
