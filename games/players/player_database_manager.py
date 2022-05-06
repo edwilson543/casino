@@ -67,6 +67,15 @@ class PlayerDatabaseManager:
         """
         if self.username_exists_check(player_username=player_username):
             raise ValueError(f"create_player called with player_username: {player_username} which is already in use.")
+        elif not self.username_meets_criteria_check(proposed_username=player_username):
+            raise ValueError("create_player method in player_database_manager attempted to create a player"
+                             f" with invalid username: {player_username}")
+        elif not self.password_meets_criteria_check(proposed_password=password):
+            raise ValueError("create_player method in player_database_manager attempted to create a player"
+                             f" with invalid password: {password}")
+        elif not self.name_meets_criteria_check(proposed_name=name):
+            raise ValueError("create_player method in player_database_manager attempted to create a player"
+                             f" with invalid name: {name}")
         else:
             player = self.player_object(name=name, username=player_username, password=password)  # Other params default
             self.upload_player(player=player)
@@ -190,9 +199,11 @@ class PlayerDatabaseManager:
     def username_meets_criteria_check(proposed_username: str) -> bool:
         """Method to check that a player's desired username meets the desired criteria"""
         disallowed_username_characters: list = PlayerParameterRestrictions.username_parameters.disallowed_characters
+        min_length: int = PlayerParameterRestrictions.username_parameters.minimum_length
         username_allowed = True
         for char in disallowed_username_characters:
             username_allowed *= char not in proposed_username
+        username_allowed *= len(proposed_username) >= min_length
         return username_allowed
 
     @staticmethod
