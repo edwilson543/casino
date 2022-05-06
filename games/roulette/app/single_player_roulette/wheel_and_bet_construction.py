@@ -7,6 +7,7 @@ from dataclasses import asdict
 from enum import Enum
 
 #  TODO update the docstrings in here, they are very out of date
+#  TODO update unpacking to actually just use parameters attribute of wheel/bet
 class WheelAndBetConstructor:
     """
     Class to look up wheel and bet parameters based on their names,

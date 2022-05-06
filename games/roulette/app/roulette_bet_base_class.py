@@ -32,7 +32,7 @@ class RouletteBet(Bet):
     RouletteBet <- ColoursBet, StraightUpBet, ... | + determine_win_criteria
     ColoursBetUser,... -< ColoursBet & RouletteBetUser
     """
-
+    #  TODO unpack the roulette parameters here for super, but only have a parameters attribute in init
     def __init__(self,
                  bet_type_name: str = None,
                  min_bet: int = None,

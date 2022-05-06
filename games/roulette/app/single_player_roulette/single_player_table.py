@@ -5,7 +5,7 @@ from games.roulette.app.single_player_roulette.wheel_and_bet_construction import
     WheelAndBetConstructor
 from games.players.player_database_manager import PlayerDatabaseManager
 
-
+#  TODO try and bring in the method for filling the bet list
 class SinglePlayerRouletteTable:
     def __init__(self,
                  active_player: PLAYER_TYPES = None,
