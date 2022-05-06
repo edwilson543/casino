@@ -1,9 +1,8 @@
 from games.roulette.constants.game_constants import Colour
 from games.roulette.constants.wheel_constants import WheelParameters
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel
-from dataclasses import asdict
 
-euro_wheel = RouletteWheel(**asdict(WheelParameters.EURO_WHEEL))  # Used throughout tests
+euro_wheel = RouletteWheel(parameters=WheelParameters.EURO_WHEEL)  # Used throughout tests
 
 
 class TestRouletteWheel:

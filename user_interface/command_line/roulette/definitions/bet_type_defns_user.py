@@ -1,4 +1,5 @@
 """To define a new bet, first go to roulette->definitions->bet_type_defns"""
+from games.roulette.app.roulette_bet_base_class import RouletteBetParameters
 from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.game_constants import Colour, ColourPrompts
@@ -14,17 +15,14 @@ class ColoursBetUser(ColoursBet, RouletteBetUser):
     """Class for navigating the user to place a colours bet"""
 
     def __init__(self,
-                 bet_type_name: str = None,
-                 min_bet: int = None,
-                 max_bet: int = None,
+                 fixed_parameters: RouletteBetParameters,
                  stake: int = None,
                  bet_choice: Colour = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None,
                  bet_choice_string_rep: str = None):
-        super(RouletteBetUser, self).__init__(bet_type_name, min_bet, max_bet, stake, bet_choice, win_criteria, payout,
-                                              playing_wheel)
+        super(RouletteBetUser, self).__init__(fixed_parameters, stake, bet_choice, win_criteria, payout, playing_wheel)
         self.bet_choice_string_rep = bet_choice_string_rep
 
     def determine_valid_bet_choices_text(self):
@@ -62,17 +60,14 @@ class StraightUpBetUser(StraightUpBet, RouletteBetUser):
     """Class for navigating the user to place a straight up bet"""
 
     def __init__(self,
-                 bet_type_name: str = None,
-                 min_bet: int = None,
-                 max_bet: int = None,
+                 fixed_parameters: RouletteBetParameters,
                  stake: int = None,
-                 bet_choice: int = None,
+                 bet_choice: Colour = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None,
                  bet_choice_string_rep: str = None):
-        super(RouletteBetUser, self).__init__(bet_type_name, min_bet, max_bet, stake, bet_choice, win_criteria, payout,
-                                              playing_wheel)
+        super(RouletteBetUser, self).__init__(fixed_parameters, stake, bet_choice, win_criteria, payout, playing_wheel)
         self.bet_choice_string_rep = bet_choice_string_rep
 
     def determine_valid_bet_choices_text(self):
@@ -81,8 +76,9 @@ class StraightUpBetUser(StraightUpBet, RouletteBetUser):
         Example output form: '0 to 36 (inclusive)'
         Note this would need to change if defining a roulette wheel which skips numbers
         """
-        min_number = min(list(set(self.playing_wheel.slots.keys())))
-        max_number = max(list(set(self.playing_wheel.slots.keys())))
+        options_range: range = self.determine_valid_bet_choices()
+        min_number = min(options_range)
+        max_number = max(options_range)
         return f"{min_number} to {max_number} (inclusive)"
 
     def get_user_bet_choice(self) -> int:
@@ -112,17 +108,14 @@ class SplitBetUser(SplitBet, RouletteBetUser):
     """Class for defining win criteria and payout for a split bet"""
 
     def __init__(self,
-                 bet_type_name: str = None,
-                 min_bet: int = None,
-                 max_bet: int = None,
+                 fixed_parameters: RouletteBetParameters,
                  stake: int = None,
-                 bet_choice: int = None,
+                 bet_choice: Colour = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None,
                  bet_choice_string_rep: str = None):
-        super(RouletteBetUser, self).__init__(bet_type_name, min_bet, max_bet, stake, bet_choice, win_criteria, payout,
-                                              playing_wheel)
+        super(RouletteBetUser, self).__init__(fixed_parameters, stake, bet_choice, win_criteria, payout, playing_wheel)
         self.bet_choice_string_rep = bet_choice_string_rep
 
     def determine_valid_bet_choices_text(self):
@@ -142,11 +135,11 @@ class SplitBetUser(SplitBet, RouletteBetUser):
                 int_one = int(int_one_str)
                 int_two = int(int_two_str)
                 if super().determine_valid_bet_choices(int_one=int_one, int_two=int_two):
-                    return (int_one, int_two)
+                    return int_one, int_two
                 else:
                     print(f"({int_one_str}, {int_two_str}) is not a valid split bet, please try again.\n"
                           f"Split bets must be placed on neighbouring tiles on the board")
-            except ValueError:
+            except (ValueError, TypeError):
                 print(f"({int_one_str}, {int_two_str}) is not a valid split bet, please try again"
                       f"Split bets must be placed on neighbouring tiles on the board")
 

@@ -3,24 +3,23 @@ from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet,
 from games.roulette.constants.game_constants import Colour
 from games.roulette.constants.wheel_constants import WheelParameters
 from games.roulette.constants.bet_constants import WheelBetParameters
-from dataclasses import asdict
 import pytest
 
 
 #  TODO include testing of payout calculation of specific bets
-#  Also, how to reject error when intentionally testing an error is thrown for an invalid type?
+#  Also, how to reject warnings when intentionally testing an error is thrown for an invalid type?
 ##########
 # Objects to be used to test the relevant methods
 ##########
-euro_wheel = RouletteWheel(**asdict(WheelParameters.EURO_WHEEL))
+euro_wheel = RouletteWheel(parameters=WheelParameters.EURO_WHEEL)
 
-colours_bet = ColoursBet(**asdict(WheelBetParameters.EURO_WHEEL.COLOURS_BET))
+colours_bet = ColoursBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.COLOURS_BET)
 colours_bet.set_playing_wheel(wheel=euro_wheel)
 
-straight_up_bet = StraightUpBet(**asdict(WheelBetParameters.EURO_WHEEL.STRAIGHTUP_BET))
+straight_up_bet = StraightUpBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.STRAIGHTUP_BET)
 straight_up_bet.set_playing_wheel(wheel=euro_wheel)
 
-split_bet = SplitBet(**asdict(WheelBetParameters.EURO_WHEEL.SPLIT_BET))
+split_bet = SplitBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.SPLIT_BET)
 split_bet.set_playing_wheel(wheel=euro_wheel)
 
 
@@ -39,7 +38,7 @@ class TestBetPlacementColours:
 
     def test_determine_win_criteria_bias_colour(self):
         """Test whether the bias_colour is rejected as a colours bet colour choice and a value error is raised."""
-        colours_bet.set_bet_choice(bet_choice=euro_wheel.bias_colour)
+        colours_bet.set_bet_choice(bet_choice=euro_wheel.parameters.bias_colour)
         with pytest.raises(ValueError):
             colours_bet.determine_win_criteria()
 
@@ -86,13 +85,26 @@ class TestBetPlacementSplitBet:
         int_two = 12  # numbers are adjacent to each other on the euro board
         assert not split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)
 
-    def test_determine_valid_bet_choices_int_not_on_board(self):
+    def test_determine_valid_bet_choices_neither_int_not_on_board(self):
+        int_one = 100
+        int_two = -2  # numbers are adjacent to each other on the euro board
+        with pytest.raises(ValueError):
+            split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)
+
+    def test_determine_valid_bet_choices_one_int_not_on_board(self):
         int_one = 100
         int_two = 12  # numbers are adjacent to each other on the euro board
-        assert not split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)
+        with pytest.raises(ValueError):
+            split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)
 
-    def test_determine_valid_bet_choices_invalid_type(self):
+    def test_determine_valid_bet_choices_one_int_not_a_valid_type_float(self):
+        int_one = 10.1
+        int_two = 12  # numbers are adjacent to each other on the euro board
+        with pytest.raises(TypeError):
+            split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)
+
+    def test_determine_valid_bet_choices_one_int_not_a_valid_type_str(self):
         int_one = "string"
         int_two = 12  # numbers are adjacent to each other on the euro board
-        with pytest.raises(ValueError):
+        with pytest.raises(TypeError):
             split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)

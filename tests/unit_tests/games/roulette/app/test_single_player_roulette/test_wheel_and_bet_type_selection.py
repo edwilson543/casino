@@ -7,22 +7,29 @@ from numpy import all
 
 constructor = WheelAndBetConstructor()
 
+
 class TestWheelAndBetConstructor:
+    ##########
+    # Wheel construction tests
+    ##########
     def test_get_wheel_from_wheel_name_euro_wheel_type(self):
         euro_wheel = constructor.get_wheel_from_wheel_name(wheel_name=WheelIds.EURO_WHEEL.name)
         assert type(euro_wheel) is RouletteWheel
 
     def test_get_wheel_from_wheel_name_euro_wheel_parameters(self):
         euro_wheel = constructor.get_wheel_from_wheel_name(wheel_name=WheelIds.EURO_WHEEL.name)
-        actual_name = euro_wheel.wheel_name
-        actual_slots = euro_wheel.slots
-        actual_bias_colour = euro_wheel.bias_colour
-        actual_board = euro_wheel.board
+        actual_name = euro_wheel.parameters.wheel_name
+        actual_slots = euro_wheel.parameters.slots
+        actual_bias_colour = euro_wheel.parameters.bias_colour
+        actual_board = euro_wheel.parameters.board
         assert actual_name == euro_wheel_parameters.wheel_name
         assert actual_slots == euro_wheel_parameters.slots
         assert actual_bias_colour == euro_wheel_parameters.bias_colour
         assert all(actual_board - euro_wheel_parameters.board) == 0
 
+    ##########
+    # Bet construction tests
+    ##########
     def test_get_bet_type_from_bet_type_name_colours_bet_type(self):
         colours_bet = constructor.get_bet_type_from_bet_type_name(wheel_name=WheelIds.EURO_WHEEL.name,
                                                                   bet_type_name=BetTypeIds.COLOURS_BET.name)

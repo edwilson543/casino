@@ -4,14 +4,14 @@ from typing import Any
 
 class Bet:
     def __init__(self,
-                 bet_type: str,
+                 bet_type_name: str,
                  min_bet: int,
                  max_bet: int,
                  stake: int,
                  bet_choice: Any,
                  win_criteria: Any,
                  payout: int):
-        self.bet_type = bet_type
+        self.bet_type_name = bet_type_name
         self.min_bet = min_bet
         self.max_bet = max_bet
         self.stake = stake
