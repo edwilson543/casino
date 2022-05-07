@@ -108,10 +108,14 @@ class Player:
         return int(round(duration_minutes, 0))
 
     def calculate_last_login_time_minutes(self):
-        duration_timedelta = datetime.now() - self.last_session_end_time
-        duration_seconds = duration_timedelta.seconds
-        duration_minutes = duration_seconds / 60
-        return int(round(duration_minutes, 0))
+        """Method to calculate how long it's been since a player last logged in."""
+        if self.last_session_end_time is None:
+            return 0
+        else:
+            duration_timedelta = datetime.now() - self.last_session_end_time
+            duration_seconds = duration_timedelta.seconds
+            duration_minutes = duration_seconds / 60
+            return int(round(duration_minutes, 0))
 
 
 ##########
