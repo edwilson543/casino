@@ -33,7 +33,6 @@ class RouletteBet(Bet):
     ColoursBetUser,... -< ColoursBet & RouletteBetUser
     """
 
-    #  TODO unpack the roulette parameters here for super, but only have a parameters attribute in init
     def __init__(self,
                  fixed_parameters: RouletteBetParameters,
                  stake: int = None,

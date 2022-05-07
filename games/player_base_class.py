@@ -4,8 +4,10 @@ from typing import TypeVar
 
 
 class PlayerType(Enum):
-    """Existing/guest/new players are treated differently at log-in"""
-    #  TODO - should be able to get rid of this once new json storage in place
+    """
+    Existing/guest/new players are treated differently at log-in (e.g. new/guest players are forced to make a
+    deposit, hence the need for this Enum.
+    """
     EXISTING_PLAYER = "E"
     GUEST_PLAYER = "G"
     NEW_PLAYER = "N"

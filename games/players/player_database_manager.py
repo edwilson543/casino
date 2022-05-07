@@ -11,13 +11,25 @@ class PlayerDatabaseManager:
                  player_object: PLAYER_TYPES = Player,
                  player_data_directory_path: Path = ROOT_DIRECTORY / "games" / "players" / "player_data",
                  player_datafile_name: str = "player_data.json",
-                 guest_datafile_name: str = "test_guest_data.json"):
+                 guest_datafile_name: str = "guest_data.json"):
         """
         Parameters:
         ----------
         player_object: the type of player object to be instantiated from their attributes in storage.
         This will currently either be just Player or PlayerUser.
-        # TODO write this docstring
+
+        player_data_directory_path: A Path object that specifies where the player and guest data is / will be stored,
+        relative to the ROOT_DIRECTORY. This can easily be changed from the default if a user would like to store their
+        player data elsewhere.
+
+        player_data_file_name: Name of the player datafile - note that new player data files could be created by
+        changing this string, although the JSON extension must always be used.
+        The player datafile with the default name and default path is in the .gitignore, however will automatically
+        populate when a new user creates an account on their own device, as an empty JSON dictionary, which then will
+        get filled with their data.
+
+        guest_datafile_name: Name of the guest data file - this is NOT on the .gitignore, as all users will need it to
+        be able to play as a guest
         """
         self.player_object = player_object
         self.player_data_directory_path = player_data_directory_path
@@ -34,7 +46,7 @@ class PlayerDatabaseManager:
         Returns: live_player: an instance of the desired Player subclass
         """
         data_path = self.get_data_path(player_username=player_username)
-        with open(data_path, "r") as player_data_file:  # TODO update this path to be dynamic
+        with open(data_path, "r") as player_data_file:
             try:
                 all_player_data_dict: dict = json.load(player_data_file)
                 encoded_player_data = all_player_data_dict[player_username]
