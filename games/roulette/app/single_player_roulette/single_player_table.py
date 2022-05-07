@@ -21,7 +21,7 @@ class SinglePlayerRouletteTable:
 
     def evaluate_all_active_bets_list(self, spin_outcome: wheel_spin_return):
         """
-        Method to evaluate each active bet in the list
+        Method to evaluate each active bet in the list, one by one, and accumulate the winnings and number of wins.
         Returns:
         total_win_count
         total_winnings

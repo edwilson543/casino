@@ -145,7 +145,8 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
             ##########
             # 1 Choose bet type
             ##########
-            potential_bet: USER_BET_TYPES = self.constructor.choose_bet_type(wheel_name=self.active_wheel.wheel_name)
+            potential_bet: USER_BET_TYPES = self.constructor.choose_bet_type(
+                wheel_name=self.active_wheel.parameters.wheel_name)
             potential_bet.set_playing_wheel(wheel=self.active_wheel)
 
             ##########
