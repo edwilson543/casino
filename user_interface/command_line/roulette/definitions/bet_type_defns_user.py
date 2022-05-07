@@ -1,9 +1,9 @@
 """To define a new bet, first go to roulette->definitions->bet_type_defns"""
 from games.roulette.app.roulette_bet_base_class import RouletteBetParameters
-from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet, HighLowBet
+from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet, HighLowBet, OddsEvensBet
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.game_constants import Colour, ColourPrompts
-from games.roulette.constants.bet_constants import HighLowBetOptions, OddsOrEvensBetOptions
+from games.roulette.constants.bet_constants import HighLowBetOptions, OddsEvensBetOptions
 from user_interface.command_line.roulette.app.roulette_bet_base_class_user import RouletteBetUser
 from enum import Enum
 
@@ -11,6 +11,10 @@ from enum import Enum
 ##########
 # Define 'get_user_bet_choice' method for each user bets
 # Use MRO SpecificBetClass, RouletteBetUser (shouldn't be needed for now anyway)
+##########
+
+##########
+# Outside Bets
 ##########
 class ColoursBetUser(ColoursBet, RouletteBetUser):
     """Class for navigating the user to place a colours bet"""
@@ -56,6 +60,84 @@ class ColoursBetUser(ColoursBet, RouletteBetUser):
         colour: str = getattr(self.bet_choice, "name").lower()
         return colour + " colours bet"  # on a ...
 
+
+class HighLowBetUser(HighLowBet, RouletteBetUser):
+    """Class for navigating the user to place a high low bet"""
+
+    def __init__(self,
+                 fixed_parameters: RouletteBetParameters,
+                 stake: int = None,
+                 bet_choice: HighLowBetOptions = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: WHEEL_TYPES = None,
+                 bet_choice_string_rep: str = None):
+        super(RouletteBetUser, self).__init__(fixed_parameters, stake, bet_choice, win_criteria, payout, playing_wheel)
+        self.bet_choice_string_rep = bet_choice_string_rep
+
+    def determine_valid_bet_choices_text(self):
+        """This method is superfluous for a split bet"""
+        raise NotImplementedError("HighLowBetUser's determine_valid_bet_choices_text method called unintentionally")
+
+    def get_user_bet_choice(self) -> (int, int):
+        """
+        Method to define the user's bet choice.
+        """
+        while True:
+            choice = input(f"What type of bet would you like to place?\n"
+                           f"{HighLowBetOptions.PROMPT.value}\n--->").upper()
+            try:
+                bet_choice = HighLowBetOptions(choice)
+                return bet_choice
+            except (ValueError, AttributeError):
+                print(f"({choice} is not a valid choice for a high or low bet, please try again")
+
+    def get_bet_choice_string_rep(self) -> str:
+        """String representation of the bet choice that has been made for feeding back to the user"""
+        high_low = self.bet_choice.name.lower()
+        return f"{high_low} bet"  # On a...
+
+
+class OddsEvensBetUser(OddsEvensBet, RouletteBetUser):
+    """Class for navigating the user to place a high low bet"""
+
+    def __init__(self,
+                 fixed_parameters: RouletteBetParameters,
+                 stake: int = None,
+                 bet_choice: OddsEvensBetOptions = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: WHEEL_TYPES = None,
+                 bet_choice_string_rep: str = None):
+        super(RouletteBetUser, self).__init__(fixed_parameters, stake, bet_choice, win_criteria, payout, playing_wheel)
+        self.bet_choice_string_rep = bet_choice_string_rep
+
+    def determine_valid_bet_choices_text(self):
+        """This method is superfluous for a split bet"""
+        raise NotImplementedError("OddsEvensBetUser's determine_valid_bet_choices_text method called unintentionally")
+
+    def get_user_bet_choice(self) -> (int, int):
+        """
+        Method to define the user's bet choice.
+        """
+        while True:
+            choice = input(f"What type of bet would you like to place?\n"
+                           f"{OddsEvensBetOptions.PROMPT.value}\n--->").upper()
+            try:
+                bet_choice = OddsEvensBetOptions(choice)
+                return bet_choice
+            except (ValueError, AttributeError):
+                print(f"({choice} is not a valid choice for a odds or evens bet, please try again")
+
+    def get_bet_choice_string_rep(self) -> str:
+        """String representation of the bet choice that has been made for feeding back to the user"""
+        odd_even = self.bet_choice.name.lower()
+        return f"{odd_even} bet"  # On a...
+
+
+##########
+# Inside Bets
+##########
 
 class StraightUpBetUser(StraightUpBet, RouletteBetUser):
     """Class for navigating the user to place a straight up bet"""
@@ -151,43 +233,6 @@ class SplitBetUser(SplitBet, RouletteBetUser):
         return "split bet on the edge between: " + str(int_one) + " and " + str(int_two)  # on a ...
 
 
-class HighLowBetUser(HighLowBet, RouletteBetUser):
-    """Class for navigating the user to place a high low bet"""
-
-    def __init__(self,
-                 fixed_parameters: RouletteBetParameters,
-                 stake: int = None,
-                 bet_choice: HighLowBetOptions = None,
-                 win_criteria: list[int] = None,
-                 payout: int = None,
-                 playing_wheel: WHEEL_TYPES = None,
-                 bet_choice_string_rep: str = None):
-        super(RouletteBetUser, self).__init__(fixed_parameters, stake, bet_choice, win_criteria, payout, playing_wheel)
-        self.bet_choice_string_rep = bet_choice_string_rep
-
-    def determine_valid_bet_choices_text(self):
-        """This method is superfluous for a split bet"""
-        raise NotImplementedError("HighLowBetUser's determine_valid_bet_choices_text method called unintentionally")
-
-
-    def get_user_bet_choice(self) -> (int, int):
-        """
-        Method to define the user's bet choice.
-        """
-        while True:
-            choice = input(f"What type of bet would you like to place?\n"
-                           f"{HighLowBetOptions.PROMPT.value}\n--->").upper()
-            try:
-                bet_choice = HighLowBetOptions(choice)
-                return bet_choice
-            except (ValueError, AttributeError):
-                print(f"({choice} is not a valid choice for a high low bet, please try again")
-
-    def get_bet_choice_string_rep(self) -> str:
-        """String representation of the bet choice that has been made for feeding back to the user"""
-        high_low = self.bet_choice.name.lower()
-        return f"{high_low} bet"  # On a...
-
 ##########
 # Enum for storing all the user bet classes
 # Parameters imported live into game so don't instantiate
@@ -197,3 +242,4 @@ class BetTypeOptionsUser(Enum):
     STRAIGHTUP_BET = StraightUpBetUser
     SPLIT_BET = SplitBetUser
     HIGH_LOW_BET = HighLowBetUser
+    ODDS_EVENS_BET = OddsEvensBetUser

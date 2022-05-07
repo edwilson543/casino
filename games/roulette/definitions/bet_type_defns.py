@@ -10,7 +10,7 @@ in the same way as is done for the existing bets.
 from games.roulette.app.roulette_bet_base_class import RouletteBet, RouletteBetParameters
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.game_constants import Colour
-from games.roulette.constants.bet_constants import HighLowBetOptions, OddsOrEvensBetOptions
+from games.roulette.constants.bet_constants import HighLowBetOptions, OddsEvensBetOptions
 from numpy import where
 from enum import Enum
 from math import floor
@@ -18,6 +18,10 @@ from math import floor
 
 ##########
 # Create subclass of RouletteBet base class to define each bet's 'determine_win_criteria' method
+##########
+
+##########
+# Outside Bets
 ##########
 class ColoursBet(RouletteBet):
     """Class for defining the valid bet choices and win criteria of a colours bet."""
@@ -50,6 +54,73 @@ class ColoursBet(RouletteBet):
             raise ValueError(f"{self.bet_choice} is not a permitted colours bet on the "
                              f"{self.playing_wheel.parameters.wheel_name} roulette wheel")
 
+
+class HighLowBet(RouletteBet):
+    """Class for defining the valid bet choices and win criteria of a High and Low bet"""
+
+    def __init__(self,
+                 fixed_parameters: RouletteBetParameters,
+                 stake: int = None,
+                 bet_choice: HighLowBetOptions = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: WHEEL_TYPES = None):
+        super().__init__(fixed_parameters, stake, bet_choice, win_criteria, payout, playing_wheel)
+
+    def determine_valid_bet_choices(self) -> list:
+        """Returns a range which specifies the valid number choices"""
+        return [HighLowBetOptions.HIGH, HighLowBetOptions.LOW]
+
+    def determine_win_criteria(self) -> list[int]:
+        """Returns: the bet_choice as a list (which for a colours bet will be an int).
+        Requires the bet_choice attribute to have already been set."""
+        middle_slot = floor(self.playing_wheel.bias_wheel_size() / 2)
+        relevant_slots = [slot_num for slot_num in self.playing_wheel.parameters.slots if
+                          self.playing_wheel.parameters.slots[slot_num] != self.playing_wheel.parameters.bias_colour]
+        if self.bet_choice == HighLowBetOptions.LOW:
+            winnings_slots = [slot_num for slot_num in relevant_slots if slot_num <= middle_slot]
+            return winnings_slots
+        elif self.bet_choice == HighLowBetOptions.HIGH:
+            winning_slots = [slot_num for slot_num in relevant_slots if slot_num > middle_slot]
+            return winning_slots
+        else:
+            raise ValueError(f"{self.bet_choice} is not a valid high / low bet on the roulette wheel")
+
+
+class OddsEvensBet(RouletteBet):
+    """Class for defining the valid bet choices and win criteria of a Odds and Evens bet"""
+
+    def __init__(self,
+                 fixed_parameters: RouletteBetParameters,
+                 stake: int = None,
+                 bet_choice: OddsEvensBetOptions = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: WHEEL_TYPES = None):
+        super().__init__(fixed_parameters, stake, bet_choice, win_criteria, payout, playing_wheel)
+
+    def determine_valid_bet_choices(self) -> list:
+        """Returns a range which specifies the valid number choices"""
+        return [OddsEvensBetOptions.ODDS, OddsEvensBetOptions.EVENS]
+
+    def determine_win_criteria(self) -> list[int]:
+        """Returns: the bet_choice as a list (which for a colours bet will be an int).
+        Requires the bet_choice attribute to have already been set."""
+        relevant_slots = [slot_num for slot_num in self.playing_wheel.parameters.slots if
+                          self.playing_wheel.parameters.slots[slot_num] != self.playing_wheel.parameters.bias_colour]
+        if self.bet_choice == OddsEvensBetOptions.ODDS:
+            winnings_slots = [slot_num for slot_num in relevant_slots if slot_num % 2 == 1]
+            return winnings_slots
+        elif self.bet_choice == OddsEvensBetOptions.EVENS:
+            winning_slots = [slot_num for slot_num in relevant_slots if slot_num % 2 == 0]
+            return winning_slots
+        else:
+            raise ValueError(f"{self.bet_choice} is not a valid odds or evens bet on the roulette wheel")
+
+
+##########
+# Inside Bets
+##########
 
 class StraightUpBet(RouletteBet):
     """Class for defining the valid bet choices and win criteria of a straight up bet"""
@@ -134,36 +205,6 @@ class SplitBet(RouletteBet):
             raise ValueError(f"({int_one}, {int_two}) is not a valid split bet on the "
                              f"{self.playing_wheel.parameters.wheel_name} board")
 
-class HighLowBet(RouletteBet):
-    """Class for defining the valid bet choices and win criteria of a High and Low bet"""
-    def __init__(self,
-                 fixed_parameters: RouletteBetParameters,
-                 stake: int = None,
-                 bet_choice: HighLowBetOptions = None,
-                 win_criteria: list[int] = None,
-                 payout: int = None,
-                 playing_wheel: WHEEL_TYPES = None):
-        super().__init__(fixed_parameters, stake, bet_choice, win_criteria, payout, playing_wheel)
-
-    def determine_valid_bet_choices(self) -> list:
-        """Returns a range which specifies the valid number choices"""
-        return [HighLowBetOptions.HIGH, HighLowBetOptions.LOW]
-
-    def determine_win_criteria(self) -> list[int]:
-        """Returns: the bet_choice as a list (which for a colours bet will be an int).
-        Requires the bet_choice attribute to have already been set."""
-        middle_slot = floor(self.playing_wheel.bias_wheel_size()/2)  # Size should be even, so shouldn't need the floor
-        relevant_slots = [slot_num for slot_num in self.playing_wheel.parameters.slots if
-                          self.playing_wheel.parameters.slots[slot_num] != self.playing_wheel.parameters.bias_colour]
-        if self.bet_choice == HighLowBetOptions.LOW:
-            winnings_slots = [slot_num for slot_num in relevant_slots if slot_num <= middle_slot]
-            return winnings_slots
-        elif self.bet_choice == HighLowBetOptions.HIGH:
-            winning_slots = [slot_num for slot_num in relevant_slots if slot_num > middle_slot]
-            return winning_slots
-        else:
-            raise ValueError(f"{self.bet_choice} is not a valid high / low bet on the roulette wheel")
-
 
 ##########
 # Enum for storing all the bet classes
@@ -173,3 +214,5 @@ class BetTypeOptions(Enum):
     COLOURS_BET = ColoursBet
     STRAIGHTUP_BET = StraightUpBet
     SPLIT_BET = SplitBet
+    HIGH_LOW_BET = HighLowBet
+    ODDS_EVENS_BET = OddsEvensBet

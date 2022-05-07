@@ -1,8 +1,8 @@
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel
-from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet, HighLowBet
+from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet, HighLowBet, OddsEvensBet
 from games.roulette.constants.game_constants import Colour
 from games.roulette.constants.wheel_constants import WheelParameters
-from games.roulette.constants.bet_constants import WheelBetParameters, HighLowBetOptions, OddsOrEvensBetOptions
+from games.roulette.constants.bet_constants import WheelBetParameters, HighLowBetOptions, OddsEvensBetOptions
 import pytest
 
 #  TODO how to reject warnings when intentionally testing an error is thrown for an invalid type?
@@ -18,7 +18,7 @@ colours_bet = ColoursBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.COLOURS_
 straight_up_bet = StraightUpBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.STRAIGHTUP_BET, playing_wheel=euro_wheel)
 split_bet = SplitBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.SPLIT_BET, playing_wheel=euro_wheel)
 high_low_bet = HighLowBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.HIGH_LOW_BET, playing_wheel=euro_wheel)
-
+odds_evens_bet = OddsEvensBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.ODDS_EVENS_BET, playing_wheel=euro_wheel)
 
 class TestBetPlacementColours:
     def test_determine_valid_bet_choices(self):
@@ -123,3 +123,21 @@ class TestHighLowBet:
         high_low_bet.set_bet_choice(bet_choice="high")
         with pytest.raises(ValueError):
             high_low_bet.determine_win_criteria()
+
+class TestOddsEvensBet:
+    def test_determine_win_criteria_odds_bet(self):
+        odds_evens_bet.set_bet_choice(bet_choice=OddsEvensBetOptions.ODDS)
+        expected_slots = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35]
+        actual_slots = odds_evens_bet.determine_win_criteria()
+        assert expected_slots == actual_slots
+
+    def test_determine_win_criteria_evens_bet(self):
+        odds_evens_bet.set_bet_choice(bet_choice=OddsEvensBetOptions.EVENS)
+        expected_slots = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36]
+        actual_slots = odds_evens_bet.determine_win_criteria()
+        assert expected_slots == actual_slots
+
+    def test_determine_win_criteria_odds_evens_invalid_choice(self):
+        odds_evens_bet.set_bet_choice(bet_choice="odds")
+        with pytest.raises(ValueError):
+            odds_evens_bet.determine_win_criteria()

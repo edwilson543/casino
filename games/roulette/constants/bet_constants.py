@@ -23,6 +23,7 @@ class BetTypeIds(str, Enum):
     STRAIGHTUP_BET = "S"
     SPLIT_BET = "P"
     HIGH_LOW_BET = "H"
+    ODDS_EVENS_BET = "O"
     NEW_BET = None
 
 
@@ -35,6 +36,7 @@ class BetTypePrompts(str, Enum):
     STRAIGHTUP_BET = "[S]-Straight Up"
     SPLIT_BET = "[P]-Split"
     HIGH_LOW_BET = "[H] - High / Low"
+    ODDS_EVENS_BET = "[O] - Odds / Evens"
     NEW_BET = None  # Dummy new bet prompt
 
 
@@ -56,6 +58,9 @@ default_split_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.SP
 default_high_low_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name,
                                                    min_bet=5,
                                                    max_bet=50)
+default_odds_evens_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.ODDS_EVENS_BET.name,
+                                                      min_bet=5,
+                                                      max_bet=50)
 
 default_new_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name,
                                                    min_bet=0,
@@ -74,6 +79,7 @@ class WheelDefaultBetOptionsAndParameters:
     STRAIGHTUP_BET: RouletteBetParameters = default_straight_up_bet_parameters
     SPLIT_BET: RouletteBetParameters = default_split_bet_parameters
     HIGH_LOW_BET: RouletteBetParameters = default_high_low_bet_parameters
+    ODDS_EVENS_BET: RouletteBetParameters = default_odds_evens_parameters
     # new bet goes here as a class attribute
 
     def construct_wheel_bet_options_prompt(self) -> str:
@@ -111,7 +117,7 @@ class HighLowBetOptions(Enum):
     LOW = "L"
     PROMPT = "[H] - High, [L] - Low"
 
-class OddsOrEvensBetOptions(Enum):
+class OddsEvensBetOptions(Enum):
     ODDS = "O"
     EVENS = "E"
     PROMPT = "[O] - Odds, [E] - Evens"

@@ -7,7 +7,7 @@ test_wheel_parameters = WheelDefaultBetOptionsAndParameters(COLOURS_BET=default_
 
 class TestIndividualWheelMinMaxBetParameters:
     def test_construct_wheel_bet_options_prompt(self):
-        expected_prompt = "[C]-Colours, [S]-Straight Up, [P]-Split"
+        expected_prompt = "[C]-Colours, [S]-Straight Up, [P]-Split, [H] - High / Low, [O] - Odds / Evens"
         actual_prompt = test_wheel_parameters.construct_wheel_bet_options_prompt()
         assert expected_prompt == actual_prompt
 
