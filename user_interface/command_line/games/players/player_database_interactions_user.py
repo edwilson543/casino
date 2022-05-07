@@ -70,7 +70,7 @@ class PlayerDatabaseInteractionsUser(PlayerDatabaseManager):
             try:
                 player_type = PlayerType(player_type_id)
                 if player_type == PlayerType.GUEST_PLAYER:
-                    guest_player: PlayerUser = super().load_player(player_username="guest")  # TODO use self not super()
+                    guest_player: PlayerUser = self.load_player(player_username="guest")
                     return guest_player, PlayerType.GUEST_PLAYER
                 elif player_type == PlayerType.EXISTING_PLAYER:
                     existing_player: PlayerUser = self.access_player()
@@ -92,7 +92,7 @@ class PlayerDatabaseInteractionsUser(PlayerDatabaseManager):
         while True:
             username = input(f"What is your username?\n--->").lower()
             try:
-                existing_player = super().load_player(player_username=username)  # TODO maybe replace super() with self
+                existing_player = self.load_player(player_username=username)
                 return existing_player
             except KeyError:
                 print(f"No user with username: {username} found. Please try again.")
