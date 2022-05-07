@@ -166,7 +166,7 @@ class HighLowBet(RouletteBet):
 
 
 ##########
-# Add the newly defined user bet class to the BetTypeOptions Enum below
+# Enum for storing all the bet classes
 # Parameters imported live into game so don't instantiate
 ##########
 class BetTypeOptions(Enum):

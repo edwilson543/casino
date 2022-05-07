@@ -1,23 +1,23 @@
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel
-from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet
+from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet, HighLowBet
 from games.roulette.constants.game_constants import Colour
 from games.roulette.constants.wheel_constants import WheelParameters
-from games.roulette.constants.bet_constants import WheelBetParameters
+from games.roulette.constants.bet_constants import WheelBetParameters, HighLowBetOptions, OddsOrEvensBetOptions
 import pytest
 
-#  Also, how to reject warnings when intentionally testing an error is thrown for an invalid type?
-#  TODO include testing of payout calculation of specific bets
+#  TODO how to reject warnings when intentionally testing an error is thrown for an invalid type?
+# Or is this a signal of a misuse of the test
 
 # Wheel to be used throughout testing
 euro_wheel = RouletteWheel(parameters=WheelParameters.EURO_WHEEL)
 
 ##########
-# Bet objects to be testes
+# Bet object to be tested
 ##########
 colours_bet = ColoursBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.COLOURS_BET, playing_wheel=euro_wheel)
 straight_up_bet = StraightUpBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.STRAIGHTUP_BET, playing_wheel=euro_wheel)
 split_bet = SplitBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.SPLIT_BET, playing_wheel=euro_wheel)
-
+high_low_bet = HighLowBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.HIGH_LOW_BET, playing_wheel=euro_wheel)
 
 
 class TestBetPlacementColours:
@@ -107,4 +107,19 @@ class TestBetPlacementSplitBet:
             split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)
 
 class TestHighLowBet:
-    pass  # TODO
+    def test_determine_win_criteria_low_bet(self):
+        high_low_bet.set_bet_choice(bet_choice=HighLowBetOptions.LOW)
+        expected_slots = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+        actual_slots = high_low_bet.determine_win_criteria()
+        assert expected_slots == actual_slots
+
+    def test_determine_win_criteria_high_bet(self):
+        high_low_bet.set_bet_choice(bet_choice=HighLowBetOptions.HIGH)
+        expected_slots = [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]
+        actual_slots = high_low_bet.determine_win_criteria()
+        assert expected_slots == actual_slots
+
+    def test_determine_win_criteria_high_low_invalid_choice(self):
+        high_low_bet.set_bet_choice(bet_choice="high")
+        with pytest.raises(ValueError):
+            high_low_bet.determine_win_criteria()

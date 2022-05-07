@@ -157,7 +157,7 @@ class HighLowBetUser(HighLowBet, RouletteBetUser):
     def __init__(self,
                  fixed_parameters: RouletteBetParameters,
                  stake: int = None,
-                 bet_choice: Colour = None,
+                 bet_choice: HighLowBetOptions = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None,
@@ -186,10 +186,11 @@ class HighLowBetUser(HighLowBet, RouletteBetUser):
     def get_bet_choice_string_rep(self) -> str:
         """String representation of the bet choice that has been made for feeding back to the user"""
         high_low = self.bet_choice.name.lower()
-        return f"{high_low} bet"  # On a
+        return f"{high_low} bet"  # On a...
 
 ##########
-# Enum for storing all the bet classes
+# Enum for storing all the user bet classes
+# Parameters imported live into game so don't instantiate
 ##########
 class BetTypeOptionsUser(Enum):
     COLOURS_BET = ColoursBetUser
