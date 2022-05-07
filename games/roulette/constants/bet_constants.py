@@ -1,7 +1,9 @@
 """
-Module for defining the parameters of each bet
+Module for defining and storing the parameters of each bet, specific to each wheel.
 The module is split into global parameters and wheel specific parameters.
 Flexibility is there to define wheel specific parameters, but currently only default values are used.
+
+At the bottom, there is also a list of individual bet-specific enums (e.g. for high/low and odds/evens bets)
 """
 from games.roulette.app.roulette_bet_base_class import RouletteBetParameters
 from enum import Enum
@@ -20,6 +22,7 @@ class BetTypeIds(str, Enum):
     COLOURS_BET = "C"
     STRAIGHTUP_BET = "S"
     SPLIT_BET = "P"
+    HIGH_LOW_BET = "H"
     NEW_BET = None
 
 
@@ -31,6 +34,7 @@ class BetTypePrompts(str, Enum):
     COLOURS_BET = "[C]-Colours"
     STRAIGHTUP_BET = "[S]-Straight Up"
     SPLIT_BET = "[P]-Split"
+    HIGH_LOW_BET = "[H] - High / Low"
     NEW_BET = None  # Dummy new bet prompt
 
 
@@ -49,6 +53,9 @@ default_straight_up_bet_parameters = RouletteBetParameters(bet_type_name=BetType
 default_split_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.SPLIT_BET.name,
                                                      min_bet=4,
                                                      max_bet=40)
+default_high_low_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name,
+                                                   min_bet=5,
+                                                   max_bet=50)
 
 default_new_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name,
                                                    min_bet=0,
@@ -66,6 +73,7 @@ class WheelDefaultBetOptionsAndParameters:
     COLOURS_BET: RouletteBetParameters = default_colours_bet_parameters
     STRAIGHTUP_BET: RouletteBetParameters = default_straight_up_bet_parameters
     SPLIT_BET: RouletteBetParameters = default_split_bet_parameters
+    HIGH_LOW_BET: RouletteBetParameters = default_high_low_bet_parameters
     # new bet goes here as a class attribute
 
     def construct_wheel_bet_options_prompt(self) -> str:
@@ -85,9 +93,25 @@ class WheelDefaultBetOptionsAndParameters:
                 bet_type_options_prompt += individual_bet_type_prompt
         return bet_type_options_prompt
 
-
+##########
+# Data class storing all bet parameters for all wheels
+##########
 @dataclass
 class WheelBetParameters:
     EURO_WHEEL = WheelDefaultBetOptionsAndParameters()
     AMERICAN_WHEEL = WheelDefaultBetOptionsAndParameters()
     NEW_WHEEL = None
+
+
+##########
+# Individual bet specific Enums - maybe this is a bit overkill...
+##########
+class HighLowBetOptions(Enum):
+    HIGH = "H"
+    LOW = "L"
+    PROMPT = "[H] - High, [L] - Low"
+
+class OddsOrEvensBetOptions(Enum):
+    ODDS = "O"
+    EVENS = "E"
+    PROMPT = "[O] - Odds, [E] - Evens"

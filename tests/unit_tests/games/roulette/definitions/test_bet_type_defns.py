@@ -105,3 +105,6 @@ class TestBetPlacementSplitBet:
         int_two = 12  # numbers are adjacent to each other on the euro board
         with pytest.raises(TypeError):
             split_bet.determine_valid_bet_choices(int_one=int_one, int_two=int_two)
+
+class TestHighLowBet:
+    pass  # TODO

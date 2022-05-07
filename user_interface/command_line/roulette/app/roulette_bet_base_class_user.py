@@ -18,7 +18,7 @@ class RouletteBetUser(RouletteBet):
         self.bet_choice_string_rep = bet_choice_string_rep
 
     @abstractmethod
-    def determine_valid_bet_choices_text(self):
+    def determine_valid_bet_choices_text(self):  # TODO maybe delete this
         """
         Abstract method for showing the users the specific bet choices within a given bet
         This is defined for each specific bet subclass of RouletteBetUser in bet_type_defns_user

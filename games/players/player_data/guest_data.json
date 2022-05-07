@@ -1,6 +1,6 @@
 {
   "guest": {
-    "name": "As a guest",
+    "name": "Guest",
     "username": "guest",
     "password": "guest",
     "active_pot": 0,

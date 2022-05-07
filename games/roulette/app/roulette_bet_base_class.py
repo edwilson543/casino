@@ -40,6 +40,15 @@ class RouletteBet(Bet):
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
+        """
+        Parameters:
+        fixed_parameters: stores the bet name, and min/max bet, which are specific to the wheel
+        stake: User defined stake on the bet
+        bet_choice: User defined choice for that bet where applicable
+        win_criteria: A list of the winning slots for that bet
+        payout: The calculated payout for that bet, based on the win_criteria
+        playing_wheel: The type of wheel the bet is being placed on
+        """
         fixed_parameters_dict = asdict(fixed_parameters)
         super().__init__(stake=stake, bet_choice=bet_choice, win_criteria=win_criteria, payout=payout,
                          **fixed_parameters_dict)

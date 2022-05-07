@@ -80,7 +80,7 @@ class PlayerDatabaseInteractionsUser(PlayerDatabaseManager):
                 elif player_type == PlayerType.NEW_PLAYER:
                     new_player: PlayerUser = self.create_player_user()
                     return new_player, PlayerType.NEW_PLAYER
-            except ValueError and AttributeError:
+            except (ValueError, AttributeError):
                 print(f"{player_type_id} not a valid option, please try again")
 
     ##########

@@ -1,8 +1,9 @@
 """To define a new bet, first go to roulette->definitions->bet_type_defns"""
 from games.roulette.app.roulette_bet_base_class import RouletteBetParameters
-from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet
+from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet, HighLowBet
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.game_constants import Colour, ColourPrompts
+from games.roulette.constants.bet_constants import HighLowBetOptions, OddsOrEvensBetOptions
 from user_interface.command_line.roulette.app.roulette_bet_base_class_user import RouletteBetUser
 from enum import Enum
 
@@ -47,7 +48,7 @@ class ColoursBetUser(ColoursBet, RouletteBetUser):
                 else:
                     print(f"{colour_choice} not a valid choice, please try again")
                     continue
-            except ValueError or AttributeError:
+            except (ValueError, AttributeError):
                 print(f"{colour_choice} not a valid choice, please try again!")
 
     def get_bet_choice_string_rep(self) -> str:
@@ -105,7 +106,7 @@ class StraightUpBetUser(StraightUpBet, RouletteBetUser):
 
 
 class SplitBetUser(SplitBet, RouletteBetUser):
-    """Class for defining win criteria and payout for a split bet"""
+    """Class for navigating the user to place a split bet"""
 
     def __init__(self,
                  fixed_parameters: RouletteBetParameters,
@@ -119,7 +120,7 @@ class SplitBetUser(SplitBet, RouletteBetUser):
         self.bet_choice_string_rep = bet_choice_string_rep
 
     def determine_valid_bet_choices_text(self):
-        """This method is a bit superfluous for a split bet so putting a pass in to use the abstract method"""
+        """This method is superfluous for a split bet"""
         raise NotImplementedError("SplitBetUser's determine_valid_bet_choices_text method called unintentionally")
 
     def get_user_bet_choice(self) -> (int, int):
@@ -150,6 +151,43 @@ class SplitBetUser(SplitBet, RouletteBetUser):
         return "split bet on the edge between: " + str(int_one) + " and " + str(int_two)  # on a ...
 
 
+class HighLowBetUser(HighLowBet, RouletteBetUser):
+    """Class for navigating the user to place a high low bet"""
+
+    def __init__(self,
+                 fixed_parameters: RouletteBetParameters,
+                 stake: int = None,
+                 bet_choice: Colour = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: WHEEL_TYPES = None,
+                 bet_choice_string_rep: str = None):
+        super(RouletteBetUser, self).__init__(fixed_parameters, stake, bet_choice, win_criteria, payout, playing_wheel)
+        self.bet_choice_string_rep = bet_choice_string_rep
+
+    def determine_valid_bet_choices_text(self):
+        """This method is superfluous for a split bet"""
+        raise NotImplementedError("HighLowBetUser's determine_valid_bet_choices_text method called unintentionally")
+
+
+    def get_user_bet_choice(self) -> (int, int):
+        """
+        Method to define the user's bet choice.
+        """
+        while True:
+            choice = input(f"What type of bet would you like to place?\n"
+                           f"{HighLowBetOptions.PROMPT.value}\n--->").upper()
+            try:
+                bet_choice = HighLowBetOptions(choice)
+                return bet_choice
+            except (ValueError, AttributeError):
+                print(f"({choice} is not a valid choice for a high low bet, please try again")
+
+    def get_bet_choice_string_rep(self) -> str:
+        """String representation of the bet choice that has been made for feeding back to the user"""
+        high_low = self.bet_choice.name.lower()
+        return f"{high_low} bet"  # On a
+
 ##########
 # Enum for storing all the bet classes
 ##########
@@ -157,3 +195,4 @@ class BetTypeOptionsUser(Enum):
     COLOURS_BET = ColoursBetUser
     STRAIGHTUP_BET = StraightUpBetUser
     SPLIT_BET = SplitBetUser
+    HIGH_LOW_BET = HighLowBetUser
