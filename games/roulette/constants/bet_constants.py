@@ -56,8 +56,8 @@ default_split_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.SP
                                                      min_bet=4,
                                                      max_bet=40)
 default_high_low_bet_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.NEW_BET.name,
-                                                   min_bet=5,
-                                                   max_bet=50)
+                                                        min_bet=5,
+                                                        max_bet=50)
 default_odds_evens_parameters = RouletteBetParameters(bet_type_name=BetTypeIds.ODDS_EVENS_BET.name,
                                                       min_bet=5,
                                                       max_bet=50)
@@ -80,6 +80,7 @@ class WheelDefaultBetOptionsAndParameters:
     SPLIT_BET: RouletteBetParameters = default_split_bet_parameters
     HIGH_LOW_BET: RouletteBetParameters = default_high_low_bet_parameters
     ODDS_EVENS_BET: RouletteBetParameters = default_odds_evens_parameters
+
     # new bet goes here as a class attribute
 
     def construct_wheel_bet_options_prompt(self) -> str:
@@ -99,6 +100,7 @@ class WheelDefaultBetOptionsAndParameters:
                 bet_type_options_prompt += individual_bet_type_prompt
         return bet_type_options_prompt
 
+
 ##########
 # Data class storing all bet parameters for all wheels
 ##########
@@ -116,6 +118,7 @@ class HighLowBetOptions(Enum):
     HIGH = "H"
     LOW = "L"
     PROMPT = "[H] - High, [L] - Low"
+
 
 class OddsEvensBetOptions(Enum):
     ODDS = "O"
