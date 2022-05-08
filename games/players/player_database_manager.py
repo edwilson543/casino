@@ -9,7 +9,7 @@ from games.player_base_class import Player, PLAYER_TYPES
 class PlayerDatabaseManager:
     def __init__(self,
                  player_object: PLAYER_TYPES = Player,
-                 player_data_directory_path: Path = ROOT_DIRECTORY / "games" / "players" / "player_data",
+                 player_data_directory_path: Path = ROOT_DIRECTORY / "data" / "player_data",
                  player_datafile_name: str = "player_data.json",
                  guest_datafile_name: str = "guest_data.json"):
         """
