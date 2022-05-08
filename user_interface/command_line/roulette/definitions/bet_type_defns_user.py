@@ -193,7 +193,7 @@ class SplitBetUser(SplitBet, RouletteBetUser):
     def __init__(self,
                  fixed_parameters: RouletteBetParameters,
                  stake: int = None,
-                 bet_choice: Colour = None,
+                 bet_choice: (int, int) = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None,

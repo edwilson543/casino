@@ -11,7 +11,7 @@ from games.roulette.app.roulette_bet_base_class import RouletteBet, RouletteBetP
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.game_constants import Colour
 from games.roulette.constants.bet_constants import HighLowBetOptions, OddsEvensBetOptions
-from numpy import where
+import numpy as np
 from enum import Enum
 from math import floor
 
@@ -162,7 +162,7 @@ class SplitBet(RouletteBet):
     def __init__(self,
                  fixed_parameters: RouletteBetParameters,
                  stake: int = None,
-                 bet_choice: Colour = None,
+                 bet_choice: (int, int) = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
@@ -177,8 +177,8 @@ class SplitBet(RouletteBet):
             raise TypeError(f"({int_one}, {int_two}) was passed to determine_valid_bet_choices in SplitBet class."
                             f"One ore more of these inputs is not of type int.")
         else:
-            int_one_index_row, int_one_index_col = where(self.playing_wheel.parameters.board == int_one)
-            int_two_index_row, int_two_index_col = where(self.playing_wheel.parameters.board == int_two)
+            int_one_index_row, int_one_index_col = np.where(self.playing_wheel.parameters.board == int_one)
+            int_two_index_row, int_two_index_col = np.where(self.playing_wheel.parameters.board == int_two)
             if len(int_one_index_row) == 0 or len(int_two_index_row) == 0:
                 raise ValueError(f"({int_one}, {int_two}) was passed to determine_valid_bet_choices in SplitBet class."
                                  f"At least one of these numbers is nt on the "
@@ -204,6 +204,59 @@ class SplitBet(RouletteBet):
         else:
             raise ValueError(f"({int_one}, {int_two}) is not a valid split bet on the "
                              f"{self.playing_wheel.parameters.wheel_name} board")
+
+
+class CornersBet(RouletteBet):
+    """
+    Class for defining the valid bet choices and win criteria of a corners bet (a bet on the corner of four tiles on the
+    playing board).
+    """
+
+    def __init__(self,
+                 fixed_parameters: RouletteBetParameters,
+                 stake: int = None,
+                 bet_choice: (int, int, int, int) = None,
+                 win_criteria: list[int] = None,
+                 payout: int = None,
+                 playing_wheel: WHEEL_TYPES = None):
+        super().__init__(fixed_parameters, stake, bet_choice, win_criteria, payout, playing_wheel)
+
+    def determine_valid_bet_choices(self, int_one: int, int_two: int, int_three: int, int_four: int) -> bool:
+        """
+        Returns: a boolean value for whether ot not a given corners bet choice is allowed.
+        i.e. determines whether or not the four tiles entered meet at a corner.
+        """
+        int_list = [int_one, int_two, int_three, int_four]
+        if any(isinstance(int_input, int) for int_input in int_list):
+            raise TypeError(f"({int_one}, {int_two}, {int_three}, {int_four}) was passed to determine_valid_bet_choices"
+                            f" in CornersBet class. One ore more of these inputs is not of type int.")
+        for tile in int_list:
+            index_arr = np.array(np.where(self.playing_wheel.parameters.board == tile))
+            if len(index_arr) == 0:
+                raise ValueError(f"{tile} was passed as one of the tiles in "
+                                 f"determine_valid_bet_choices in CornersBet class. This is not a tile on the: "
+                                 f"{self.playing_wheel.parameters.wheel_name} playing board")
+        else:
+            int_list.sort()  # puts the ints in order top-left -> bottom-left -> top-right -> bottom_right
+            neighbouring_rows = (int_list[0] + 1 == int_list[1]) and (int_list[2] + 1 == int_list[3])
+            n_board_rows = np.shape(self.playing_wheel.parameters.board)[0]
+            neighbouring_cols = (int_list[0] + n_board_rows == int_list[2]) and (
+                        int_list[1] + n_board_rows == int_list[3])
+            return neighbouring_rows and neighbouring_cols
+
+    # def determine_win_criteria(self) -> list[int]:
+    #     """
+    #     Method that takes an input tuple representing an edge bet, and determines the win criteria of that bet
+    #     in wheel terms. Seems a bit superfluous but it's a translation board -> wheel.
+    #     """
+    #     split_bet: (int, int) = self.bet_choice
+    #     int_one = split_bet[0]
+    #     int_two = split_bet[1]
+    #     if self.determine_valid_bet_choices(int_one=int_one, int_two=int_two):
+    #         return [int_one, int_two]
+    #     else:
+    #         raise ValueError(f"({int_one}, {int_two}) is not a valid split bet on the "
+    #                          f"{self.playing_wheel.parameters.wheel_name} board")
 
 
 ##########
