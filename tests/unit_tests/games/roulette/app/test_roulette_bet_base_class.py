@@ -5,11 +5,14 @@ from games.roulette.app.roulette_wheel_base_class import RouletteWheel
 from games.roulette.constants.bet_constants import default_colours_bet_parameters
 import pytest
 
+@pytest.fixture(scope="module")
+def euro_wheel():
+    return RouletteWheel(parameters=WheelParameters.EURO_WHEEL)  # Used throughout testing here
 
-euro_wheel = RouletteWheel(parameters=WheelParameters.EURO_WHEEL)  # Used throughout testing here
-
+# TODO define the bets as fixtures
 
 class TestRouletteBet:
+    """Class to test the methods defined on the roulette bet"""
     def test_determine_valid_bet_choices(self):
         with pytest.raises(NotImplementedError):
             RouletteBet(fixed_parameters=default_colours_bet_parameters).determine_valid_bet_choices()
@@ -18,14 +21,14 @@ class TestRouletteBet:
         with pytest.raises(NotImplementedError):
             RouletteBet(fixed_parameters=default_colours_bet_parameters).determine_win_criteria()
 
-    def test_calculate_payout_sufficiently_defined_bet(self):
+    def test_calculate_payout_sufficiently_defined_bet(self, euro_wheel):
         test = RouletteBet(fixed_parameters=default_colours_bet_parameters,
                            stake=20, win_criteria=[1, 2, 3], playing_wheel=euro_wheel)
         expected_payout = 240  # as the euro wheel has 36 unbiased slots, bet choice covers 2 slots, stake is 20
         calculated_payout = test.calculate_payout()
         assert calculated_payout == expected_payout
 
-    def test_evaluate_sufficiently_defined_winning(self):
+    def test_evaluate_sufficiently_defined_winning_bet(self):
         test = RouletteBet(fixed_parameters=default_colours_bet_parameters,
                            win_criteria=[1, 2, 3], payout=240)
         expected_winnings_return = 240
@@ -33,7 +36,7 @@ class TestRouletteBet:
         calculated_winnings = test.evaluate_bet(spin_outcome)
         assert calculated_winnings == expected_winnings_return
 
-    def test_evaluate_sufficiently_defined_losing_bet(self):
+    def test_evaluate_sufficiently_defined_losing_bet(self, euro_wheel):
         test_bet = RouletteBet(fixed_parameters=default_colours_bet_parameters,
                                win_criteria=[1, 2, 3], payout=240, playing_wheel=euro_wheel)
         expected_winnings_return = 0  # as bet has lost
