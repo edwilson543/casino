@@ -1,4 +1,4 @@
-from games.roulette.app.roulette_bet_base_class import RouletteBet
+from games.roulette.app.roulette_bet_base_class import RouletteBet, RouletteBetParameters
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 
 from typing import TypeVar, Any
@@ -7,21 +7,18 @@ from abc import abstractmethod
 
 class RouletteBetUser(RouletteBet):
     def __init__(self,
-                 bet_type_name: str,
-                 min_bet: int,
-                 max_bet: int,
+                 fixed_parameters: RouletteBetParameters,
                  stake: int,
                  bet_choice: Any,  # Varies a lot by bet type
                  win_criteria: list[int],
                  payout: int,
                  playing_wheel: WHEEL_TYPES,
                  bet_choice_string_rep: str):
-        super().__init__(bet_type_name, min_bet, max_bet, stake, bet_choice,
-                         win_criteria, payout, playing_wheel)
+        super().__init__(fixed_parameters, stake, bet_choice, win_criteria, payout, playing_wheel)
         self.bet_choice_string_rep = bet_choice_string_rep
 
     @abstractmethod
-    def determine_valid_bet_choices_text(self):
+    def determine_valid_bet_choices_text(self):  # TODO maybe delete this
         """
         Abstract method for showing the users the specific bet choices within a given bet
         This is defined for each specific bet subclass of RouletteBetUser in bet_type_defns_user

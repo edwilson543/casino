@@ -3,11 +3,9 @@ from games.roulette.app.roulette_bet_base_class import RouletteBetParameters, BE
 from games.roulette.constants.wheel_constants import WheelParameters
 from games.roulette.constants.bet_constants import WheelBetParameters
 from games.roulette.definitions.bet_type_defns import BetTypeOptions
-from dataclasses import asdict
 from enum import Enum
 
-#  TODO update the docstrings in here, they are very out of date
-#  TODO update unpacking to actually just use parameters attribute of wheel/bet
+
 class WheelAndBetConstructor:
     """
     Class to look up wheel and bet parameters based on their names,
@@ -28,14 +26,13 @@ class WheelAndBetConstructor:
         """
         Method to take the wheel_name, look_up the relevant parameters, and then instantiate the relevant live wheel
         object
-        Parameters: wheel_name - the bet_type_name of the desired playing wheel (parameters)
+        Parameters: wheel_name - the name of the desired playing wheel (parameters)
         Returns: an instance of the construction object (RouletteWheel/RouletteWheelUser),
-        which has all the instance attributes defined (e.g. Euro_wheel()).
+        which then has the instance attribute "parameters" defined, using the RouletteWheelParameters dataclass
         """
         try:
             wheel_parameters: RouletteWheelParameters = getattr(self.wheel_parameters_look_up, wheel_name)
-            wheel_parameters_dict = asdict(wheel_parameters)  # dict of parameters specific to the named wheel
-            wheel = self.wheel_construction_object(**wheel_parameters_dict)
+            wheel = self.wheel_construction_object(parameters=wheel_parameters)
             return wheel
         except ValueError:
             raise ValueError(
@@ -44,18 +41,24 @@ class WheelAndBetConstructor:
 
     def get_bet_type_from_bet_type_name(self, wheel_name: str, bet_type_name: str) -> BET_TYPES:
         """
-        Method to take the bet_type_id and return a live bet object (subclass).
+        Method to take the wheel and bet name and return a live bet object (subclass).
+
+
+        Parameters: wheel_name - the name of the playing wheel (that has already been selected). The wheel name is
+        needed because the min/max bet parameters can be specific to each wheel.
+        bet_type_name - the name of the bet that is being looked up and instantiated
+
+        Returns: A subclass of Bet which is a fully defined bet class (i.e. includes bet placing), and is defined in
+        bet_type_defns or bet_type_defns_user depending on the look_up Enum
+
         Note the purpose of this remains that the user enters a single letter, although it's not a UI facing method
-        Parameters: bet_type_id - string, e.g. 'C' which represents ColoursBet subclass of Bet
-        Returns: A subclass of Bet which is a fully defined bet class (i.e. includes bet placing).
         """
         try:
             bet_type_parameters: RouletteBetParameters = getattr(
                 getattr(self.bet_parameters_look_up, wheel_name),  # get parameters specific to the given wheel
                 bet_type_name)  # get parameters specific to the given bet
-            bet_type_parameters_dict = asdict(bet_type_parameters)
             bet_type_object = getattr(self.bet_object_look_up, bet_type_name).value
-            bet_type = bet_type_object(**bet_type_parameters_dict)  # sets bet_type_name, min bet and max bet
+            bet_type = bet_type_object(fixed_parameters=bet_type_parameters)  # sets bet_type_name, min bet and max bet
             return bet_type
         except ValueError:
             raise ValueError(f"Invalid bet type {bet_type_name} passed to {self.bet_object_look_up} "

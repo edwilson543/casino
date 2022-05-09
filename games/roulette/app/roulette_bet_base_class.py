@@ -5,7 +5,7 @@ from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from math import floor
 from typing import Any, TypeVar
 from abc import abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 
 ##########
@@ -32,17 +32,26 @@ class RouletteBet(Bet):
     RouletteBet <- ColoursBet, StraightUpBet, ... | + determine_win_criteria
     ColoursBetUser,... -< ColoursBet & RouletteBetUser
     """
-    #  TODO unpack the roulette parameters here for super, but only have a parameters attribute in init
+
     def __init__(self,
-                 bet_type_name: str = None,
-                 min_bet: int = None,
-                 max_bet: int = None,
+                 fixed_parameters: RouletteBetParameters,
                  stake: int = None,
                  bet_choice: Any = None,
                  win_criteria: list[int] = None,
                  payout: int = None,
                  playing_wheel: WHEEL_TYPES = None):
-        super().__init__(bet_type_name, min_bet, max_bet, stake, bet_choice, win_criteria, payout)
+        """
+        Parameters:
+        fixed_parameters: stores the bet name, and min/max bet, which are specific to the wheel
+        stake: User defined stake on the bet
+        bet_choice: User defined choice for that bet where applicable
+        win_criteria: A list of the winning slots for that bet
+        payout: The calculated payout for that bet, based on the win_criteria
+        playing_wheel: The type of wheel the bet is being placed on
+        """
+        fixed_parameters_dict = asdict(fixed_parameters)
+        super().__init__(stake=stake, bet_choice=bet_choice, win_criteria=win_criteria, payout=payout,
+                         **fixed_parameters_dict)
         self.playing_wheel = playing_wheel
 
     @abstractmethod

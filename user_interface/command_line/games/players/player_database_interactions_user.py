@@ -39,9 +39,9 @@ class PlayerDatabaseInteractionsUser(PlayerDatabaseManager):
 
     def __init__(self,
                  player_object: PLAYER_TYPES = PlayerUser,
-                 player_data_directory_path: Path = ROOT_DIRECTORY / "games" / "players" / "player_data",
+                 player_data_directory_path: Path = ROOT_DIRECTORY / "data" / "player_data",
                  player_datafile_name: str = "player_data.json",
-                 guest_datafile_name: str = "test_guest_data.json"):
+                 guest_datafile_name: str = "guest_data.json"):
         super().__init__(player_object,
                          player_data_directory_path,
                          player_datafile_name,
@@ -70,7 +70,7 @@ class PlayerDatabaseInteractionsUser(PlayerDatabaseManager):
             try:
                 player_type = PlayerType(player_type_id)
                 if player_type == PlayerType.GUEST_PLAYER:
-                    guest_player: PlayerUser = super().load_player(player_username="guest")  # TODO use self not super()
+                    guest_player: PlayerUser = self.load_player(player_username="guest")
                     return guest_player, PlayerType.GUEST_PLAYER
                 elif player_type == PlayerType.EXISTING_PLAYER:
                     existing_player: PlayerUser = self.access_player()
@@ -80,7 +80,7 @@ class PlayerDatabaseInteractionsUser(PlayerDatabaseManager):
                 elif player_type == PlayerType.NEW_PLAYER:
                     new_player: PlayerUser = self.create_player_user()
                     return new_player, PlayerType.NEW_PLAYER
-            except ValueError and AttributeError:
+            except (ValueError, AttributeError):
                 print(f"{player_type_id} not a valid option, please try again")
 
     ##########
@@ -92,7 +92,7 @@ class PlayerDatabaseInteractionsUser(PlayerDatabaseManager):
         while True:
             username = input(f"What is your username?\n--->").lower()
             try:
-                existing_player = super().load_player(player_username=username)  # TODO maybe replace super() with self
+                existing_player = self.load_player(player_username=username)
                 return existing_player
             except KeyError:
                 print(f"No user with username: {username} found. Please try again.")

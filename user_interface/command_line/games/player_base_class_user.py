@@ -114,7 +114,7 @@ class PlayerUser(Player):
                 return self.get_top_up_amount(), game_continues
             else:
                 return 0, game_continues
-        elif 0 < self.active_pot <= low_pot_forced_top_up:
+        elif 0 <= self.active_pot <= low_pot_forced_top_up:
             if self.see_if_user_wants_forced_top_up():
                 return self.get_top_up_amount(), game_continues
             else:
@@ -136,7 +136,7 @@ class PlayerUser(Player):
         while True:
             amount = input(
                 f"How much would you like to top up by?\nTop ups are allowed as multiples of £"
-                f"{top_up_multiples}, the minimum deposit is £{min_top_up}.\n--->")
+                f"{top_up_multiples}, the minimum top up is £{min_top_up}.\n--->")
             try:
                 amount_int = int(amount.replace("£", ""))  # e.g. replace '£100' with '100'
                 if amount_int >= min_top_up and amount_int % top_up_multiples == 0:
@@ -180,7 +180,7 @@ class PlayerUser(Player):
         If it returns F and the user has active bets, they just won't be allowed to add any more bets to current spin.
         """
         while True:
-            if 0 < self.active_pot <= RouletteGameParameters.top_up_parameters.low_pot_forced_top_up:
+            if 0 <= self.active_pot <= RouletteGameParameters.top_up_parameters.low_pot_forced_top_up:
                 proceed = input(f"You only have £{self.active_pot} left in your pot, "
                                 "to continue playing you must top up.\nWould you like to top up?\n"
                                 "[Y]es, [N]o, (game session will end if you have no active bets)\n--->").upper()

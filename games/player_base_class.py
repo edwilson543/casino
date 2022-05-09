@@ -4,8 +4,10 @@ from typing import TypeVar
 
 
 class PlayerType(Enum):
-    """Existing/guest/new players are treated differently at log-in"""
-    #  TODO - should be able to get rid of this once new json storage in place
+    """
+    Existing/guest/new players are treated differently at log-in (e.g. new/guest players are forced to make a
+    deposit, hence the need for this Enum.
+    """
     EXISTING_PLAYER = "E"
     GUEST_PLAYER = "G"
     NEW_PLAYER = "N"
@@ -106,10 +108,14 @@ class Player:
         return int(round(duration_minutes, 0))
 
     def calculate_last_login_time_minutes(self):
-        duration_timedelta = datetime.now() - self.last_session_end_time
-        duration_seconds = duration_timedelta.seconds
-        duration_minutes = duration_seconds / 60
-        return int(round(duration_minutes, 0))
+        """Method to calculate how long it's been since a player last logged in."""
+        if self.last_session_end_time is None:
+            return 0
+        else:
+            duration_timedelta = datetime.now() - self.last_session_end_time
+            duration_seconds = duration_timedelta.seconds
+            duration_minutes = duration_seconds / 60
+            return int(round(duration_minutes, 0))
 
 
 ##########

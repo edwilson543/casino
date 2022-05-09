@@ -1,8 +1,8 @@
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel, wheel_spin_return, RouletteWheelParameters
-from games.roulette.constants.game_constants import RouletteGameParameters, Colour
+from games.roulette.constants.game_constants import RouletteGameParameters
 from dataclasses import dataclass
 from time import sleep
-from numpy import array, array2string
+from numpy import array2string
 
 
 ##########
@@ -20,16 +20,13 @@ class RouletteWheelParametersUser(RouletteWheelParameters):
 
 class RouletteWheelUser(RouletteWheel):
     def __init__(self,
-                 wheel_name: str,
-                 slots: dict,
-                 bias_colour: Colour,
-                 board: array):
+                 parameters: RouletteWheelParameters):
         """
         Added instance attributes:
         colour_options_text: a mapping of colour id (e.g. 'R') to each colour (e.g. 'red')
         colour_options_text: a string used to get user input on what colour they'd like to bet on
         """
-        super().__init__(wheel_name, slots, bias_colour, board)
+        super().__init__(parameters)
 
     def user_spin(self) -> wheel_spin_return:
         """Low level method just to get the user to type spin in the game flow"""
@@ -50,7 +47,7 @@ class RouletteWheelUser(RouletteWheel):
     def generate_board_string_rep(self) -> str:
         """Method to give a human comprehensible string representation of the Roulette board"""
         board_string_rep = "The board shape is as follows:\n"
-        for row in range(0, self.board.shape[0]):  # iterate over number of array rows
-            row_rep = array2string(self.board[row], separator="|")[2:][:-1].strip(" ") + "\n"
+        for row in range(0, self.parameters.board.shape[0]):  # iterate over number of array rows
+            row_rep = array2string(self.parameters.board[row], separator="|")[2:][:-1].strip(" ") + "\n"
             board_string_rep += row_rep
         return board_string_rep[:-1]  # Remove the final extra line of the board representation
