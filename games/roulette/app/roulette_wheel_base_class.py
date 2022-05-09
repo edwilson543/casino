@@ -64,7 +64,10 @@ class RouletteWheel:
 
     def colour_counts(self, colour: Colour) -> int:
         """Returns: the number of slots on the wheel of the specified colour"""
-        return sum(value == colour for value in self.parameters.slots.values())
+        if colour in self.parameters.slots.values():
+            return sum(value == colour for value in self.parameters.slots.values())
+        else:
+            raise ValueError(f"{colour} is not a colour on the {self.parameters.wheel_name}.")
 
 
 ##########
