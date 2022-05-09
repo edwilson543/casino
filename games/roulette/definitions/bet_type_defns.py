@@ -223,15 +223,16 @@ class CornersBet(RouletteBet):
 
     def determine_valid_bet_choices(self, int_list: list[int, int, int, int]) -> bool:
         """
+        Parameters: a list of 4 integers. This defines the corner being bet on.
         Returns: a boolean value for whether ot not a given corners bet choice is allowed.
         i.e. determines whether or not the four tiles entered meet at a corner.
         """
-        if any(isinstance(int_input, int) for int_input in int_list):
+        if not all(isinstance(int_input, int) for int_input in int_list):
             raise TypeError(f"({int_list}) was passed to determine_valid_bet_choices"
                             f" in CornersBet class. One ore more element in the list is not of type int.")
         for tile in int_list:
-            index_arr = np.array(np.where(self.playing_wheel.parameters.board == tile))
-            if len(index_arr) == 0:
+            index_row, index_col = np.where(self.playing_wheel.parameters.board == tile)
+            if (len(index_row) == 0) or (len(index_col) == 0):
                 raise ValueError(f"{tile} was passed as one of the tiles in "
                                  f"determine_valid_bet_choices in CornersBet class. This is not a tile on the: "
                                  f"{self.playing_wheel.parameters.wheel_name} playing board")
@@ -266,3 +267,4 @@ class BetTypeOptions(Enum):
     SPLIT_BET = SplitBet
     HIGH_LOW_BET = HighLowBet
     ODDS_EVENS_BET = OddsEvensBet
+    CORNERS_BET = CornersBet
