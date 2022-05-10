@@ -23,6 +23,9 @@ class PlayerUser(Player):
                          active_session_top_ups=active_session_top_ups,
                          last_session_end_time=last_session_end_time)
 
+    ##########
+    # Methods printing information on the player's status in the game
+    ##########
     def login_message(self):
         last_login_minutes = self.calculate_last_login_time_minutes()
         if last_login_minutes == 0:
@@ -50,6 +53,9 @@ class PlayerUser(Player):
         print(f"Thanks for playing {self.name}!\n"
               f"Your final pot is £{self.active_pot}.")
 
+    ##########
+    # Methods relating to user top ups/ deposits
+    ##########
     def make_initial_deposit_or_top_up(self, player_type: PlayerType):
         """Method to get the user to either set an initial deposit if they are playing as a guest or as a new player,
         or to top up if playing as an existing player."""
@@ -122,7 +128,7 @@ class PlayerUser(Player):
                 return 0, game_continues
 
     ##########
-    # Method called during check top up worthwhile
+    # Method called during check top up scenario
     ##########
     @staticmethod
     def get_top_up_amount() -> int:
