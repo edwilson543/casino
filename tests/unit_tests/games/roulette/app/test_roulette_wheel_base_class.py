@@ -28,6 +28,6 @@ class TestRouletteWheel:
     def test_wheel_colour_counts_black(self, euro_wheel):
         assert euro_wheel.colour_counts(colour=Colour.BLACK) == 18
 
-    def test_whel_colour_counts_invalid_colour(self, euro_wheel):
+    def test_wheel_colour_counts_invalid_colour(self, euro_wheel):
         with pytest.raises(ValueError):
             euro_wheel.colour_counts(colour=Colour.BLUE)

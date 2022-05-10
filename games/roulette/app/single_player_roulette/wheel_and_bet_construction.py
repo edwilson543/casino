@@ -34,8 +34,8 @@ class WheelAndBetConstructor:
             wheel_parameters: RouletteWheelParameters = getattr(self.wheel_parameters_look_up, wheel_name)
             wheel = self.wheel_construction_object(parameters=wheel_parameters)
             return wheel
-        except ValueError:
-            raise ValueError(
+        except AttributeError:
+            raise AttributeError(
                 f"Inavlid wheel bet_type_name: {wheel_name} passed to {self.wheel_parameters_look_up}, in method"
                 f"'get_wheel_from_wheel_name'")
 
@@ -60,6 +60,6 @@ class WheelAndBetConstructor:
             bet_type_object = getattr(self.bet_object_look_up, bet_type_name).value
             bet_type = bet_type_object(fixed_parameters=bet_type_parameters)  # sets bet_type_name, min bet and max bet
             return bet_type
-        except ValueError:
-            raise ValueError(f"Invalid bet type {bet_type_name} passed to {self.bet_object_look_up} "
+        except AttributeError:
+            raise AttributeError(f"Invalid bet type {bet_type_name} passed to {self.bet_object_look_up} "
                              f"in get_bet_type_from_bet_type_name")
