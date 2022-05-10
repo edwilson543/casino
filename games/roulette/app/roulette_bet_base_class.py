@@ -85,13 +85,13 @@ class RouletteBet(Bet):
         """
         if self.playing_wheel is None:
             raise AttributeError("Call to calculate_payout in RouletteBet was made\n"
-                                 " before setting the playing_wheel of the bet")
+                                 " before setting the playing_wheel of the bet.")
         if self.win_criteria is None:
             raise AttributeError("Call to calculate_payout in RouletteBet was made\n"
-                                 " before setting the win_criteria of the bet")
+                                 " before setting the win_criteria of the bet.")
         if self.stake is None:
             raise AttributeError("Call to calculate_payout in RouletteBet was made\n"
-                                 " before setting the stake of the bet")
+                                 " before setting the stake of the bet.")
         else:
             win_probability_over_estimate = len(self.win_criteria) / self.playing_wheel.bias_wheel_size()
             unit_payout = floor(1 / win_probability_over_estimate)
