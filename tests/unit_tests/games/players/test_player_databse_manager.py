@@ -2,7 +2,7 @@
 
 from games.players.player_database_manager import PlayerDatabaseManager
 from games.player_base_class import Player
-from root_directory import ROOT_DIRECTORY
+from games.all_game_constants.root_directory import ROOT_DIRECTORY
 from datetime import datetime
 import json
 import pytest

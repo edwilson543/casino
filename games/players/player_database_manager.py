@@ -1,4 +1,4 @@
-from root_directory import ROOT_DIRECTORY
+from games.all_game_constants.root_directory import ROOT_DIRECTORY
 from pathlib import Path
 from datetime import datetime
 import json
