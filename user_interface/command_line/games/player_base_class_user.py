@@ -91,10 +91,11 @@ class PlayerUser(Player):
                     confirmation = input(
                         f"Are you sure you would like to deposit £{amount_int} to play with?\n"
                         "[Y]es, [N]o \n--->").upper()
-                    if confirmation != 'Y':
+                    if confirmation != "Y":
                         continue
-                    print(f"You have made a deposit of £{amount_int} to play with!")
-                    return amount_int
+                    else:
+                        print(f"You have made a deposit of £{amount_int} to play with!")
+                        return amount_int
                 else:
                     print(f"Invalid deposit amount - please try again and refer to deposit criteria.")
             except ValueError:
