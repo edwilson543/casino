@@ -15,7 +15,7 @@ class TestPlayerUser:
     def acceptable_deposit(self) -> int:
         """Acceptable deposit object to be used when testing deposits"""
         return RouletteGameParameters.deposit_parameters.min_deposit + \
-               RouletteGameParameters.deposit_parameters.deposit_multiples
+            RouletteGameParameters.deposit_parameters.deposit_multiples
 
     def test_get_initial_deposit_amount(self, monkeypatch, test_player, acceptable_deposit):
         auto_input_list = [f"{acceptable_deposit}", "Y"]
