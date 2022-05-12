@@ -26,8 +26,3 @@ class LogConfiguration:
         if not logging_data_path.exists():
             logging_data_path.mkdir(parents=True)
         return logging_data_path
-
-logging_path = ROOT_DIRECTORY / "data" / "logging_data"
-print(logging_path.is_dir())
-print(Path.is_dir(logging_path))
-logging_path.mkdir(parents=True)
