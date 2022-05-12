@@ -15,8 +15,8 @@ class LogConfiguration:
     def logging_set_up(self) -> None:
         logging_data_path = self.create_time_dependent_log_directory()
         logging.basicConfig(level=logging.INFO,
-                            format="%(asctime)s-%(levelname)-%(message)s",
-                            datefmt="%Y_%m_%d_%H_%M_%S",
+                            format='%(asctime)s %(levelname)s %(message)s',
+                            datefmt='%Y-%m-%d %H:%M:%S',
                             filename=logging_data_path / self.log_file_name,
                             filemode="w")
 
