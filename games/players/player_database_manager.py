@@ -122,6 +122,8 @@ class PlayerDatabaseManager:
                 f"create_player_data_file method of PlayerDatabaseManager "
                 f"was called although the player data file already exists")
         else:  # if the file hasn't been created
+            if not Path.is_dir(self.player_data_directory_path):
+                self.player_data_directory_path.mkdir(parents=True)
             with open(player_data_path, "x") as new_data_file:
                 empty_dict: dict = {}  # This is the dict that will get written to JSON and filled with player data
                 json.dump(empty_dict, new_data_file)
