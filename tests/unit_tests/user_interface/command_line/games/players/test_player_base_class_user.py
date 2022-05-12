@@ -4,7 +4,7 @@ import pytest
 from tests.utils_command_line_testing import override_input_function_with_input_sequence
 
 
-class TestPlayerUser:
+class TestPlayerUserUnit:
 
     @pytest.fixture(scope="function")
     def test_player(self):
