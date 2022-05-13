@@ -4,7 +4,7 @@ from games.all_game_constants.player_constants import PlayerParameterRestriction
 from user_interface.command_line.games.player_base_class_user import PlayerUser
 import sys
 import functools
-from root_directory import ROOT_DIRECTORY
+from games.all_game_constants.root_directory import ROOT_DIRECTORY
 from pathlib import Path
 
 

@@ -2,13 +2,13 @@ from games.roulette.app.single_player_roulette.single_player_table import Single
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.constants.game_constants import RouletteGameParameters
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
-from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
+from user_interface.command_line.games.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     NavigationOptionRank
-from user_interface.command_line.roulette.app.single_player_roulette_user.wheel_and_bet_construction_user import \
+from user_interface.command_line.games.roulette.app.single_player_roulette_user.wheel_and_bet_construction_user import \
     WheelAndBetConstructorUser
-from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
+from user_interface.command_line.games.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     RouletteContinuationUser
-from user_interface.command_line.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
+from user_interface.command_line.games.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
 from user_interface.command_line.games.player_base_class_user import PlayerUser
 from user_interface.command_line.games.players.player_database_interactions_user import PlayerDatabaseInteractionsUser
 

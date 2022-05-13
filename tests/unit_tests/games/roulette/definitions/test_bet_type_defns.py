@@ -20,7 +20,7 @@ def euro_wheel():
 ##########
 class TestColoursBet:
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture(scope="function")
     def colours_bet(self, euro_wheel):
         return ColoursBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.COLOURS_BET, playing_wheel=euro_wheel)
 
@@ -51,7 +51,7 @@ class TestColoursBet:
 
 class TestHighLowBet:
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture(scope="function")
     def high_low_bet(self, euro_wheel):
         return HighLowBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.HIGH_LOW_BET, playing_wheel=euro_wheel)
 
@@ -75,7 +75,7 @@ class TestHighLowBet:
 
 class TestOddsEvensBet:
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture(scope="function")
     def odds_evens_bet(self, euro_wheel):
         return OddsEvensBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.ODDS_EVENS_BET, playing_wheel=euro_wheel)
 
@@ -102,7 +102,7 @@ class TestOddsEvensBet:
 ##########
 class TestBetStraightUpBet:
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture(scope="function")
     def straight_up_bet(self, euro_wheel):
         return StraightUpBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.STRAIGHTUP_BET, playing_wheel=euro_wheel)
 

@@ -4,23 +4,42 @@ from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet,
 from games.roulette.app.single_player_roulette.single_player_table import SinglePlayerRouletteTable
 from games.roulette.constants.wheel_constants import WheelParameters
 from games.roulette.constants.bet_constants import WheelBetParameters
-
-# Wheel to be used throughout testing
-euro_wheel = RouletteWheel(parameters=WheelParameters.EURO_WHEEL)
-
-# Bets to be used throughout testing
-colours_bet = ColoursBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.COLOURS_BET, playing_wheel=euro_wheel)
-straight_up_bet = StraightUpBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.STRAIGHTUP_BET, playing_wheel=euro_wheel)
-split_bet = SplitBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.SPLIT_BET, playing_wheel=euro_wheel)
-
-##########
-# Table object ot be tested
-##########
-table = SinglePlayerRouletteTable()
+import pytest
 
 
 class TestSinglePlayerRouletteTable:
-    def test_evaluate_all_active_bets_list_three_different_bets_all_winners(self):
+    """Class for testing that the methods on the SinglePlayerRouletteTable are working."""
+
+    @pytest.fixture(scope="function")
+    def table(self):
+        """Table object that will be tested throughout this class"""
+        return SinglePlayerRouletteTable()
+
+    # Secondary test fixtures
+    @pytest.fixture(scope="class")
+    def euro_wheel(self):
+        """Wheel that the table is being tested on"""
+        return RouletteWheel(parameters=WheelParameters.EURO_WHEEL)
+
+    @pytest.fixture(scope="function")
+    def colours_bet(self, euro_wheel):
+        """First generic bet used to test the table"""
+        return ColoursBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.COLOURS_BET, playing_wheel=euro_wheel)
+
+    @pytest.fixture(scope="function")
+    def straight_up_bet(self, euro_wheel):
+        """Second generic bet used to test the table"""
+        return StraightUpBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.STRAIGHTUP_BET, playing_wheel=euro_wheel)
+
+    @pytest.fixture(scope="function")
+    def split_bet(self, euro_wheel):
+        """Third generic bet used to test the table"""
+        return SplitBet(fixed_parameters=WheelBetParameters.EURO_WHEEL.SPLIT_BET, playing_wheel=euro_wheel)
+
+    # Test methods
+    def test_evaluate_all_active_bets_list_three_different_bets_all_winners(self,
+                                                                            table, colours_bet, straight_up_bet,
+                                                                            split_bet):
         colours_bet.set_payout(amount=50)
         colours_bet.set_win_criteria(win_criteria=[1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36])
         straight_up_bet.set_payout(amount=720)
@@ -35,8 +54,9 @@ class TestSinglePlayerRouletteTable:
         assert bet_win_count == 3
         assert total_winnings == 1130
 
-
-    def test_evaluate_all_active_bets_list_three_different_bets_one_winner(self):
+    def test_evaluate_all_active_bets_list_three_different_bets_one_winner(self,
+                                                                           table, colours_bet, straight_up_bet,
+                                                                           split_bet):
         colours_bet.set_payout(amount=50)
         colours_bet.set_win_criteria(win_criteria=[1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36])
         straight_up_bet.set_payout(amount=720)
@@ -51,7 +71,9 @@ class TestSinglePlayerRouletteTable:
         assert bet_win_count == 1
         assert total_winnings == 50
 
-    def test_evaluate_all_active_bets_list_three_different_bets_no_winners(self):
+    def test_evaluate_all_active_bets_list_three_different_bets_no_winners(self,
+                                                                           table, colours_bet, straight_up_bet,
+                                                                           split_bet):
         colours_bet.set_payout(amount=50)
         colours_bet.set_win_criteria(win_criteria=[1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36])
         straight_up_bet.set_payout(amount=720)

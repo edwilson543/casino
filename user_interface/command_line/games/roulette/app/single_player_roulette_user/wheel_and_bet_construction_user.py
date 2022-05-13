@@ -3,9 +3,9 @@ from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.wheel_constants import WheelIds, wheel_options_text, WheelParameters
 from games.roulette.constants.bet_constants import BetTypeIds, WheelBetParameters
 
-from user_interface.command_line.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
-from user_interface.command_line.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
-from user_interface.command_line.roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
+from user_interface.command_line.games.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
+from user_interface.command_line.games.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
+from user_interface.command_line.games.roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
 from enum import Enum
 
 
