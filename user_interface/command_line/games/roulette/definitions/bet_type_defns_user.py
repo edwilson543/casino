@@ -1,4 +1,4 @@
-"""To define a new bet, first go to roulette->definitions->bet_type_defns"""
+"""To define a new bet, first go to roulette->strategies->bet_type_defns"""
 from games.roulette.app.roulette_bet_base_class import RouletteBetParameters
 from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet, HighLowBet, OddsEvensBet, \
     CornersBet
