@@ -1,9 +1,10 @@
-from games.all_game_constants.root_directory import ROOT_DIRECTORY
-from pathlib import Path
-from datetime import datetime
-import json
 from games.all_game_constants.player_constants import PlayerParameterRestrictions
 from games.player_base_class import Player, PLAYER_TYPES
+from games.all_game_constants.root_directory import ROOT_DIRECTORY
+from pathlib import Path
+import logging
+from datetime import datetime
+import json
 
 
 class PlayerDatabaseManager:
@@ -51,8 +52,10 @@ class PlayerDatabaseManager:
                 all_player_data_dict: dict = json.load(player_data_file)
                 encoded_player_data = all_player_data_dict[player_username]
                 live_player = self.decode_player(serialised_attributes_dict=encoded_player_data)
+                logging.info(f"Player username: {player_username} was retrieved from the database.")
                 return live_player
             except KeyError:
+                logging.exception("Exception occurred when retrieving from player database.")
                 raise KeyError("load_player method attempted to load a player not found in player database.")
 
     def upload_player(self, player: PLAYER_TYPES) -> None:
@@ -71,6 +74,7 @@ class PlayerDatabaseManager:
             all_player_data_dict[player.username] = self.encode_player(player=player)
             with open(data_path, "w") as player_data_file:
                 json.dump(all_player_data_dict, player_data_file)
+            logging.info(f"Player username: {player.username} was uploaded back to the database.")
 
     def create_player(self, name, player_username, password) -> None:
         """

@@ -4,6 +4,7 @@ from games.roulette.constants.wheel_constants import WheelParameters
 from games.roulette.constants.bet_constants import WheelBetParameters
 from games.roulette.definitions.bet_type_defns import BetTypeOptions
 from enum import Enum
+import logging
 
 
 class WheelAndBetConstructor:
@@ -33,10 +34,13 @@ class WheelAndBetConstructor:
         try:
             wheel_parameters: RouletteWheelParameters = getattr(self.wheel_parameters_look_up, wheel_name)
             wheel = self.wheel_construction_object(parameters=wheel_parameters)
+            logging.info(f"{wheel_name} {self.wheel_construction_object.__name__} instantiated from its parameters.")
             return wheel
         except AttributeError:
+            logging.exception(
+                f"Exception occurred when instantiating {wheel_name} {self.wheel_construction_object.__name__}.")
             raise AttributeError(
-                f"Inavlid wheel bet_type_name: {wheel_name} passed to {self.wheel_parameters_look_up}, in method"
+                f"Invalid wheel bet_type_name: {wheel_name} passed to {self.wheel_parameters_look_up}, in method"
                 f"'get_wheel_from_wheel_name'")
 
     def get_bet_type_from_bet_type_name(self, wheel_name: str, bet_type_name: str) -> BET_TYPES:
@@ -59,7 +63,9 @@ class WheelAndBetConstructor:
                 bet_type_name)  # get parameters specific to the given bet
             bet_type_object = getattr(self.bet_object_look_up, bet_type_name).value
             bet_type = bet_type_object(fixed_parameters=bet_type_parameters)  # sets bet_type_name, min bet and max bet
+            logging.info(f"{bet_type_name} instantiated from its parameters.")
             return bet_type
         except AttributeError:
+            logging.exception(f"Exception occurred when instantiating {bet_type_name}.")
             raise AttributeError(f"Invalid bet type {bet_type_name} passed to {self.bet_object_look_up} "
-                             f"in get_bet_type_from_bet_type_name")
+                                 f"in get_bet_type_from_bet_type_name")
