@@ -1,22 +1,64 @@
+"""Initial ideas on how to structure a strategy ###NOT INTENDED AS ACTUAL CODE"""
+
+from games.roulette.app.roulette_wheel_base_class import RouletteWheel
+from pathlib import Path
+import pandas as pd
+
+class StrategySimulation:
+    """
+    SKETCH
+    Base class to define the structure of a simulated game - perhaps not that much of the UI is relevant, as all
+    confirmation can be got rid of + we can just place and evaluate bets in one go here.
+    """
+    def __init__(self,
+                 n_simulations: int,
+                 strategy,
+                 playing_wheel: RouletteWheel,
+                 data_output_path: Path,
+                 data_output_filename: str):
+        """
+        SKETCH
+        Parameters:
+        -----------
+        n_simulations: The number of simulations of a given strategy to complete
+        strategy: The strategy that the simulation is testing
+        data_output_path: The path to the file where the data should be stored
+        data_output_filename: The name of the file the simulation data should be written to
+        """
+        self.n_simulations = n_simulations
+        self.strategy = strategy
+        self.playing_wheel = playing_wheel
+        self.data_output_path = data_output_path
+        self.data_output_filename = data_output_filename
+
+    def place_individual_bet(self):
+        """SKETCH. Bet placement (placed on selection which is done by the strategy base class)"""
+        pass
+    def bet_evaluation(self):
+        """SKETCH. Bet evaluation, resulting in some player interactions (adding/taking from pot)"""
+        pass
+
+    def win_or_ruin_individual_run(self):
+        """SKETCH. Method to test the strategy once, until either win or ruin is reached"""
+        # while not strategy.win and not strategy.ruin:
+        #   strategy.keep_placing_more_bets()
+        #   outcome = xyz
+        #   if win or ruin:
+        #       return outcome
+        pass
+
+    def run_multiple_simulations(self):
+        """SKETCH (more ideas below)"""
+        simulation_data = pd.DataFrame()
+        # simulation_data.columns = self.strategy.output_data_headers
+        for simulation in range(0, self.n_simulations):
+            individual_run_outcome = self.win_or_ruin_individual_run()
+            pd.concat([simulation_data, individual_run_outcome])
+        # simulation_data.to_csv(self.data_output_path / self.data_output_path)
+        # The writing part of this could be called from the utils
+
+
 """
-Base class to define the structure of a simulated game - perhaps not that much of the UI is relevant, as all
-confirmation can be got rid of + we can just place and evaluate bets in one go here.
-
-Potential attributes:
-    - Number of simulations of a given strategy to complete
-
-Processing/methods:
-    - Bet placement (placed on selection which is done by the strategy base class)
-    - Bet evaluation, player interaction (adding/taking from pot)
-    - Game loop - keep going until we've met criteria
-
-    - Appending the outcome of the simulations to a DataFrame then writing these to a csv. Maybe this should be done
-    separately, I think it makes sense here because it's where the data is created - why transport it somewhere else
-    before storing.
-    I also don't see any point in recording the bet-by-bet progress, as this is
-    defined by the bet strategy and the wheel's uniform probability distribution, only the outcome of a strategy and the
-    given parameters that led to that outcome.
-    - Writing the csv to file at the end of the simulation run (this would likely be a function called from a utils)
 
 The csv fields would be along the lines of:
 strategy_name, bet_type_name, bet_type_min_bet, bet_type_max_bet, initial_pot, exit_pot_threshold, win_or_ruin
