@@ -2,13 +2,13 @@ from games.roulette.app.single_player_roulette.single_player_table import Single
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.constants.game_constants import RouletteGameParameters
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
-from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
+from user_interface.command_line.games.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     NavigationOptionRank
-from user_interface.command_line.roulette.app.single_player_roulette_user.wheel_and_bet_construction_user import \
+from user_interface.command_line.games.roulette.app.single_player_roulette_user.wheel_and_bet_construction_user import \
     WheelAndBetConstructorUser
-from user_interface.command_line.roulette.app.single_player_roulette_user.roulette_continuation_user import \
+from user_interface.command_line.games.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     RouletteContinuationUser
-from user_interface.command_line.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
+from user_interface.command_line.games.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
 from user_interface.command_line.games.player_base_class_user import PlayerUser
 from user_interface.command_line.games.players.player_database_interactions_user import PlayerDatabaseInteractionsUser
 
@@ -63,7 +63,7 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
             if self.next_step <= NavigationOptionRank.REPEAT_BETS.value:
                 """If user chose to change wheel or bet type or stake amount or bet choice or just repeat bet."""
                 spin_outcome: wheel_spin_return = self.active_wheel.user_spin()  # gets user to spin wheel
-                bet_win_count, total_winnings = super().evaluate_all_active_bets_list(spin_outcome=spin_outcome)
+                bet_win_count, total_winnings = self.evaluate_all_active_bets_list(spin_outcome=spin_outcome)
                 self.active_player.add_winnings_to_pot(amount=total_winnings)
                 self.give_user_bet_news(bet_win_count=bet_win_count, total_winnings=total_winnings)
 
@@ -145,22 +145,23 @@ class SinglePlayerRouletteTableUser(SinglePlayerRouletteTable):
             ##########
             # 1 Choose bet type
             ##########
-            potential_bet: USER_BET_TYPES = self.constructor.choose_bet_type(wheel_name=self.active_wheel.wheel_name)
+            potential_bet: USER_BET_TYPES = self.constructor.choose_bet_type(
+                wheel_name=self.active_wheel.parameters.wheel_name)
             potential_bet.set_playing_wheel(wheel=self.active_wheel)
 
             ##########
-            # 2 Determine stake amount
-            ##########
-            stake = potential_bet.choose_stake_amount(player_funds=self.active_player.active_pot)
-            potential_bet.set_stake_amount(amount=stake)
-
-            ##########
-            # 3 Determine bet choice, which is specific to the bet type
+            # 2 Determine bet choice, which is specific to the bet type
             ##########
             bet_choice = potential_bet.get_user_bet_choice()
             potential_bet.set_bet_choice(bet_choice=bet_choice)
             bet_choice_string = potential_bet.get_bet_choice_string_rep()
             potential_bet.set_bet_choice_string_rep(bet_choice_string=bet_choice_string)
+
+            ##########
+            # 3 Determine stake amount
+            ##########
+            stake = potential_bet.choose_stake_amount(player_funds=self.active_player.active_pot)
+            potential_bet.set_stake_amount(amount=stake)
 
             ##########
             # 4 Determine the win criteria and calculate the payout of the specific bet choice

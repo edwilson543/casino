@@ -1,23 +1,36 @@
-from root_directory import ROOT_DIRECTORY
-from pathlib import Path
-from datetime import datetime
-import json
 from games.all_game_constants.player_constants import PlayerParameterRestrictions
 from games.player_base_class import Player, PLAYER_TYPES
+from games.all_game_constants.root_directory import ROOT_DIRECTORY
+from pathlib import Path
+import logging
+from datetime import datetime
+import json
 
 
 class PlayerDatabaseManager:
     def __init__(self,
                  player_object: PLAYER_TYPES = Player,
-                 player_data_directory_path: Path = ROOT_DIRECTORY / "games" / "players" / "player_data",
+                 player_data_directory_path: Path = ROOT_DIRECTORY / "data" / "player_data",
                  player_datafile_name: str = "player_data.json",
-                 guest_datafile_name: str = "test_guest_data.json"):
+                 guest_datafile_name: str = "guest_data.json"):
         """
         Parameters:
         ----------
         player_object: the type of player object to be instantiated from their attributes in storage.
         This will currently either be just Player or PlayerUser.
-        # TODO write this docstring
+
+        player_data_directory_path: A Path object that specifies where the player and guest data is / will be stored,
+        relative to the ROOT_DIRECTORY. This can easily be changed from the default if a user would like to store their
+        player data elsewhere.
+
+        player_data_file_name: Name of the player datafile - note that new player data files could be created by
+        changing this string, although the JSON extension must always be used.
+        The player datafile with the default name and default path is in the .gitignore, however will automatically
+        populate when a new user creates an account on their own device, as an empty JSON dictionary, which then will
+        get filled with their data.
+
+        guest_datafile_name: Name of the guest data file - this is NOT on the .gitignore, as all users will need it to
+        be able to play as a guest
         """
         self.player_object = player_object
         self.player_data_directory_path = player_data_directory_path
@@ -34,13 +47,15 @@ class PlayerDatabaseManager:
         Returns: live_player: an instance of the desired Player subclass
         """
         data_path = self.get_data_path(player_username=player_username)
-        with open(data_path, "r") as player_data_file:  # TODO update this path to be dynamic
+        with open(data_path, "r") as player_data_file:
             try:
                 all_player_data_dict: dict = json.load(player_data_file)
                 encoded_player_data = all_player_data_dict[player_username]
                 live_player = self.decode_player(serialised_attributes_dict=encoded_player_data)
+                logging.info(f"Player username: {player_username} was retrieved from the database.")
                 return live_player
             except KeyError:
+                logging.exception("Exception occurred when retrieving from player database.")
                 raise KeyError("load_player method attempted to load a player not found in player database.")
 
     def upload_player(self, player: PLAYER_TYPES) -> None:
@@ -59,6 +74,7 @@ class PlayerDatabaseManager:
             all_player_data_dict[player.username] = self.encode_player(player=player)
             with open(data_path, "w") as player_data_file:
                 json.dump(all_player_data_dict, player_data_file)
+            logging.info(f"Player username: {player.username} was uploaded back to the database.")
 
     def create_player(self, name, player_username, password) -> None:
         """
@@ -110,6 +126,8 @@ class PlayerDatabaseManager:
                 f"create_player_data_file method of PlayerDatabaseManager "
                 f"was called although the player data file already exists")
         else:  # if the file hasn't been created
+            if not Path.is_dir(self.player_data_directory_path):
+                self.player_data_directory_path.mkdir(parents=True)
             with open(player_data_path, "x") as new_data_file:
                 empty_dict: dict = {}  # This is the dict that will get written to JSON and filled with player data
                 json.dump(empty_dict, new_data_file)

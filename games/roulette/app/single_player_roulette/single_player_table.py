@@ -5,7 +5,7 @@ from games.roulette.app.single_player_roulette.wheel_and_bet_construction import
     WheelAndBetConstructor
 from games.players.player_database_manager import PlayerDatabaseManager
 
-
+#  TODO try and bring in the method for filling the bet list
 class SinglePlayerRouletteTable:
     def __init__(self,
                  active_player: PLAYER_TYPES = None,
@@ -21,7 +21,7 @@ class SinglePlayerRouletteTable:
 
     def evaluate_all_active_bets_list(self, spin_outcome: wheel_spin_return):
         """
-        Method to evaluate each active bet in the list
+        Method to evaluate each active bet in the list, one by one, and accumulate the winnings and number of wins.
         Returns:
         total_win_count
         total_winnings
