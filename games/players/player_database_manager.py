@@ -115,6 +115,28 @@ class PlayerDatabaseManager:
     ##########
     # Methods relating to the storage location of players
     ##########
+    def get_data_path(self, player_username: str) -> Path:
+        """
+        Method to:
+        1) Return a specific path to the guest player data if the user has played as a guest
+        2) Return the path to player data when a user player (non-guest) is being used
+        3) Create the player data folder if it is empty by calling the create_player_data_file() method
+        """
+        if player_username == "guest":
+            guest_player_data_path = self.player_data_directory_path / self.guest_datafile_name
+            if guest_player_data_path.is_file():
+                return guest_player_data_path
+            else:
+                self.create_guest_and_guest_data_file()
+                return guest_player_data_path
+        else:
+            player_data_path = self.player_data_directory_path / self.player_datafile_name
+            if player_data_path.is_file():  # i.e. if the file has already been created
+                return player_data_path
+            else:  # if the file hasn't been created, call the file creation method before returning path to it
+                self.create_player_data_file()
+                return player_data_path
+
     def create_player_data_file(self) -> None:
         """
         Method to create an empty json data file that player data will be uploaded to - this will only be done if the
@@ -132,23 +154,28 @@ class PlayerDatabaseManager:
                 empty_dict: dict = {}  # This is the dict that will get written to JSON and filled with player data
                 json.dump(empty_dict, new_data_file)
 
-    def get_data_path(self, player_username: str) -> Path:
+    def create_guest_and_guest_data_file(self) -> None:
         """
-        Method to:
-        1) Return a specific path to the guest player data if the user has played as a guest
-        2) Return the path to player data when a user player (non-guest) is being used
-        3) Create the player data folder if it is empty by calling the create_player_data_file() method
+        Method to create the guest player - this will be called the first time a user chooses to play as the guest,
+        i.e. when the guest player data file does not exist yet.
+        The guest player is encoded in JSON and given their own file - now when a user tries to load them, they are
+        available.
         """
-        if player_username == "guest":
-            player_data_path = self.player_data_directory_path / self.guest_datafile_name
-            return player_data_path
+        guest_data_path = self.player_data_directory_path / self.guest_datafile_name
+        if guest_data_path.is_file():  # i.e. if the file has already been created
+            raise FileExistsError(
+                f"create_guest_and_guest_data_file method of PlayerDatabaseManager "
+                f"was called although the guest data file already exists")
         else:
-            player_data_path = self.player_data_directory_path / self.player_datafile_name
-            if player_data_path.is_file():  # i.e. if the file has already been created
-                return player_data_path
-            else:  # if the file hasn't been created, call the file creation method before returning path to it
-                self.create_player_data_file()
-                return player_data_path
+            if not Path.is_dir(self.player_data_directory_path):
+                self.player_data_directory_path.mkdir(parents=True)
+
+            # Create and encode a new guest player, then dump them in a json file
+            guest = self.player_object(name="Guest", username="guest", password="guest")  # Other params default
+            encoded_guest = self.encode_player(player=guest)
+            guest_data_dict = {"guest": encoded_guest}
+            with open(guest_data_path, "w") as guest_data_file:
+                json.dump(guest_data_dict, guest_data_file)
 
     ##########
     # Methods to serialise/deserialise the Player object

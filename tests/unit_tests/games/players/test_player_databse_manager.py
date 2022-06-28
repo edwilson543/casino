@@ -110,6 +110,8 @@ class TestPlayerStorage:
         with pytest.raises(FileExistsError):
             test_player_database_manager.create_player_data_file()
 
+    # TODO add tests for guest data path
+
     ##########
     # get_data_path unit tests
     ##########
