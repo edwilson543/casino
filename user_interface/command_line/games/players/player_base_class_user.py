@@ -1,4 +1,4 @@
-from games.player_base_class import Player, PlayerType
+from games.players.player_base_class import Player, PlayerType
 from games.roulette.constants.game_constants import RouletteGameParameters
 from datetime import datetime
 

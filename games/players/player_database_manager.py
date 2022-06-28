@@ -1,5 +1,5 @@
 from games.all_game_constants.player_constants import PlayerParameterRestrictions
-from games.player_base_class import Player, PLAYER_TYPES
+from games.players.player_base_class import Player, PLAYER_TYPES
 from games.all_game_constants.root_directory import ROOT_DIRECTORY
 from pathlib import Path
 import logging

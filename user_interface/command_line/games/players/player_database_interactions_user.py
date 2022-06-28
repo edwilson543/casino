@@ -1,7 +1,7 @@
 from games.players.player_database_manager import PlayerDatabaseManager
-from games.player_base_class import PlayerType, PLAYER_TYPES
+from games.players.player_base_class import PlayerType, PLAYER_TYPES
 from games.all_game_constants.player_constants import PlayerParameterRestrictions
-from user_interface.command_line.games.player_base_class_user import PlayerUser
+from user_interface.command_line.games.players.player_base_class_user import PlayerUser
 import sys
 import functools
 from games.all_game_constants.root_directory import ROOT_DIRECTORY

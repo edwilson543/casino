@@ -9,7 +9,7 @@ from user_interface.command_line.games.roulette.app.single_player_roulette_user.
 from user_interface.command_line.games.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     RouletteContinuationUser
 from user_interface.command_line.games.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
-from user_interface.command_line.games.player_base_class_user import PlayerUser
+from user_interface.command_line.games.players.player_base_class_user import PlayerUser
 from user_interface.command_line.games.players.player_database_interactions_user import PlayerDatabaseInteractionsUser
 
 

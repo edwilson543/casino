@@ -1,4 +1,4 @@
-from user_interface.command_line.games.player_base_class_user import PlayerUser
+from user_interface.command_line.games.players.player_base_class_user import PlayerUser
 from enum import Enum
 
 

@@ -1,6 +1,6 @@
 """Integration tests for the check_top_up_scenario method"""
 from games.roulette.constants.game_constants import RouletteGameParameters
-from user_interface.command_line.games.player_base_class_user import PlayerUser
+from user_interface.command_line.games.players.player_base_class_user import PlayerUser
 import pytest
 from tests.utils_command_line_testing import override_input_function_with_input_sequence
 
