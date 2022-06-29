@@ -1,10 +1,22 @@
+"""
+Module defining the class which is used to manage the JSON (JavaScript Object notation) player database.
+This exists so that players can create an account and login/logout of these accounts, with their data being retained
+between sessions.
+A JSON dictionary is used as the master data object. The keys are player usernames as strings, and the values are
+Player objects that have been serialised to JSON.
+Database functionality including initial creation, data creation, data retrieval, data upload etc. are all implemented.
+"""
+
+# Standard library imports
+from datetime import datetime
+import json
+import logging
+from pathlib import Path
+
+# Local application imports
 from games.all_game_constants.player_constants import PlayerParameterRestrictions
 from games.players.player_base_class import Player, PLAYER_TYPES
 from games.all_game_constants.root_directory import ROOT_DIRECTORY
-from pathlib import Path
-import logging
-from datetime import datetime
-import json
 
 
 class PlayerDatabaseManager:
@@ -42,8 +54,10 @@ class PlayerDatabaseManager:
         Method to read the JSON file storing player data, retrieve the relevant player's data and then
         instantiate a player as an instance of self.player_object (using decode_player).
         JSON database -> player's JSON dict -> python dict (self.decode_player) -> instantiate player as a Player object
-        Parameters: player_username: the player_username of the player to be retrieved. Note that if the
+
+        Parameters: player_username: the username of the player to be retrieved. Note that if the
         guest player_username is passed, then the data_path will just point to the test_guest_data.json
+
         Returns: live_player: an instance of the desired Player subclass
         """
         data_path = self.get_data_path(player_username=player_username)
@@ -66,6 +80,7 @@ class PlayerDatabaseManager:
         Parameters: player - the player being stored
         """
         if player.username == "guest":
+            # The guest player's data is only ever retrieved from the database, but never uploaded
             pass
         else:
             data_path = self.get_data_path(player_username=player.username)
@@ -186,14 +201,13 @@ class PlayerDatabaseManager:
         Method to take a player object, serialise all their parameters, and then store these parameters in a dictionary
         so that json.dump() can be used on the dictionary.
 
-
         Parameters: player (the player whose attributes are being converted to a dict)
         Returns: dict (a dictionary of the player's attributes, containing only serialisable data types)
 
         Note that if in the future player attributes are introduced of different types that are not immediately
-        serialisable, then the encoding function below must be updated.
+        serialisable, then the encoding method below must be updated.
+        An interesting extension here could be to add some form of encryption for the player passwords.
         """
-        #  TODO add some form of encryption for player password encoding
         unserialisable_dict = player.__dict__
         serialisable_dict = {}
         for key, value in unserialisable_dict.items():
