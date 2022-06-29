@@ -1,6 +1,8 @@
 """Module to specify restrictions on the definition of player-defined player parameters"""
 
+# Local application imports
 from dataclasses import dataclass
+
 
 @dataclass(frozen=True)
 class PasswordParameters:
@@ -12,6 +14,7 @@ class PasswordParameters:
 class UsernameParameters:
     disallowed_characters = [" ", "!", ".", "/"]
     minimum_length = 5
+
 
 @dataclass(frozen=True)
 class NameParameters:
