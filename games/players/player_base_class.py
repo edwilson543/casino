@@ -1,4 +1,8 @@
-"""Module to define the Player base class, a core object withing the Casino"""
+"""
+Module to define the Player base class, a core object withing the Casino, as well as the different types of player,
+(existing, guest, new) which each initiate games ins slightly different ways, and at the very bottom the type hint that
+should be used in the backend for type hinting Player objects (PLAYER_TYPES).
+"""
 
 # Standard library imports
 from datetime import datetime
