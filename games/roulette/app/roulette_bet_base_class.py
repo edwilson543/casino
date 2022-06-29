@@ -1,11 +1,20 @@
-from games.bet_base_class import Bet
-from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
-from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
+"""
+Module containing:
+The RouletteBetParameters class, used to define the immutable attributes of a roulette bet;
+The RouletteBet class, a base class for defining specific individual bet classes;
+The BET_TYPES typehint, which is used for type hinting references to a RouletteBet in the backend.
+"""
 
+# Standard library imports
 from math import floor
 from typing import Any, TypeVar
 from abc import abstractmethod
 from dataclasses import dataclass, asdict
+
+# Local application imports
+from games.bet_base_class import Bet
+from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
+from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 
 
 ##########
