@@ -1,8 +1,21 @@
-from games.roulette.constants.game_constants import Colour
+"""
+Module containing:
+The RouletteWheelParameters class, used to define the immutable attributes of a roulette wheel;
+The wheel_spin_return namedtuple, which is a data object for defining the outcome of an individual spin;
+The RouletteWheel class, a base class for defining the roulette wheel object and its methods;
+The WHEEL_TYPES typehint, which is used for type hinting references to a RouletteWheel in the backend.
+"""
+
+# Standard library imports
 from dataclasses import dataclass
 from collections import namedtuple
 from typing import TypeVar
+
+# Third party imports
 from numpy import random, array
+
+# Local application imports
+from games.roulette.constants.game_constants import Colour
 
 
 ##########
