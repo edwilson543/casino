@@ -1,3 +1,6 @@
+"""Module to define the Player base class, a core object withing the Casino"""
+
+# Standard library imports
 from datetime import datetime
 from enum import Enum
 from typing import TypeVar
@@ -6,7 +9,7 @@ from typing import TypeVar
 class PlayerType(Enum):
     """
     Existing/guest/new players are treated differently at log-in (e.g. new/guest players are forced to make a
-    deposit, hence the need for this Enum.
+    deposit) This Enum is therefore used to direct the game flow between the different cases.
     """
     EXISTING_PLAYER = "E"
     GUEST_PLAYER = "G"
@@ -14,8 +17,11 @@ class PlayerType(Enum):
 
 
 class Player:
-    """Class to hold the pot and define interactions with the pot.
-    Player has money taken from the pot, and added to the pot"""
+    """
+    Class to store a player's data, to hold their pot and to define interactions with their pot during gameplay.
+    When a Player makes a stake, they have money taken from their pot, while if they win a bet or make a top up then
+    they have money added to the pot.
+    """
 
     def __init__(self,
                  name: str,
