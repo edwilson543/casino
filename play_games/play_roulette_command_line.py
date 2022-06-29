@@ -1,10 +1,15 @@
-"""Module that should be run to play roulette on the command line"""
+"""Module to run in order to play roulette on the command line."""
 
+# Standard library imports
+import logging
+
+# Local application imports
 from games.logging_setup import LogConfiguration
+
+# Local application UI imports
 from user_interface.command_line.games.roulette.app.single_player_roulette_user.single_player_table_user import \
     SinglePlayerRouletteTableUser
 from user_interface.command_line.games.players.player_database_interactions_user import PlayerDatabaseInteractionsUser
-import logging
 
 if __name__ == '__main__':
     LogConfiguration(log_file_name="game_log.txt").logging_set_up()
