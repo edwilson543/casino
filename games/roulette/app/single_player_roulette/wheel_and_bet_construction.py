@@ -1,10 +1,20 @@
+"""
+Module containing:
+The WheelAndBetConstructor class, which is used to:
+- instantiate a RouletteWheel using the data in storage (for a European/American etc.);
+- instantiate specific subclasses of the RouletteBet (ColoursBet, StraightUpBet etc.) using the data in storage.
+"""
+
+# Standard library imports
+from enum import Enum
+import logging
+
+# Local application imports
 from games.roulette.app.roulette_wheel_base_class import RouletteWheelParameters, RouletteWheel, WHEEL_TYPES
 from games.roulette.app.roulette_bet_base_class import RouletteBetParameters, BET_TYPES
 from games.roulette.constants.wheel_constants import WheelParameters
 from games.roulette.constants.bet_constants import WheelBetParameters
 from games.roulette.definitions.bet_type_defns import BetTypeOptions
-from enum import Enum
-import logging
 
 
 class WheelAndBetConstructor:
