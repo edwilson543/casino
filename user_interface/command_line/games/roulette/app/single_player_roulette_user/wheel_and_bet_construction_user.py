@@ -1,12 +1,21 @@
+"""
+Module defining the WheelAndBetConstructorUser object which allows users to interact with the WheelAndBetConstructor
+object, and instantiate wheels and bets for use in the Roulette game.
+"""
+
+# Standard library imports
+from enum import Enum
+
+# Local application imports
 from games.roulette.app.single_player_roulette.wheel_and_bet_construction import WheelAndBetConstructor
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.wheel_constants import WheelIds, get_wheel_options_text, WheelParameters
 from games.roulette.constants.bet_constants import BetTypeIds, WheelBetParameters
 
+# Local application UI imports
 from user_interface.command_line.games.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
 from user_interface.command_line.games.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
 from user_interface.command_line.games.roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
-from enum import Enum
 
 
 class WheelAndBetConstructorUser(WheelAndBetConstructor):
