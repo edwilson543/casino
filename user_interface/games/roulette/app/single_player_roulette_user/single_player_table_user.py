@@ -11,13 +11,13 @@ from games.roulette.app.roulette_wheel_base_class import wheel_spin_return, WHEE
 from games.roulette.constants.game_constants import RouletteGameParameters
 
 # Local application UI imports
-from user_interface.command_line.games.roulette.app.single_player_roulette_user.roulette_continuation_user import \
+from user_interface.games.roulette.app.single_player_roulette_user.roulette_continuation_user import \
     NavigationOptionRank, RouletteContinuationUser
-from user_interface.command_line.games.roulette.app.single_player_roulette_user.wheel_and_bet_construction_user import \
+from user_interface.games.roulette.app.single_player_roulette_user.wheel_and_bet_construction_user import \
     WheelAndBetConstructorUser
-from user_interface.command_line.games.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
-from user_interface.command_line.games.players.player_base_class_user import PlayerUser
-from user_interface.command_line.games.players.player_database_interactions_user import PlayerDatabaseInteractionsUser
+from user_interface.games.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
+from user_interface.games.players.player_base_class_user import PlayerUser
+from user_interface.games.players.player_database_interactions_user import PlayerDatabaseInteractionsUser
 
 
 ##########

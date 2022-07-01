@@ -15,7 +15,7 @@ from games.players.player_database_manager import PlayerDatabaseManager
 from games.players.player_base_class import PlayerType, PLAYER_TYPES
 
 # Local application UI imports
-from user_interface.command_line.games.players.player_base_class_user import PlayerUser
+from user_interface.games.players.player_base_class_user import PlayerUser
 
 
 ##########

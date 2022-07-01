@@ -7,9 +7,9 @@ import logging
 from games.logging_setup import LogConfiguration
 
 # Local application UI imports
-from user_interface.command_line.games.roulette.app.single_player_roulette_user.single_player_table_user import \
+from user_interface.games.roulette.app.single_player_roulette_user.single_player_table_user import \
     SinglePlayerRouletteTableUser
-from user_interface.command_line.games.players.player_database_interactions_user import PlayerDatabaseInteractionsUser
+from user_interface.games.players.player_database_interactions_user import PlayerDatabaseInteractionsUser
 
 if __name__ == '__main__':
     LogConfiguration(log_file_name="game_log.txt").logging_set_up()

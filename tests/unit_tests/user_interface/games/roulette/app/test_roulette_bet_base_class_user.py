@@ -7,7 +7,7 @@ import pytest
 from games.roulette.app.roulette_bet_base_class import RouletteBetParameters
 
 # Local application UI imports
-from user_interface.command_line.games.roulette.app.roulette_bet_base_class_user import RouletteBetUser
+from user_interface.games.roulette.app.roulette_bet_base_class_user import RouletteBetUser
 from tests.utils_command_line_testing import override_input_function_with_input_sequence
 
 

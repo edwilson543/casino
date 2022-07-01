@@ -13,9 +13,9 @@ from games.roulette.constants.wheel_constants import WheelIds, get_wheel_options
 from games.roulette.constants.bet_constants import BetTypeIds, WheelBetParameters
 
 # Local application UI imports
-from user_interface.command_line.games.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
-from user_interface.command_line.games.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
-from user_interface.command_line.games.roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
+from user_interface.games.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
+from user_interface.games.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
+from user_interface.games.roulette.app.roulette_wheel_base_class_user import RouletteWheelUser
 
 
 class WheelAndBetConstructorUser(WheelAndBetConstructor):

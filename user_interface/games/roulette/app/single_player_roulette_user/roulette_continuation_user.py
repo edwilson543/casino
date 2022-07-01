@@ -9,7 +9,7 @@ Contents:
 from enum import Enum
 
 # Local application UI imports
-from user_interface.command_line.games.players.player_base_class_user import PlayerUser
+from user_interface.games.players.player_base_class_user import PlayerUser
 
 
 ##########

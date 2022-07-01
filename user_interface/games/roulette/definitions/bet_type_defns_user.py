@@ -22,7 +22,7 @@ from games.roulette.constants.game_constants import Colour, ColourPrompts
 from games.roulette.constants.bet_constants import HighLowBetOptions, OddsEvensBetOptions
 
 # Local application UI imports
-from user_interface.command_line.games.roulette.app.roulette_bet_base_class_user import RouletteBetUser
+from user_interface.games.roulette.app.roulette_bet_base_class_user import RouletteBetUser
 
 
 ##########

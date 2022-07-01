@@ -9,7 +9,7 @@ from games.roulette.constants.bet_constants import BetTypeIds, InsideBetTypeProm
 from games.roulette.definitions.bet_type_defns import BetTypeOptions
 
 # Local application UI imports
-from user_interface.command_line.games.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
+from user_interface.games.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
 
 
 class TestBetConstantsConsistent:

@@ -8,7 +8,7 @@ from games.roulette.constants.game_constants import RouletteGameParameters
 
 # Local application UI imports
 from tests.utils_command_line_testing import override_input_function_with_input_sequence
-from user_interface.command_line.games.players.player_base_class_user import PlayerUser
+from user_interface.games.players.player_base_class_user import PlayerUser
 
 
 class TestPlayerUserIntegration:
