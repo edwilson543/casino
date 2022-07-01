@@ -1,6 +1,15 @@
+"""
+Module contents:
+PlayerUser - the subclass of the Player class used in the UI for implementing methods to facilitate game flow on the
+command line.
+"""
+
+# Standard library imports
+from datetime import datetime
+
+# Local application imports
 from games.players.player_base_class import Player, PlayerType
 from games.roulette.constants.game_constants import RouletteGameParameters
-from datetime import datetime
 
 
 class PlayerUser(Player):
