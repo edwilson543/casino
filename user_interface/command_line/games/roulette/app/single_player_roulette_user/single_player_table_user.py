@@ -1,13 +1,20 @@
+"""
+Module defining the SinglePlayerRouletteTableUser object.
+This is used to define the main game loop of the command line application - taking users through each stage of selecting
+their playing wheel, bet type, stake, confirmation, spinning the wheel and initiating the game loop.
+"""
+
+
+# Local application imports
 from games.roulette.app.single_player_roulette.single_player_table import SinglePlayerRouletteTable
-from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
+from games.roulette.app.roulette_wheel_base_class import wheel_spin_return, WHEEL_TYPES
 from games.roulette.constants.game_constants import RouletteGameParameters
-from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
+
+# Local application UI imports
 from user_interface.command_line.games.roulette.app.single_player_roulette_user.roulette_continuation_user import \
-    NavigationOptionRank
+    NavigationOptionRank, RouletteContinuationUser
 from user_interface.command_line.games.roulette.app.single_player_roulette_user.wheel_and_bet_construction_user import \
     WheelAndBetConstructorUser
-from user_interface.command_line.games.roulette.app.single_player_roulette_user.roulette_continuation_user import \
-    RouletteContinuationUser
 from user_interface.command_line.games.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
 from user_interface.command_line.games.players.player_base_class_user import PlayerUser
 from user_interface.command_line.games.players.player_database_interactions_user import PlayerDatabaseInteractionsUser
