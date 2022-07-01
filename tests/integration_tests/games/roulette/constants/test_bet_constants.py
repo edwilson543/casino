@@ -1,8 +1,15 @@
+"""Module for unit tests on consistency of bet constants"""
+
+# Standard library imports
+from dataclasses import fields
+
+ # Local application imports
 from games.roulette.constants.bet_constants import BetTypeIds, InsideBetTypePrompts, OutsideBetTypePrompts, \
     WheelDefaultBetOptionsAndParameters
 from games.roulette.definitions.bet_type_defns import BetTypeOptions
+
+# Local application UI imports
 from user_interface.command_line.games.roulette.definitions.bet_type_defns_user import BetTypeOptionsUser
-from dataclasses import fields
 
 
 class TestBetConstantsConsistent:
