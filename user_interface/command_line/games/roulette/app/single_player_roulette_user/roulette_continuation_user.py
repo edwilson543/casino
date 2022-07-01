@@ -1,5 +1,15 @@
-from user_interface.command_line.games.players.player_base_class_user import PlayerUser
+"""
+Module used to define how the command line application loops.
+Contents:
+- Navigation Enums - used to define constants controlling where in the game loop the user returns to.
+- RouletteContinuationUser - used to implement methods controlling where in the game loop the user returns to.
+"""
+
+# Standard library imports
 from enum import Enum
+
+# Local application UI imports
+from user_interface.command_line.games.players.player_base_class_user import PlayerUser
 
 
 ##########
