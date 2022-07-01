@@ -1,13 +1,16 @@
+"""Unit tests for each bet type definition"""
+
+# Standard library imports
+import pytest
+
+# Local application imports
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel
 from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet, HighLowBet, OddsEvensBet, \
     CornersBet
 from games.roulette.constants.game_constants import Colour
 from games.roulette.constants.wheel_constants import WheelParameters
 from games.roulette.constants.bet_constants import WheelBetParameters, HighLowBetOptions, OddsEvensBetOptions
-import pytest
 
-
-#  TODO use the pytest.fixture decorator throughout testing
 
 @pytest.fixture(scope="module")
 def euro_wheel():

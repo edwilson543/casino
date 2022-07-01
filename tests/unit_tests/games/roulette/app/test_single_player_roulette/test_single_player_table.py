@@ -1,4 +1,4 @@
-"""Module containing unit tests for the SinglePlayerRouletteTabel class."""
+"""Module containing unit tests for the SinglePlayerRouletteTable class."""
 
 # Standard library imports
 import pytest
