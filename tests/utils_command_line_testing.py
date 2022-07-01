@@ -1,15 +1,20 @@
 """
 Module for defining the utility function to be used throughout command line testing.
-The override_input_function_with_input_sequence replaces call to input() in the program with a sequence of inputs.
+The override_input_function_with_input_sequence replaces calls to input() in the program with a sequence of inputs
+which are yielded by a generator.
 """
 
+# Standard library imports
 from typing import TypeVar, Generator
 
 T = TypeVar("T")  # Generic type use in type hints below
 
 
 def print_replacement_func(*args, **kwargs):
-    """Function to replace print with when testing command line game - a function that does nothing."""
+    """
+    Function to replace print with when testing command line game - a function that does nothing.
+    This is so that none of the print statements spam the terminal when command line tests run.
+    """
     pass
 
 
