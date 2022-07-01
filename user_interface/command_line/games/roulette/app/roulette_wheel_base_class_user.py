@@ -1,8 +1,20 @@
+"""
+Module contents:
+RouletteWheelParametersUser - subclasses RouletteWheelParameters class and adds one data field used to display a string
+representation of the board on the terminal
+RouletteWheelUser - subclass of the RouletteWheel class allowing users to interact with RouletteWheel objects
+"""
+
+# Standard library imports
+from time import sleep
+
+# Third party imports
+from numpy import array2string
+
+# Local application imports
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel, wheel_spin_return, RouletteWheelParameters
 from games.roulette.constants.game_constants import RouletteGameParameters
 from dataclasses import dataclass
-from time import sleep
-from numpy import array2string
 
 
 ##########

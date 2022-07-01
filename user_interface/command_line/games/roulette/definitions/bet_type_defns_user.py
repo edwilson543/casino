@@ -1,18 +1,29 @@
-"""To define a new bet, first go to roulette->strategies->bet_type_defns"""
+"""
+Module contents:
+- The UI class of each of the bets defined in bet_type_defns - these are the classes that allow users to interact with
+each bet type object. Each class uses multiple inheritance from the non-UI definition of that bet object (e.g.
+ColoursBet) and from RouletteBetUser. This is so that it has both the bet type specific logic and user interaction
+logic already implemented, meaning minimal logic needs to be added for each bet.
+The bet type definitions here just implement the abstract methods of the RouletteBetUser class.
+- Enum of all users bet types available - these are then imported into the UI application
+
+To define a new bet, first go to roulette->strategies->bet_type_defns
+"""
+
+# Standard library imports
+from enum import Enum
+
+# Local application imports
 from games.roulette.app.roulette_bet_base_class import RouletteBetParameters
 from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet, HighLowBet, OddsEvensBet, \
     CornersBet
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.game_constants import Colour, ColourPrompts
 from games.roulette.constants.bet_constants import HighLowBetOptions, OddsEvensBetOptions
+
+# Local application UI imports
 from user_interface.command_line.games.roulette.app.roulette_bet_base_class_user import RouletteBetUser
-from enum import Enum
 
-
-##########
-# Define 'get_user_bet_choice' method for each user bets
-# Use MRO SpecificBetClass, RouletteBetUser (shouldn't be needed for now anyway)
-##########
 
 ##########
 # Outside Bets

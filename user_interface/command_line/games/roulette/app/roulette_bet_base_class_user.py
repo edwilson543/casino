@@ -1,8 +1,17 @@
-from games.roulette.app.roulette_bet_base_class import RouletteBet, RouletteBetParameters
-from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
+"""
+Module contents:
+RouletteBetUser class, allowing users to interact with the RouletteBet class.
+USER_BET_TYPES, the type hint that should be used when referring to RouletteBetUser objects or its subclasses.
+"""
 
+
+# Standard library imports
 from typing import TypeVar, Any
 from abc import abstractmethod
+
+# Local application imports
+from games.roulette.app.roulette_bet_base_class import RouletteBet, RouletteBetParameters
+from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 
 
 class RouletteBetUser(RouletteBet):
@@ -42,7 +51,7 @@ class RouletteBetUser(RouletteBet):
         This is defined for each specific bet subclass of RouletteBetUser in bet_type_defns_user
         """
         raise NotImplementedError("Call to get_bet_choice_string_rep has referred to abstract method in"
-                             "RouletteBetUser super class")
+                                  "RouletteBetUser super class")
 
     def choose_stake_amount(self, player_funds) -> int:
         """
@@ -94,6 +103,6 @@ class RouletteBetUser(RouletteBet):
 
 
 ##########
-# Typevar to be used when referencing user bets in type hints throughout game
+# Type hint to be used when referencing user bets in type hints throughout game
 ##########
 USER_BET_TYPES = TypeVar(name="USER_BET_TYPES", bound=RouletteBetUser)
