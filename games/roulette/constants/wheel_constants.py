@@ -1,4 +1,8 @@
 """
+Module content:
+- Wheel IDs/prompts and ancillary function for getting a prompt listing the defined wheels
+- Parameters necessary for defining each wheel.
+
 To define a new wheel complete the following steps:
 1) Add an ID, prompt for that wheel
 2) Add all necessary parameters for that wheel, as is done for the existing wheel
@@ -6,18 +10,24 @@ To define a new wheel complete the following steps:
 4) Add all relevant bets (can just use the default bets) to that wheel, in the WheelBetParameters Enum found in
 bet_constants
 """
-from games.roulette.app.roulette_wheel_base_class import RouletteWheelParameters
-from games.roulette.constants.game_constants import Colour
+
+# Standard library imports
 from dataclasses import dataclass
 from enum import Enum
+
+# Third party imports
 from numpy import array
+
+# Local application imports
+from games.roulette.app.roulette_wheel_base_class import RouletteWheelParameters
+from games.roulette.constants.game_constants import Colour
 
 
 ##########
 # Wheel IDs and corresponding prompts
 ##########
-class WheelIds(str, Enum):
-    """Class for storing wheel bet_type_name and an associated id"""
+class WheelIds(Enum):
+    """Enum class for storing wheel bet_type_name and an associated id"""
     EURO_WHEEL = "E"
     AMERICAN_WHEEL = "A"
 
@@ -28,7 +38,8 @@ class WheelPrompts(Enum):
     AMERICAN_WHEEL = "[A]merican"
 
 
-def wheel_options_text():
+def get_wheel_options_text():
+    """Function to return a string of prompts showing the user all the available wheels on the command line."""
     full_prompt = ", ".join([prompt.value for prompt in WheelPrompts])
     return full_prompt
 
@@ -71,6 +82,6 @@ american_wheel_parameters = RouletteWheelParameters(
 
 @dataclass
 class WheelParameters:
-    """Data class storing all the parameters that define the playing wheels"""
+    """Dataclass storing all the parameters that define the playing wheels"""
     EURO_WHEEL = euro_wheel_parameters
     AMERICAN_WHEEL = american_wheel_parameters

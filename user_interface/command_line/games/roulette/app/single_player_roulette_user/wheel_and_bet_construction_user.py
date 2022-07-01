@@ -1,6 +1,6 @@
 from games.roulette.app.single_player_roulette.wheel_and_bet_construction import WheelAndBetConstructor
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
-from games.roulette.constants.wheel_constants import WheelIds, wheel_options_text, WheelParameters
+from games.roulette.constants.wheel_constants import WheelIds, get_wheel_options_text, WheelParameters
 from games.roulette.constants.bet_constants import BetTypeIds, WheelBetParameters
 
 from user_interface.command_line.games.roulette.app.roulette_bet_base_class_user import USER_BET_TYPES
@@ -26,7 +26,7 @@ class WheelAndBetConstructorUser(WheelAndBetConstructor):
         """
         while True:
             wheel_choice_id = input("What wheel would you like to play on?\n"
-                                    f"{wheel_options_text()}\n--->").upper()  # upper to allow for lower case
+                                    f"{get_wheel_options_text()}\n--->").upper()  # upper to allow for lower case
             try:
                 wheel_name = WheelIds(wheel_choice_id).name
                 wheel = self.get_wheel_from_wheel_name(wheel_name=wheel_name)
