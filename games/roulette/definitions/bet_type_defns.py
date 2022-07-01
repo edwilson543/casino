@@ -1,4 +1,12 @@
 """
+Module contents:
+- The definitions of each individual bet (colours bet, split bet etc.), organised into outside and inside bets
+- An enum of the different bets that have been defined (very bottom)
+
+Each bet has a slightly different logic for determining the valid bet choices, determining the win criteria, as well
+as UI logic for placing bets, hence the need for a separate class for each bet.
+This structure also makes it very easy to add new bet types to the game - see process for doing so below.
+
 To define a new bet type complete the following steps:
 1) Define a class for that bet as a subclass of RouletteBet, adding the methods as shown for the
 existing bets below
@@ -7,21 +15,23 @@ existing bets below
 4) To add to command line UI, define a user class for that bet in bet_type_defns_user,
 in the same way as is done for the existing bets.
 """
+
+# Standard library imports
+from enum import Enum
+from math import floor
+
+# Third party imports
+import numpy as np
+
+# Local application imports
 from games.roulette.app.roulette_bet_base_class import RouletteBet, RouletteBetParameters
 from games.roulette.app.roulette_wheel_base_class import WHEEL_TYPES
 from games.roulette.constants.game_constants import Colour
 from games.roulette.constants.bet_constants import HighLowBetOptions, OddsEvensBetOptions
-import numpy as np
-from enum import Enum
-from math import floor
 
 
 ##########
-# Create subclass of RouletteBet base class to define each bet's 'determine_win_criteria' method
-##########
-
-##########
-# Outside Bets
+# Outside Bet classes
 ##########
 class ColoursBet(RouletteBet):
     """Class for defining the valid bet choices and win criteria of a colours bet."""
@@ -56,7 +66,7 @@ class ColoursBet(RouletteBet):
 
 
 class HighLowBet(RouletteBet):
-    """Class for defining the valid bet choices and win criteria of a High and Low bet"""
+    """Class for defining the valid bet choices and win criteria of a high / low bet"""
 
     def __init__(self,
                  fixed_parameters: RouletteBetParameters,
@@ -88,7 +98,7 @@ class HighLowBet(RouletteBet):
 
 
 class OddsEvensBet(RouletteBet):
-    """Class for defining the valid bet choices and win criteria of a Odds and Evens bet"""
+    """Class for defining the valid bet choices and win criteria of a odds / evens bet"""
 
     def __init__(self,
                  fixed_parameters: RouletteBetParameters,
@@ -119,7 +129,7 @@ class OddsEvensBet(RouletteBet):
 
 
 ##########
-# Inside Bets
+# Inside Bet classes
 ##########
 
 class StraightUpBet(RouletteBet):
@@ -259,7 +269,7 @@ class CornersBet(RouletteBet):
 
 ##########
 # Enum for storing all the bet classes
-# Parameters imported live into game so don't instantiate
+# Parameters are imported live into game so we don't instantiate here
 ##########
 class BetTypeOptions(Enum):
     COLOURS_BET = ColoursBet
