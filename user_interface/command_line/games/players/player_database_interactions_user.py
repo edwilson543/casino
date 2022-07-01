@@ -1,17 +1,28 @@
+"""
+Module implementing the functionality for users to be able to interact with the Player database on the command line,
+and retrieve their PlayerUser object
+"""
+
+# Standard library imports
+import functools
+from pathlib import Path
+import sys
+
+# Local application imports
+from games.all_game_constants.player_constants import PlayerParameterRestrictions
+from games.all_game_constants.root_directory import ROOT_DIRECTORY
 from games.players.player_database_manager import PlayerDatabaseManager
 from games.players.player_base_class import PlayerType, PLAYER_TYPES
-from games.all_game_constants.player_constants import PlayerParameterRestrictions
+
+# Local application UI imports
 from user_interface.command_line.games.players.player_base_class_user import PlayerUser
-import sys
-import functools
-from games.all_game_constants.root_directory import ROOT_DIRECTORY
-from pathlib import Path
 
 
 ##########
 # Password protection decorator to be called when accessing players
 ##########
 def password_protected(access_player_func):
+    """Decorator to be used when accessing players, to make users enter the corresponding password"""
     n_attempts: int = PlayerParameterRestrictions.password_parameters.allowed_password_attempts
 
     @functools.wraps(access_player_func)
@@ -48,6 +59,7 @@ class PlayerDatabaseInteractionsUser(PlayerDatabaseManager):
                          guest_datafile_name)
 
     def all_games_set_up(self) -> PlayerUser:
+        """Method called at the start of the main game loop to introduce a PlayerUser object into the game"""
         active_player, player_type = self.access_existing_or_new_player()
         active_player.make_initial_deposit_or_top_up(player_type=player_type)
         active_player.set_active_session_initial_pot_and_time()
