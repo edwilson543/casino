@@ -49,8 +49,8 @@ When the game starts the welcome message above is displayed. Users have three op
 All 3 selections result in the instantiation of a PlayerUser object using their own / guest parameters.
 </p>
 
-<b>Existing player login:</b>
-<img src="user_interface/readme_screenshots/username_and_password.png" alt="Login and access to player database">
+<b>Existing player login:</b><br>
+<img src="user_interface/readme_screenshots/username_and_password.png" alt="Login and access to player database"><br>
 <p>
 If playing as ean existing player, the user enters their username and password as shown. A parameter of each player
 that is stored is a timestamp for their last active session end time, which is compared with the current time to create
