@@ -50,7 +50,7 @@ All 3 selections result in the instantiation of a PlayerUser object using their 
 </p>
 
 <b>Existing player login:</b><br>
-<img src="user_interface/readme_screenshots/username_and_password.png" alt="Login and access to player database"><br>
+<img src="user_interface/readme_screenshots/username_and_password.png" alt="Login and access to player database">
 <p>
 If playing as ean existing player, the user enters their username and password as shown. A parameter of each player
 that is stored is a timestamp for their last active session end time, which is compared with the current time to create
@@ -58,7 +58,7 @@ the last login message shown. There are small sub-branches of the game that may 
 player is low on funds, they may receive a top up prompt, and if accepting of this prompt be guided to make a top up.
 </p>
 
-<b>Wheel selection:</b>
+<b>Wheel selection:</b><br>
 <img src="user_interface/readme_screenshots/wheel_selection.png" alt="Playing wheel and bet type selection">
 <p>
 The user is given a choice of wheels to play on which have slightly different slots. The game has been implemented in 
@@ -68,14 +68,14 @@ is intentionally not case sensitive, hence the use of a lower case e in the imag
 sensitive...).
 </p>
 
-<b>Bet selection:</b>
+<b>Bet selection:</b><br>
 <img src="user_interface/readme_screenshots/bet_selection.png" alt="Playing wheel and bet type selection">
 <p>
 Different inside and outside bet options are displayed to the user, who is guided to pick the bet type they would like 
 to place. Again, the game has been implemented such that it's very easy to add new bets of arbitrary definition.
 </p>
 
-<b>Bet placement:</b>
+<b>Bet placement:</b><br>
 <img src="user_interface/readme_screenshots/bet_placement.png" alt="User defined parameters of the selected bet type">
 <p>
 The user must then enter the parameters specific to their initial bet type choice.
@@ -86,7 +86,7 @@ Meanwhile, ColoursBetUser implements the abstract methods of RouletteBetUser, wh
 messages on the command line and prompt user input.
 </p>
 
-<b>Bet evaluation:</b>
+<b>Bet evaluation:</b><br>
 <img src="user_interface/readme_screenshots/bet_evaluation.png" alt="Wheel spinning and evaluation of the given bet.">
 <p>
 The user is given the option of adding more bets to the current wheel spin (always subject to criteria such as having
@@ -100,7 +100,7 @@ spin outcome. Note that the spinning of the ball is intentionally delayed in the
 function.
 </p>
 
-<b>Game continuation and looping:</b>
+<b>Game continuation and looping:</b><br>
 <img src="user_interface/readme_screenshots/game_continuation.png" alt="Screenshot of the game setup window">
 <p>
 Following the evaluation of the user's bets, a message displaying the player's winnings/losings in the current active
