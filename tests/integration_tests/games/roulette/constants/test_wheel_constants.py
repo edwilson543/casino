@@ -1,5 +1,10 @@
-from games.roulette.constants.wheel_constants import WheelParameters, WheelIds, WheelPrompts
+"""Module for unit tests on consistency of wheel constants"""
+
+# Standard library imports
 from dataclasses import fields
+
+# Local application imports
+from games.roulette.constants.wheel_constants import WheelParameters, WheelIds, WheelPrompts
 
 
 class TestWheelConstantsConsistent:

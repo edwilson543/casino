@@ -1,7 +1,12 @@
+"""Unit test for the bet constants - that the correct prompt is displayed"""
+
+# Standard library imports
+import pytest
+
+# Local application imports
 from games.roulette.constants.bet_constants import WheelDefaultBetOptionsAndParameters, default_colours_bet_parameters, \
     default_straight_up_bet_parameters
 from games.roulette.constants.bet_constants import InsideBetTypePrompts, OutsideBetTypePrompts
-import pytest
 
 
 class TestIndividualWheelMinMaxBetParameters:

@@ -1,10 +1,17 @@
+"""Unit tests for the wheel and bet type constructor"""
+
+# Standard library imports
+import pytest
+
+# Third party imports
+from numpy import all
+
+# Local application imports
 from games.roulette.app.single_player_roulette.wheel_and_bet_construction import WheelAndBetConstructor
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel
 from games.roulette.definitions.bet_type_defns import ColoursBet
 from games.roulette.constants.bet_constants import BetTypeIds, default_colours_bet_parameters
 from games.roulette.constants.wheel_constants import WheelIds, euro_wheel_parameters
-from numpy import all
-import pytest
 
 
 class TestWheelAndBetConstructor:

@@ -1,9 +1,14 @@
+"""Unit tests for the RouletteBet object"""
+
+# Standard library imports
+import pytest
+
+# Local application imports
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.app.roulette_bet_base_class import RouletteBet
 from games.roulette.constants.wheel_constants import WheelParameters
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel
 from games.roulette.constants.bet_constants import default_colours_bet_parameters
-import pytest
 
 
 class TestRouletteBet:

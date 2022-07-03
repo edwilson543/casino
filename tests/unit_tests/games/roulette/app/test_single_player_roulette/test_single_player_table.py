@@ -1,10 +1,15 @@
+"""Module containing unit tests for the SinglePlayerRouletteTable class."""
+
+# Standard library imports
+import pytest
+
+# Local application imports
 from games.roulette.app.roulette_wheel_base_class import wheel_spin_return
 from games.roulette.app.roulette_wheel_base_class import RouletteWheel
 from games.roulette.definitions.bet_type_defns import ColoursBet, StraightUpBet, SplitBet
 from games.roulette.app.single_player_roulette.single_player_table import SinglePlayerRouletteTable
 from games.roulette.constants.wheel_constants import WheelParameters
 from games.roulette.constants.bet_constants import WheelBetParameters
-import pytest
 
 
 class TestSinglePlayerRouletteTable:

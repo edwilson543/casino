@@ -1,35 +1,28 @@
 """
 Module for defining the utility function to be used throughout command line testing.
-The override_input_function_with_input_sequence replaces call to input() in the program with a sequence of inputs.
+The override_input_function_with_input_sequence replaces calls to input() in the program with a sequence of inputs
+which are yielded by a generator.
 """
-import functools
-from typing import TypeVar
+
+# Standard library imports
+from typing import TypeVar, Generator
 
 T = TypeVar("T")  # Generic type use in type hints below
 
 
-def call_count(func):
-    """
-    Decorator for counting how many times a function has been called. This gets used to track how many times the
-    input function has been called, and return a different value base don this count.
-    """
-
-    def call_count_wrapper(*args, **kwargs):
-        call_count_wrapper.calls += 1
-        return func(*args, **kwargs)
-
-    call_count_wrapper.calls = 0
-    return call_count_wrapper
-
 def print_replacement_func(*args, **kwargs):
-    """Function to replace print with when testing command line game"""
+    """
+    Function to replace print with when testing command line game - a function that does nothing.
+    This is so that none of the print statements spam the terminal when command line tests run.
+    """
     pass
+
 
 def override_input_function_with_input_sequence(monkeypatch, input_sequence: list[T]) -> None:
     """
-    access_nth_list_value_on_nth_call is curried with the list_of_values, and is then used to override the input
-    function. The affect is that calls to input() in the original code are replaced by the nth input in the
-    list_of_values.
+    We replace the input function with a call to next on a generator that generates the desired input sequence.
+    Here a generator expression is used because it's more succinct, however a generator function could equivalently be
+    used, which yields the nth value in the input_sequence.
 
     Parameters:
     ----------
@@ -46,21 +39,10 @@ def override_input_function_with_input_sequence(monkeypatch, input_sequence: lis
     print() function calls are nullified
     """
 
-    @call_count
-    def access_nth_list_value_on_nth_call(list_of_values: list[T], *args, **kwargs) -> T:
-        """
-        Inner function is used (rather than a separate function) so that the call_count of the modified input function
-        always gets reset to 0 each time input() is modified.
+    generator: Generator[T] = (value for value in input_sequence)
 
-        Parameters:
-        list_of_values: As above.
+    def next_nth_value(*args, **kwargs) -> T:
+        return next(generator)
 
-        Returns:
-        the nth item in the list_of_values on the nth call for a user input. The decorator allows us to
-        know how many times we've called the new_input_func, and thus correctly selects the nth item
-        """
-        return list_of_values[access_nth_list_value_on_nth_call.calls - 1]
-
-    input_replacement_func = functools.partial(access_nth_list_value_on_nth_call, input_sequence)
-    monkeypatch.setattr("builtins.input", input_replacement_func)
+    monkeypatch.setattr("builtins.input", next_nth_value)
     monkeypatch.setattr("builtins.print", print_replacement_func)
