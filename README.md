@@ -41,21 +41,22 @@ The game has a simple command line user interface, which is easy to use and demo
 <img src="user_interface/readme_screenshots/opening_message.png" alt="Welcome message and player type selection">
 <p>
 When the game starts the welcome message above is displayed. Users have three options in terms of entry into the game:<br>
-    1) Play as a guest, in which case their session is stand-alone and will not be saved <br>
+    1) Play as a guest, in which case their session is stand-alone and will not be saved. <br>
     2) Play as an existing player (i.e. login). In this case the user has previously made an account and uses their
         username/password. Player data is stored in a JSON database, see notable/interesting features below for details.<br>
-    3) Play as a new player, the user is then directed to make an account (set name, username password etc.). Their
-        data is then uploaded to the database and they then play in effect as an existing player.<br>
+    3) Play as a new player - the user is directed to make an account (set name, username password etc.). Their
+        data is then uploaded to the database and they play in effect as an existing player.<br>
 All 3 selections result in the instantiation of a PlayerUser object using their own / guest parameters.
 </p>
 
 <b>Existing player login:</b><br>
 <img src="user_interface/readme_screenshots/username_and_password.png" alt="Login and access to player database">
 <p>
-If playing as ean existing player, the user enters their username and password as shown. A parameter of each player
-that is stored is a timestamp for their last active session end time, which is compared with the current time to create
-the last login message shown. There are small sub-branches of the game that may happen at this point - for example if the
-player is low on funds, they may receive a top up prompt, and if accepting of this prompt be guided to make a top up.
+If playing as an existing player, the user enters their username and password as shown. A last active session end time 
+parameter is stored for each player, which is compared with the current time to create
+the last login message shown. There are small sub-branches of the game that may be triggered at this point. For example,
+if the player is low on funds, they may receive a top up prompt and if accepting of this prompt be guided to make a top 
+up.
 </p>
 
 <b>Wheel selection:</b><br>
@@ -63,7 +64,7 @@ player is low on funds, they may receive a top up prompt, and if accepting of th
 <p>
 The user is given a choice of wheels to play on which have slightly different slots. The game has been implemented in 
 such a way that it's quick and easy to add more wheels to the game, of arbitrary user definition. The wheel is then in
-place for the game loop, however can be changed at the end of each betting round, see below. Note that the application
+place for the game loop, however can be changed at the end of each betting round (see below). Note that the application
 is intentionally not case sensitive, hence the use of a lower case e in the image (passwords, however, are case
 sensitive...).
 </p>
@@ -92,27 +93,28 @@ messages on the command line and prompt user input.
 The user is given the option of adding more bets to the current wheel spin (always subject to criteria such as having
 sufficient funds available to meet the minimum-minimum bet - if these criteria fail, then this option will be bypassed and the
 user will be taken straight to spinning). The player then types 'spin/SPIN' etc., which initiates a random selection of
-a spin outcome from the game wheel's slots (which are represented as a dictionary (Mapping) from slot numbers to colours).
+a spin outcome from the game wheel's slots (which are stored as a dictionary with slot numbers as keys and colours as 
+values.
 The spin outcome is compared with the user's bet selection - internally, whatever type of bet the user has made, their
 selection is converted into a list of integers representing the slots of the wheel that would result in them winning the
 bet. If the user has multiple active bets on the current spin, each of these are evaluated individually using the same
-spin outcome. Note that the spinning of the ball is intentionally delayed in the actual game play using the sleep 
-function.
+spin outcome. Note that the spinning of the wheel is intentionally delayed in the actual game play (using the sleep 
+function) so that the spin outcome doesn't just come up immediately.
 </p>
 
 <b>Game continuation and looping:</b><br>
 <img src="user_interface/readme_screenshots/game_continuation.png" alt="Screenshot of the game setup window">
 <p>
-Following the evaluation of the user's bets, a message displaying the player's winnings/losings in the current active
-session. The player can then decide to keep playing or exit - in the event of an exit, their updated data will be
-re-uploaded to the JSON player database. In order to continue playing, as at login, the player must meet certain criteria
+After each spin, a message is displayed with the player's winnings/losings in the current active session.
+The player can decide to keep playing or exit - in the event of an exit, their updated data will be
+uploaded to the JSON player database. In order to continue playing, as at login, the player must meet certain criteria
 such as having sufficient funds to do so, otherwise a top up prompt is shown.<br>
 The options at the bottom of the image show how the user has control over where to re-enter the game loop - they can 
 either:<br>
 1) Repeat their bets (carry out a quick re-spin of the wheel with the given bet selections) - this option is only 
 displayed if the total stake of the previous bets exceeds their new remaining pot.<br>
 2) Change their bets - sticking with the same wheel choice, the user can pick new bet types and selections within these
-bets.
+bets.<br>
 3) Change the wheel - the takes the user to the very start of the game loop, the stage which immediately follows the 
 login step.
 </p>
@@ -137,19 +139,20 @@ The application includes a dynamic database for locally storing player data, all
 a username and password, store their betting pots, and allow the application to track their log-in times.<br>
 This is implemented using JSON (JavaScript Object Notation) - Player object attributes are serialised into a form that 
 can be stored as JSON, and the player database is stored as a single JSON dictionary, with the player usernames as keys. 
-Players can then be retrieved from the database in JSON, deserialised and instantiated as Player objects. <br>
-A class was created to manage this database, including common database features such as data creation, updating,
+Player is data  retrieved from the database in JSON, deserialised and used to instantiate a Player object.<br>
+A class to manage this database was implemented, with common database features such as data creation, updating,
 retrieval and deletion.<br>
-The database manager is visible in the repository however a database is not - this is because it is gitignored, and
-automatically populates locally the first time a user creates an account when playing Roulette.
+The database manager is visible in the repository however a database is not - this is because it is gitignored and
+automatically populates locally the first time a user creates an account.
 <br>
 
-<b>Unit and integration testing:</b> The application includes over a hundred unit tests and integration tests as well.
-This includes testing of the command line application - this was a challenge in that the command line takes a user 
+<b>Unit and integration testing:</b> The application includes over a hundred unit tests as well as integration tests of 
+the core game functionality.
+This includes testing of the command line UI - this was a challenge in that the UI takes a user 
 input to proceed, and as such any test must simulate user input on the command line. To this end, a utility function
-was defined which takes a sequence of inputs and returns the nth item in this sequence at the nth call, and overrides
-the input function using pytest's monkeypatch. The utility function was implemented as a generator, yielding the nth
-value in the sequence on the nth call using the built-in next() function.
+was defined which takes a sequence of inputs and returns the nth item in this sequence at the nth call. The input 
+function can then be over-ridden with the utility function using pytest's monkeypatch. The utility function is
+implemented as a generator, yielding the nth value in the sequence on the nth call using the built-in next() function.
 <br>
 
 
@@ -171,16 +174,15 @@ Fairly obvious extension - some sort of graphical user interface to bring the ga
 app implemented in Tkinter or PyQT, or a web application.
 <br>
 
-<b>Allow multiplayer functionality</b>
+<b>Allow multiplayer functionality.</b>
 Following on from the GUI point above, a web application would give the opportunity to have multiple players
-betting on the same spin of the Roulette wheel, and also offer a more sophisticated authentication and database 
-management system.
+betting on the same spin of the Roulette wheel, and using a framework such as Django would make it easier to implement
+a more sophisticated authentication and database management system.
 <br>
 
 <b>Add more games beyond just Roulette.</b>
 The code is intended to be re-usable for other casino games. In particular objects such as the Player and the Bet.
-This could also tie-in well with making the application multiplayer capable, by implementing multiplayer games such as
-blackjack and poker.
+This could also tie-in well with making the application multiplayer, implementing games such as blackjack and poker.
 <br>
 
 <b>Add strategy simulation</b>
