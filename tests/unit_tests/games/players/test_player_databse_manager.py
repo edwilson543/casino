@@ -1,11 +1,15 @@
 """Unit tests for the player_database_manager"""
 
-from games.players.player_database_manager import PlayerDatabaseManager
-from games.player_base_class import Player
-from games.all_game_constants.root_directory import ROOT_DIRECTORY
+# Standard library imports
 from datetime import datetime
 import json
+from pathlib import Path
 import pytest
+
+# Local application imports
+from games.all_game_constants.root_directory import ROOT_DIRECTORY
+from games.players.player_database_manager import PlayerDatabaseManager
+from games.players.player_base_class import Player
 
 
 @pytest.fixture(scope="module")
@@ -45,18 +49,6 @@ class TestPlayerStorage:
     without integration tests.
     """
 
-    @pytest.fixture(scope="class")
-    def database_manager_alt_path(self):
-        """
-        Database interaction object that interacts with a different player datafile, so that it can try creating a new
-        player data file/ path.
-        """
-        return PlayerDatabaseManager(
-            player_object=Player,
-            player_data_directory_path=ROOT_DIRECTORY / "tests" / "test_data" / "player_data",
-            player_datafile_name="test_player_data_non_existent.json",  # By default no file with this name exists
-            guest_datafile_name="test_guest_data.json")
-
     ##########
     # load_player method unit tests
     ##########
@@ -92,23 +84,17 @@ class TestPlayerStorage:
         with pytest.raises(ValueError):
             test_player_database_manager.delete_player(player_username="i_dont_exist")
 
-    ##########
-    # create_player_data_file unit tests
-    ##########
     @pytest.fixture(scope="class")
-    def new_player_data_path(self):
-        """Alternative path to create and delete new player datafile in"""
-        return ROOT_DIRECTORY / "tests" / "test_data" / "player_data" / "test_player_data_non_existent.json"
-
-    def test_create_player_data_file_does_not_exist_yet(self, database_manager_alt_path, new_player_data_path):
-        """Tests that a new file is created in the dummy path"""
-        database_manager_alt_path.create_player_data_file()
-        assert new_player_data_path.is_file()
-        new_player_data_path.unlink()  # Deletes the new file so that the test can be re-run
-
-    def test_create_player_data_file_raises_error_existing_player_data(self, test_player_database_manager):
-        with pytest.raises(FileExistsError):
-            test_player_database_manager.create_player_data_file()
+    def database_manager_alt_path(self):
+        """
+        Database interaction object that interacts with a different player and guest datafile, so that it can try
+        creating a new player data file/ path.
+        """
+        return PlayerDatabaseManager(
+            player_object=Player,
+            player_data_directory_path=ROOT_DIRECTORY / "tests" / "test_data" / "player_data",
+            player_datafile_name="test_player_data_non_existent.json",  # By default no file with this name exists
+            guest_datafile_name="test_guest_data_non_existent.json")
 
     ##########
     # get_data_path unit tests
@@ -129,9 +115,44 @@ class TestPlayerStorage:
         assert expected_path == actual_path
 
     ##########
+    # create_player_data_file unit tests
+    ##########
+    @pytest.fixture(scope="class")
+    def new_player_data_path(self) -> Path:
+        """Alternative path to create and delete new player datafile in"""
+        return ROOT_DIRECTORY / "tests" / "test_data" / "player_data" / "test_player_data_non_existent.json"
+
+    def test_create_player_data_file_does_not_exist_yet(self, database_manager_alt_path, new_player_data_path):
+        """Tests that a new file is created in the dummy path"""
+        database_manager_alt_path.create_player_data_file()
+        assert new_player_data_path.is_file()
+        new_player_data_path.unlink()  # Deletes the new file so that the test can be re-run
+
+    def test_create_player_data_file_raises_error_existing_player_data(self, test_player_database_manager):
+        with pytest.raises(FileExistsError):
+            test_player_database_manager.create_player_data_file()
+
+    ##########
+    # create_guest_and_guest_data_file unit tests
+    ##########
+    @pytest.fixture(scope="class")
+    def new_guest_data_path(self) -> Path:
+        """Alternative path to create and delete new guest datafile in"""
+        return ROOT_DIRECTORY / "tests" / "test_data" / "player_data" / "test_guest_data_non_existent.json"
+
+    def test_create_guest_data_file_does_not_exist_yet(self, database_manager_alt_path, new_guest_data_path):
+        """Tests that a new file is created in the dummy path containing the relevant guest data"""
+        database_manager_alt_path.create_guest_and_guest_data_file()
+        assert new_guest_data_path.is_file()
+        new_guest_data_path.unlink()  # Deletes the new file so that the test can be re-run
+
+    def test_create_guest_data_file_raises_error_existing_player_data(self, test_player_database_manager):
+        with pytest.raises(FileExistsError):
+            test_player_database_manager.create_guest_and_guest_data_file()
+
+    ##########
     # Unit test on lower level username methods
     ##########
-
     #  Username existence checks
     def test_username_existence_check_existing_player(self, test_player_database_manager):
         user_exists = test_player_database_manager.username_exists_check(player_username="test_one")

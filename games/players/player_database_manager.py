@@ -1,10 +1,22 @@
-from games.all_game_constants.player_constants import PlayerParameterRestrictions
-from games.player_base_class import Player, PLAYER_TYPES
-from games.all_game_constants.root_directory import ROOT_DIRECTORY
-from pathlib import Path
-import logging
+"""
+Module defining the class which is used to manage the JSON (JavaScript Object notation) player database.
+This exists so that players can create an account and login/logout of these accounts, with their data being retained
+between sessions.
+A JSON dictionary is used as the master data object. The keys are player usernames as strings, and the values are
+Player objects that have been serialised to JSON.
+Database functionality including initial creation, data creation, data retrieval, data upload etc. are all implemented.
+"""
+
+# Standard library imports
 from datetime import datetime
 import json
+import logging
+from pathlib import Path
+
+# Local application imports
+from games.all_game_constants.player_constants import PlayerParameterRestrictions
+from games.players.player_base_class import Player, PLAYER_TYPES
+from games.all_game_constants.root_directory import ROOT_DIRECTORY
 
 
 class PlayerDatabaseManager:
@@ -42,8 +54,10 @@ class PlayerDatabaseManager:
         Method to read the JSON file storing player data, retrieve the relevant player's data and then
         instantiate a player as an instance of self.player_object (using decode_player).
         JSON database -> player's JSON dict -> python dict (self.decode_player) -> instantiate player as a Player object
-        Parameters: player_username: the player_username of the player to be retrieved. Note that if the
+
+        Parameters: player_username: the username of the player to be retrieved. Note that if the
         guest player_username is passed, then the data_path will just point to the test_guest_data.json
+
         Returns: live_player: an instance of the desired Player subclass
         """
         data_path = self.get_data_path(player_username=player_username)
@@ -66,6 +80,7 @@ class PlayerDatabaseManager:
         Parameters: player - the player being stored
         """
         if player.username == "guest":
+            # The guest player's data is only ever retrieved from the database, but never uploaded
             pass
         else:
             data_path = self.get_data_path(player_username=player.username)
@@ -115,6 +130,28 @@ class PlayerDatabaseManager:
     ##########
     # Methods relating to the storage location of players
     ##########
+    def get_data_path(self, player_username: str) -> Path:
+        """
+        Method to:
+        1) Return a specific path to the guest player data if the user has played as a guest
+        2) Return the path to player data when a user player (non-guest) is being used
+        3) Create the player data folder if it is empty by calling the create_player_data_file() method
+        """
+        if player_username == "guest":
+            guest_player_data_path = self.player_data_directory_path / self.guest_datafile_name
+            if guest_player_data_path.is_file():
+                return guest_player_data_path
+            else:
+                self.create_guest_and_guest_data_file()
+                return guest_player_data_path
+        else:
+            player_data_path = self.player_data_directory_path / self.player_datafile_name
+            if player_data_path.is_file():  # i.e. if the file has already been created
+                return player_data_path
+            else:  # if the file hasn't been created, call the file creation method before returning path to it
+                self.create_player_data_file()
+                return player_data_path
+
     def create_player_data_file(self) -> None:
         """
         Method to create an empty json data file that player data will be uploaded to - this will only be done if the
@@ -132,23 +169,28 @@ class PlayerDatabaseManager:
                 empty_dict: dict = {}  # This is the dict that will get written to JSON and filled with player data
                 json.dump(empty_dict, new_data_file)
 
-    def get_data_path(self, player_username: str) -> Path:
+    def create_guest_and_guest_data_file(self) -> None:
         """
-        Method to:
-        1) Return a specific path to the guest player data if the user has played as a guest
-        2) Return the path to player data when a user player (non-guest) is being used
-        3) Create the player data folder if it is empty by calling the create_player_data_file() method
+        Method to create the guest player - this will be called the first time a user chooses to play as the guest,
+        i.e. when the guest player data file does not exist yet.
+        The guest player is encoded in JSON and given their own file - now when a user tries to load them, they are
+        available.
         """
-        if player_username == "guest":
-            player_data_path = self.player_data_directory_path / self.guest_datafile_name
-            return player_data_path
+        guest_data_path = self.player_data_directory_path / self.guest_datafile_name
+        if guest_data_path.is_file():  # i.e. if the file has already been created
+            raise FileExistsError(
+                f"create_guest_and_guest_data_file method of PlayerDatabaseManager "
+                f"was called although the guest data file already exists")
         else:
-            player_data_path = self.player_data_directory_path / self.player_datafile_name
-            if player_data_path.is_file():  # i.e. if the file has already been created
-                return player_data_path
-            else:  # if the file hasn't been created, call the file creation method before returning path to it
-                self.create_player_data_file()
-                return player_data_path
+            if not Path.is_dir(self.player_data_directory_path):
+                self.player_data_directory_path.mkdir(parents=True)
+
+            # Create and encode a new guest player, then dump them in a json file
+            guest = self.player_object(name="Guest", username="guest", password="guest")  # Other params default
+            encoded_guest = self.encode_player(player=guest)
+            guest_data_dict = {"guest": encoded_guest}
+            with open(guest_data_path, "w") as guest_data_file:
+                json.dump(guest_data_dict, guest_data_file)
 
     ##########
     # Methods to serialise/deserialise the Player object
@@ -159,14 +201,13 @@ class PlayerDatabaseManager:
         Method to take a player object, serialise all their parameters, and then store these parameters in a dictionary
         so that json.dump() can be used on the dictionary.
 
-
         Parameters: player (the player whose attributes are being converted to a dict)
         Returns: dict (a dictionary of the player's attributes, containing only serialisable data types)
 
         Note that if in the future player attributes are introduced of different types that are not immediately
-        serialisable, then the encoding function below must be updated.
+        serialisable, then the encoding method below must be updated.
+        An interesting extension here could be to add some form of encryption for the player passwords.
         """
-        #  TODO add some form of encryption for player password encoding
         unserialisable_dict = player.__dict__
         serialisable_dict = {}
         for key, value in unserialisable_dict.items():

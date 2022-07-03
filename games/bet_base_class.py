@@ -1,3 +1,9 @@
+"""
+Module defining a base/super class for the game specific classes within different games (e.g. the RouletteBet class).
+Three abstract methods are declared, and then setter methods common to all subclasses are also implemented.
+"""
+
+# Standard library imports
 from abc import abstractmethod
 from typing import Any
 
@@ -50,7 +56,6 @@ class Bet:
     ##########
     # Setter methods for the bet attributes attributes
     ##########
-
     def set_min_bet(self, amount: int):
         """Sets the min_bet of the bet"""
         self.min_bet = amount

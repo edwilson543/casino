@@ -1,3 +1,10 @@
+"""
+Module contents:
+- Dataclasses storing all global parameters of the game (min top ups/deposit amounts, pause durations used)
+- Enums for generic data such as colours and the colour prompts (used to define wheel slots.
+"""
+
+# Standard library imports
 from dataclasses import dataclass
 from enum import Enum
 
