@@ -33,11 +33,11 @@ Balint and Ed's online casino
 <hr>
 
 
-<h3>UI screenshots</h3>
+<h3>UI screenshots and gameplay:</h3>
 The game has a simple command line user interface, which is easy to use and demonstrates the core game flow implemented.
 
 
-<b>Game initiation and playing mode:</b>
+<b>Game initiation and playing mode:</b><br>
 <img src="user_interface/readme_screenshots/opening_message.png" alt="Welcome message and player type selection">
 <p>
 When the game starts the welcome message above is displayed. Users have three options in terms of entry into the game:<br>
