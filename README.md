@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<html>
+<body>
+
 <h1> Casino </h1>
 
 Balint and Ed's online casino
@@ -204,3 +208,6 @@ put in the database, with decryption happening when players are retrieved from t
 </p>
 
 <hr>
+
+</body>
+</html>
