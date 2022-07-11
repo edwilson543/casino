@@ -189,7 +189,7 @@ The code is intended to be re-usable for other casino games. In particular objec
 This could also tie-in well with making the application multiplayer, implementing games such as blackjack and poker.
 <br>
 
-<b>Add strategy simulation</b>
+<b>Add strategy simulation.</b>
 An interesting extension would be to implement a way in which users can simulate different betting strategies and 
 receive a summary of how this strategy performed - for example the 'Martingale strategy', where players double their
 stake following a losing evens bet, and stake say £1 following a winning evens bet. However, Roulette is essentially a
